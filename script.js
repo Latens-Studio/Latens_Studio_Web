@@ -552,42 +552,44 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             setStepState(1);
-            if (loadingProgressBar) loadingProgressBar.style.width = '5%';
-            if (loadingPercent) loadingPercent.textContent = '5%';
+            if (loadingProgressBar) loadingProgressBar.style.width = '8%';
+            if (loadingPercent) loadingPercent.textContent = '8%';
+            if (loadingTimeText) loadingTimeText.textContent = '⏱️ Iniciando conexión con el servidor 3D...';
 
             const progressInterval = setInterval(() => {
                 const elapsedSec = (Date.now() - startTime) / 1000;
                 
-                if (elapsedSec < 2.0) {
-                    currentProgress = Math.min(28, currentProgress + 1.2);
+                if (elapsedSec < 2.5) {
+                    currentProgress = Math.min(30, 8 + elapsedSec * 9);
                     setStepState(1);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '📐 Calculando geometría tipográfica y curvas...';
-                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ Tiempo estimado: ~${Math.max(1, Math.round(9 - elapsedSec))} seg`;
-                } else if (elapsedSec < 4.5) {
-                    currentProgress = Math.min(58, currentProgress + 0.9);
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '📐 1/4: Calculando geometría tipográfica y curvas vectoriales...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(1)}s — Generando mallas STL...`;
+                } else if (elapsedSec < 5.5) {
+                    currentProgress = Math.min(60, 30 + (elapsedSec - 2.5) * 10);
                     setStepState(2);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '❤️ Ensamblando corazón magnético y anillas...';
-                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ Tiempo estimado: ~${Math.max(1, Math.round(9 - elapsedSec))} seg`;
-                } else if (elapsedSec < 7.5) {
-                    currentProgress = Math.min(84, currentProgress + 0.7);
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '❤️ 2/4: Ensamblando corazón magnético y anillas...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(1)}s — Fusionando piezas...`;
+                } else if (elapsedSec < 9.0) {
+                    currentProgress = Math.min(85, 60 + (elapsedSec - 5.5) * 7);
                     setStepState(3);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '📸 Renderizando 5 perspectivas en alta definición (OpenSCAD)...';
-                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ Tiempo estimado: ~${Math.max(1, Math.round(9 - elapsedSec))} seg`;
-                } else if (elapsedSec < 10.0) {
-                    currentProgress = Math.min(95, currentProgress + 0.4);
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '📸 3/4: Renderizando 5 perspectivas en alta definición (OpenSCAD)...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(1)}s — Capturando ángulos HD...`;
+                } else if (elapsedSec < 13.0) {
+                    currentProgress = Math.min(96, 85 + (elapsedSec - 9.0) * 2.8);
                     setStepState(4);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '⚡ Optimizando imágenes y calculando medidas exactas...';
-                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ Finalizando render...`;
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '⚡ 4/4: Optimizando imágenes y calculando medidas de impresión...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(1)}s — Empaquetando resultado...`;
                 } else {
-                    currentProgress = Math.min(98, currentProgress + 0.1);
+                    // Servidor en frío (despertando tras inactividad en Render)
+                    currentProgress = Math.min(99, 96 + (elapsedSec - 13.0) * 0.15);
                     setStepState(4);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '🌐 Despertando servidor en la nube... ¡Casi listo!';
-                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ Procesando datos (${Math.round(elapsedSec)}s)`;
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '🌐 Despertando servidor en la nube tras inactividad... ¡Ya casi está!';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(0)}s transcurridos — Preparando render...`;
                 }
 
                 if (loadingPercent) loadingPercent.textContent = `${Math.round(currentProgress)}%`;
                 if (loadingProgressBar) loadingProgressBar.style.width = `${currentProgress}%`;
-            }, 100);
+            }, 80);
 
             try {
                 const API_URL = 'https://latens-studio-web-backend.onrender.com/api/preview';
