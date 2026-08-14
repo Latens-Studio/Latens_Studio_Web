@@ -525,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
             generateBtn.disabled = true;
 
             try {
-                const API_URL = 'http://127.0.0.1:8000/api/preview';
+                const API_URL = 'https://latens-studio-web-backend.onrender.com/api/preview';
                 
                 const payload = {
                     type,
@@ -635,7 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData(contactForm);
             
             try {
-                const response = await fetch('https://api.web3forms.com/submit', {
+                const response = await fetch('https://latens-studio-web-backend.onrender.com/api/contact', {
                     method: 'POST',
                     body: formData
                 });
@@ -649,7 +649,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (fileLabel) fileLabel.classList.remove('has-file');
                 } else {
                     console.error(response);
-                    formResult.textContent = json.message || 'Error al enviar. Verifica tu "Access Key" de Web3Forms.';
+                    formResult.textContent = json.detail || 'Error al enviar. Asegúrate de tener el servidor encendido.';
                     formResult.classList.add('error');
                 }
             } catch (error) {
