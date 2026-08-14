@@ -131,12 +131,17 @@ body {
     justify-content: center;
 }
 
+.brand-logo-svg,
 .brand-avatar img {
     width: 100%;
     height: 100%;
     object-fit: contain;
     filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.35)) !important;
     color-scheme: only light !important;
+    forced-color-adjust: none !important;
+}
+
+.brand-logo-svg path {
     forced-color-adjust: none !important;
 }
 
@@ -1661,10 +1666,11 @@ textarea.form-input {
     }
 
     .main-header {
-        padding: 1.1rem 1rem 1.1rem 105px;
+        padding: 1.15rem 1rem 1.15rem 88px;
         margin-top: 2rem;
         flex-direction: row;
         align-items: center;
+        justify-content: space-between;
         gap: 0.5rem;
         position: relative;
         overflow: visible;
@@ -1673,29 +1679,41 @@ textarea.form-input {
     .header-brand {
         padding-left: 0;
         gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
     }
 
     .brand-avatar {
         position: absolute;
-        left: -28px;
+        left: -18px;
         top: 50%;
         transform: translateY(-50%);
-        width: 125px;
-        height: 125px;
+        width: 95px;
+        height: 95px;
         z-index: 10;
     }
 
     .brand-title {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
+        font-weight: 800;
+        white-space: nowrap;
     }
 
     .brand-subtitle {
-        font-size: 0.74rem;
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        line-height: 1.25;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     .btn-secondary-sm {
         padding: 0.45rem 0.65rem;
-        font-size: 0.76rem;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+        white-space: nowrap;
     }
 
     /* Navegación por pestañas compacta (2x2) */
@@ -1718,10 +1736,16 @@ textarea.form-input {
         transform: none !important;
     }
 
-    /* Chapitas de regalo (Badge) */
+    /* Chapitas de regalo (Badge) Grande y Destacada en Móvil */
     .gift-badge.catalog-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
         max-width: 100%;
-        margin: 0 auto 5px auto;
+        margin: 0.5rem auto 1.25rem auto;
+        padding: 0.4rem 0;
+        position: relative;
     }
 
     .gift-badge.catalog-badge::before,
@@ -1729,24 +1753,145 @@ textarea.form-input {
         display: none !important;
     }
 
+    .gift-badge.catalog-badge img,
     .gift-badge img {
-        width: 85px;
-        height: 85px;
+        width: 125px;
+        height: 125px;
+        object-fit: contain;
+        filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.28));
+        animation: bounceBadge 3s infinite ease-in-out;
+        z-index: 2;
         margin-left: 0;
     }
 
+    .gift-badge.catalog-badge .gift-text,
     .gift-text {
-        margin-left: -20px;
-        padding: 6px 12px 6px 26px;
-        white-space: normal;
+        margin-left: -32px;
+        padding: 10px 16px 10px 38px;
+        background: #ffffff;
+        border: 2px solid var(--primary);
+        border-radius: var(--radius-md);
+        box-shadow: 0 6px 16px rgba(79, 70, 229, 0.18);
+        z-index: 1;
+        white-space: nowrap;
     }
 
     .gift-text strong {
-        font-size: 0.82rem;
+        font-size: 0.95rem;
+        color: var(--primary);
+        font-weight: 800;
+        line-height: 1.15;
     }
 
     .gift-text span {
-        font-size: 0.7rem;
+        font-size: 0.76rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    /* Catálogo 2 en 2 estilo Bambu Handy */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.65rem !important;
+    }
+
+    .product-card {
+        border-radius: var(--radius-md);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-preview-box {
+        height: 130px !important;
+        min-height: 130px !important;
+    }
+
+    .product-tag {
+        font-size: 0.65rem;
+        padding: 0.2rem 0.45rem;
+        top: 6px;
+        left: 6px;
+    }
+
+    .product-body {
+        padding: 0.65rem !important;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .product-title {
+        font-size: 0.9rem !important;
+        font-weight: 700;
+        line-height: 1.25;
+        margin-bottom: 0.25rem;
+    }
+
+    .product-desc {
+        font-size: 0.74rem;
+        color: var(--text-muted);
+        line-height: 1.35;
+        margin-bottom: 0.4rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .product-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        margin-bottom: 0.45rem;
+    }
+
+    .meta-pill {
+        font-size: 0.62rem;
+        padding: 0.15rem 0.35rem;
+        background: var(--bg-subtle);
+        border-radius: 4px;
+        color: var(--text-muted);
+    }
+
+    .product-footer {
+        margin-top: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        padding-top: 0.4rem;
+        border-top: 1px solid var(--border-light);
+    }
+
+    .product-price {
+        display: flex;
+        align-items: baseline;
+        gap: 0.2rem;
+    }
+
+    .price-val {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--text-heading);
+    }
+
+    .price-unit {
+        font-size: 0.65rem;
+        color: var(--text-muted);
+    }
+
+    .btn-primary-block {
+        width: 100% !important;
+        padding: 0.45rem 0.35rem !important;
+        font-size: 0.75rem !important;
+        justify-content: center;
+        text-align: center;
+        border-radius: var(--radius-sm);
+        gap: 0.25rem;
+    }
+
+    .btn-primary-block svg {
+        display: none;
     }
 
     /* Tarjetas de Contenido */
