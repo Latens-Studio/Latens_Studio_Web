@@ -687,6 +687,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const formResult = document.getElementById('formResult');
     const fileLabel = document.querySelector('.file-label');
 
+    // Auto-expansión dinámica del recuadro de mensaje hacia abajo
+    const messageTextarea = document.querySelector('textarea[name="message"]');
+    if (messageTextarea) {
+        function autoResize() {
+            messageTextarea.style.height = 'auto';
+            messageTextarea.style.height = Math.max(95, messageTextarea.scrollHeight) + 'px';
+        }
+        messageTextarea.addEventListener('input', autoResize);
+        window.addEventListener('resize', autoResize);
+    }
+
     if (fileInput) {
         fileInput.addEventListener('change', function(e) {
             const fileName = e.target.files[0] ? e.target.files[0].name : 'Adjuntar archivo 3D o foto (Opcional)';
@@ -742,6 +753,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     formResult.textContent = '¡Mensaje enviado con éxito! Te responderé pronto.';
                     formResult.classList.add('success');
                     contactForm.reset();
+                    if (messageTextarea) messageTextarea.style.height = 'auto';
                     if (fileNameDisplay) fileNameDisplay.textContent = 'Adjuntar archivo 3D o foto (Opcional)';
                     if (fileLabel) fileLabel.classList.remove('has-file');
                 } else {

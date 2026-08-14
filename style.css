@@ -1523,6 +1523,12 @@ body {
     background: #ffffff;
     transition: var(--transition);
 }
+textarea.form-input {
+    resize: none; /* Desactiva el tirador manual de escalar */
+    overflow-y: hidden; /* Oculta la barra de scroll mientras crece */
+    min-height: 95px;
+    line-height: 1.5;
+}
 .form-input:focus {
     outline: none;
     border-color: var(--primary);
