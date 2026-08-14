@@ -138,30 +138,30 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
-    padding: clamp(1rem, 2.5vw, 1.5rem) clamp(1rem, 2.5vw, 2rem);
+    padding: 1.5rem 2rem 1.5rem 125px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     box-shadow: var(--shadow-sm);
     position: relative;
-    margin-top: clamp(1.75rem, 3.5vw, 2.75rem);
+    margin-top: 2.75rem;
     overflow: visible;
 }
 
 .header-brand {
     display: flex;
     align-items: center;
-    padding-left: clamp(80px, 12vw, 120px);
+    padding-left: 0;
     position: relative;
 }
 
 .brand-avatar {
     position: absolute;
-    left: clamp(-35px, -4vw, -45px);
+    left: -48px;
     top: 50%;
     transform: translateY(-50%);
-    width: clamp(95px, 14vw, 165px);
-    height: clamp(95px, 14vw, 165px);
+    width: 145px;
+    height: 145px;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -1705,12 +1705,12 @@ textarea.form-input {
     }
 
     .main-header {
-        padding: 1.15rem 1rem 1.15rem 88px;
+        padding: 1.15rem 0.85rem 1.15rem 86px;
         margin-top: 2rem;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        gap: 0.5rem;
+        gap: 0.4rem;
         position: relative;
         overflow: visible;
     }
@@ -1724,11 +1724,11 @@ textarea.form-input {
 
     .brand-avatar {
         position: absolute;
-        left: -18px;
+        left: -26px;
         top: 50%;
         transform: translateY(-50%);
-        width: 95px;
-        height: 95px;
+        width: 102px;
+        height: 102px;
         z-index: 10;
     }
 
