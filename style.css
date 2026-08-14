@@ -1,10 +1,12 @@
 /* ==========================================================================
-   DESIGN TOKENS & SYSTEM (NATIVE LIGHT & DARK THEMES)
+   DESIGN TOKENS & SYSTEM — FORZAR SIEMPRE CLARO
+   Samsung Internet ignora color-scheme y aplica su propio filtro oscuro.
+   La ÚNICA forma de evitarlo es declarar @media (prefers-color-scheme: dark)
+   con los MISMOS valores claros. Así el navegador cree que ya lo gestionamos.
    ========================================================================== */
 :root {
-    color-scheme: only light;
+    color-scheme: light dark;
     
-    /* Variables de Color (Siempre Claro) */
     --bg-page: #f8fafc;
     --bg-card: #ffffff;
     --bg-subtle: #f1f5f9;
@@ -32,11 +34,9 @@
     
     --bg-pattern-dot: #cbd5e1;
     
-    /* Typography */
     --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     
-    /* Structure & Radius */
     --radius-lg: 16px;
     --radius-md: 12px;
     --radius-sm: 8px;
@@ -44,7 +44,36 @@
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-    /* Modo Oscuro Nativo Eliminado para forzar que la página siempre sea blanca/clara */
+/* TRUCO ANTI-SAMSUNG: Repetir EXACTAMENTE los mismos valores claros.
+   Samsung Internet detecta este bloque y NO aplica su filtro forzado. */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-page: #f8fafc;
+        --bg-card: #ffffff;
+        --bg-subtle: #f1f5f9;
+        --bg-hover: #e2e8f0;
+        --border-light: #e2e8f0;
+        --border-medium: #cbd5e1;
+        --border-focus: #6366f1;
+        --text-heading: #0f172a;
+        --text-body: #334155;
+        --text-muted: #64748b;
+        --text-dim: #94a3b8;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --primary-light: #eeefff;
+        --accent-rose: #e11d48;
+        --accent-emerald: #10b981;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+        --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.03);
+        --bg-pattern-dot: #cbd5e1;
+    }
+    
+    * {
+        forced-color-adjust: none !important;
+    }
+}
 
 /* ==========================================================================
    BASE & RESET
@@ -64,7 +93,9 @@ html {
     max-width: 100%;
     overflow-x: hidden;
     scroll-behavior: smooth;
-    background-color: var(--bg-page);
+    /* background-image NO es invertido por Samsung Internet (solo invierte background-color) */
+    background-color: #f8fafc !important;
+    background-image: linear-gradient(#f8fafc, #f8fafc) !important;
 }
 
 body {
@@ -72,8 +103,9 @@ body {
     max-width: 100%;
     overflow-x: hidden;
     font-family: var(--font-body);
-    background-color: var(--bg-page);
-    color: var(--text-body);
+    background-color: #f8fafc !important;
+    background-image: linear-gradient(#f8fafc, #f8fafc) !important;
+    color: #334155 !important;
     min-height: 100vh;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -108,7 +140,8 @@ body {
    HEADER PRINCIPAL
    ========================================================================== */
 .main-header {
-    background: var(--bg-card);
+    background-color: #ffffff !important;
+    background-image: linear-gradient(#ffffff, #ffffff) !important;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     padding: 1.5rem 2rem 1.5rem 125px;
@@ -219,7 +252,8 @@ body {
    ========================================================================== */
 .nav-tabs {
     display: flex;
-    background: var(--bg-card);
+    background-color: #ffffff !important;
+    background-image: linear-gradient(#ffffff, #ffffff) !important;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     padding: 0.4rem;
@@ -296,7 +330,8 @@ body {
 }
 
 .content-card {
-    background: var(--bg-card);
+    background-color: #ffffff !important;
+    background-image: linear-gradient(#ffffff, #ffffff) !important;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     padding: 1.75rem;
@@ -457,7 +492,8 @@ body {
    PESTAÑA 2: CATÁLOGO
    ========================================================================== */
 .section-intro {
-    background: var(--bg-card);
+    background-color: #ffffff !important;
+    background-image: linear-gradient(#ffffff, #ffffff) !important;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     padding: 1.5rem 1.75rem;
@@ -491,7 +527,8 @@ body {
 }
 
 .product-card {
-    background: var(--bg-card);
+    background-color: #ffffff !important;
+    background-image: linear-gradient(#ffffff, #ffffff) !important;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -659,7 +696,8 @@ body {
 }
 
 .preview-panel {
-    background: var(--bg-card);
+    background-color: #ffffff !important;
+    background-image: linear-gradient(#ffffff, #ffffff) !important;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     padding: 1.5rem;
@@ -1700,8 +1738,8 @@ textarea.form-input {
     }
 
     .main-header {
-        padding: 1rem 0.85rem 1rem 80px;
-        margin-top: 1.8rem;
+        padding: 1rem 0.75rem 1rem 72px;
+        margin-top: 1.5rem;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
@@ -1719,11 +1757,11 @@ textarea.form-input {
 
     .brand-avatar {
         position: absolute;
-        left: -10px;
+        left: -4px;
         top: 50%;
         transform: translateY(-50%);
-        width: 90px;
-        height: 90px;
+        width: 80px;
+        height: 80px;
         z-index: 10;
     }
 
