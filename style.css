@@ -1,12 +1,10 @@
 /* ==========================================================================
-   DESIGN TOKENS & SYSTEM — FORZAR SIEMPRE CLARO
-   Samsung Internet ignora color-scheme y aplica su propio filtro oscuro.
-   La ÚNICA forma de evitarlo es declarar @media (prefers-color-scheme: dark)
-   con los MISMOS valores claros. Así el navegador cree que ya lo gestionamos.
+   DESIGN TOKENS & SYSTEM (FULL NATIVE LIGHT & DARK THEME)
    ========================================================================== */
 :root {
     color-scheme: light dark;
     
+    /* Modo Claro (Light Theme) */
     --bg-page: #f8fafc;
     --bg-card: #ffffff;
     --bg-subtle: #f1f5f9;
@@ -28,15 +26,21 @@
     --accent-rose: #e11d48;
     --accent-emerald: #10b981;
     
+    --logo-bg: #090d16;
+    --logo-border: #ffffff;
+    --logo-lines: #ffffff;
+    
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
     --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.03);
     
     --bg-pattern-dot: #cbd5e1;
     
+    /* Typography */
     --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     
+    /* Structure & Radius */
     --radius-lg: 16px;
     --radius-md: 12px;
     --radius-sm: 8px;
@@ -44,34 +48,39 @@
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* TRUCO ANTI-SAMSUNG: Repetir EXACTAMENTE los mismos valores claros.
-   Samsung Internet detecta este bloque y NO aplica su filtro forzado. */
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg-page: #f8fafc;
-        --bg-card: #ffffff;
-        --bg-subtle: #f1f5f9;
-        --bg-hover: #e2e8f0;
-        --border-light: #e2e8f0;
-        --border-medium: #cbd5e1;
-        --border-focus: #6366f1;
-        --text-heading: #0f172a;
-        --text-body: #334155;
-        --text-muted: #64748b;
-        --text-dim: #94a3b8;
-        --primary: #4f46e5;
-        --primary-hover: #4338ca;
-        --primary-light: #eeefff;
-        --accent-rose: #e11d48;
-        --accent-emerald: #10b981;
-        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-        --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-        --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.03);
-        --bg-pattern-dot: #cbd5e1;
-    }
-    
-    * {
-        forced-color-adjust: none !important;
+        /* Modo Oscuro Ultra-Nítido (Deep Slate & Vibrant Indigo) */
+        --bg-page: #090d16;
+        --bg-card: #111827;
+        --bg-subtle: #1e293b;
+        --bg-hover: #26334d;
+        
+        --border-light: #1f293d;
+        --border-medium: #334155;
+        --border-focus: #818cf8;
+        
+        --text-heading: #f8fafc;
+        --text-body: #cbd5e1;
+        --text-muted: #94a3b8;
+        --text-dim: #64748b;
+        
+        --primary: #6366f1;
+        --primary-hover: #4f46e5;
+        --primary-light: rgba(99, 102, 241, 0.18);
+        
+        --accent-rose: #f43f5e;
+        --accent-emerald: #34d399;
+        
+        --logo-bg: #030712;
+        --logo-border: #818cf8;
+        --logo-lines: #f8fafc;
+        
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 16px 36px -4px rgba(0, 0, 0, 0.7), 0 4px 10px -2px rgba(0, 0, 0, 0.4);
+        
+        --bg-pattern-dot: #1e293b;
     }
 }
 
@@ -93,9 +102,7 @@ html {
     max-width: 100%;
     overflow-x: hidden;
     scroll-behavior: smooth;
-    /* background-image NO es invertido por Samsung Internet (solo invierte background-color) */
-    background-color: #f8fafc !important;
-    background-image: linear-gradient(#f8fafc, #f8fafc) !important;
+    background-color: var(--bg-page);
 }
 
 body {
@@ -103,9 +110,8 @@ body {
     max-width: 100%;
     overflow-x: hidden;
     font-family: var(--font-body);
-    background-color: #f8fafc !important;
-    background-image: linear-gradient(#f8fafc, #f8fafc) !important;
-    color: #334155 !important;
+    background-color: var(--bg-page);
+    color: var(--text-body);
     min-height: 100vh;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -140,8 +146,7 @@ body {
    HEADER PRINCIPAL
    ========================================================================== */
 .main-header {
-    background-color: #ffffff !important;
-    background-image: linear-gradient(#ffffff, #ffffff) !important;
+    background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     padding: 1.5rem 2rem 1.5rem 125px;
@@ -158,7 +163,6 @@ body {
     display: flex;
     align-items: center;
     padding-left: 0;
-    /* Eliminado position: relative; para que el logo .brand-avatar absoluto no solape el texto */
 }
 
 .brand-avatar {
@@ -180,34 +184,41 @@ body {
     height: 100%;
     object-fit: contain;
     filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
+    transition: filter 0.3s ease;
 }
 
-/* Truco para evitar que Samsung Internet invierta el SVG en su Modo Oscuro forzado: 
-   Usar rgb(1,1,1) y rgb(254,254,254) en lugar de #000000 y #ffffff */
+@media (prefers-color-scheme: dark) {
+    .brand-logo-svg,
+    .brand-avatar img {
+        filter: drop-shadow(0 10px 24px rgba(99, 102, 241, 0.35)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.7));
+    }
+}
+
 .logo-path-bg {
-    fill: rgb(1, 1, 1);
-    stroke: rgb(254, 254, 254);
+    fill: var(--logo-bg);
+    stroke: var(--logo-border);
     stroke-width: 14.2px;
     stroke-linecap: square;
+    transition: var(--transition);
 }
 
 .logo-path-outer {
     fill: none;
-    stroke: rgb(254, 254, 254);
+    stroke: var(--logo-lines);
     stroke-width: 25.1px;
     stroke-linecap: square;
 }
 
 .logo-path-inner {
     fill: none;
-    stroke: rgb(254, 254, 254);
+    stroke: var(--logo-lines);
     stroke-width: 17.2px;
     stroke-linecap: square;
 }
 
 .logo-path-spoke {
     fill: none;
-    stroke: rgb(254, 254, 254);
+    stroke: var(--logo-lines);
     stroke-width: 8.3px;
     stroke-linecap: butt;
     stroke-linejoin: bevel;
@@ -252,8 +263,7 @@ body {
    ========================================================================== */
 .nav-tabs {
     display: flex;
-    background-color: #ffffff !important;
-    background-image: linear-gradient(#ffffff, #ffffff) !important;
+    background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     padding: 0.4rem;
@@ -330,8 +340,7 @@ body {
 }
 
 .content-card {
-    background-color: #ffffff !important;
-    background-image: linear-gradient(#ffffff, #ffffff) !important;
+    background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     padding: 1.75rem;
@@ -492,8 +501,7 @@ body {
    PESTAÑA 2: CATÁLOGO
    ========================================================================== */
 .section-intro {
-    background-color: #ffffff !important;
-    background-image: linear-gradient(#ffffff, #ffffff) !important;
+    background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     padding: 1.5rem 1.75rem;
@@ -527,8 +535,7 @@ body {
 }
 
 .product-card {
-    background-color: #ffffff !important;
-    background-image: linear-gradient(#ffffff, #ffffff) !important;
+    background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -696,8 +703,7 @@ body {
 }
 
 .preview-panel {
-    background-color: #ffffff !important;
-    background-image: linear-gradient(#ffffff, #ffffff) !important;
+    background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
     padding: 1.5rem;
@@ -723,6 +729,47 @@ body {
 
 .form-field {
     margin-bottom: 1.25rem;
+}
+
+/* Opciones específicas de iniciales */
+.custom-options-box {
+    background: var(--bg-subtle);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 1.5rem;
+}
+
+.custom-options-title {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.custom-options-row {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.custom-option-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-body);
+}
+
+.custom-option-check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+    cursor: pointer;
 }
 
 .form-field label {
@@ -1738,8 +1785,8 @@ textarea.form-input {
     }
 
     .main-header {
-        padding: 1rem 0.75rem 1rem 72px;
-        margin-top: 1.5rem;
+        padding: 0.9rem 0.85rem 0.9rem 88px;
+        margin-top: 1.25rem;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
@@ -1757,11 +1804,11 @@ textarea.form-input {
 
     .brand-avatar {
         position: absolute;
-        left: -4px;
+        left: -6px;
         top: 50%;
         transform: translateY(-50%);
-        width: 80px;
-        height: 80px;
+        width: 82px;
+        height: 82px;
         z-index: 10;
     }
 
@@ -1769,6 +1816,7 @@ textarea.form-input {
         font-size: 1.15rem;
         font-weight: 800;
         white-space: nowrap;
+        line-height: 1.2;
     }
 
     .brand-subtitle {
