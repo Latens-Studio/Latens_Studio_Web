@@ -2,6 +2,8 @@
    DESIGN TOKENS & SYSTEM (WHITE, CLEAN, STRUCTURED)
    ========================================================================== */
 :root {
+    color-scheme: light;
+    
     /* Color Palette */
     --bg-page: #f8fafc;
     --bg-card: #ffffff;
@@ -24,6 +26,9 @@
     --accent-rose: #e11d48;
     --accent-emerald: #10b981;
     
+    --logo-fill: #000000;
+    --logo-stroke: #ffffff;
+    
     /* Typography */
     --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -39,6 +44,22 @@
     --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.03);
     
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: light;
+        --bg-page: #f8fafc;
+        --bg-card: #ffffff;
+        --bg-subtle: #f1f5f9;
+        --bg-hover: #e2e8f0;
+        --border-light: #e2e8f0;
+        --text-heading: #0f172a;
+        --text-body: #334155;
+        --text-muted: #64748b;
+        --logo-fill: #000000;
+        --logo-stroke: #ffffff;
+    }
 }
 
 /* ==========================================================================
@@ -142,6 +163,8 @@ body {
 }
 
 .brand-logo-svg path {
+    fill: var(--logo-fill, #000000) !important;
+    stroke: var(--logo-stroke, #ffffff) !important;
     forced-color-adjust: none !important;
 }
 
