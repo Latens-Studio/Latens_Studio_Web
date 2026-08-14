@@ -2,9 +2,9 @@
    DESIGN TOKENS & SYSTEM (NATIVE LIGHT & DARK THEMES)
    ========================================================================== */
 :root {
-    color-scheme: light dark;
+    color-scheme: light;
     
-    /* Modo Claro (Default Light Theme) */
+    /* Variables de Color (Siempre Claro) */
     --bg-page: #f8fafc;
     --bg-card: #ffffff;
     --bg-subtle: #f1f5f9;
@@ -44,34 +44,7 @@
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        /* Modo Oscuro Nativo (Premium Dark Slate Theme) */
-        --bg-page: #090d16;
-        --bg-card: #111827;
-        --bg-subtle: #1e293b;
-        --bg-hover: #26334d;
-        
-        --border-light: #1f293d;
-        --border-medium: #334155;
-        --border-focus: #818cf8;
-        
-        --text-heading: #f8fafc;
-        --text-body: #cbd5e1;
-        --text-muted: #94a3b8;
-        --text-dim: #64748b;
-        
-        --primary: #6366f1;
-        --primary-hover: #4f46e5;
-        --primary-light: rgba(99, 102, 241, 0.18);
-        
-        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-        --shadow-lg: 0 16px 36px -4px rgba(0, 0, 0, 0.7), 0 4px 10px -2px rgba(0, 0, 0, 0.4);
-        
-        --bg-pattern-dot: #1e293b;
-    }
-}
+    /* Modo Oscuro Nativo Eliminado para forzar que la página siempre sea blanca/clara */
 
 /* ==========================================================================
    BASE & RESET
@@ -152,7 +125,7 @@ body {
     display: flex;
     align-items: center;
     padding-left: 0;
-    position: relative;
+    /* Eliminado position: relative; para que el logo .brand-avatar absoluto no solape el texto */
 }
 
 .brand-avatar {
@@ -176,30 +149,32 @@ body {
     filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
 }
 
+/* Truco para evitar que Samsung Internet invierta el SVG en su Modo Oscuro forzado: 
+   Usar rgb(1,1,1) y rgb(254,254,254) en lugar de #000000 y #ffffff */
 .logo-path-bg {
-    fill: #000000;
-    stroke: #ffffff;
+    fill: rgb(1, 1, 1);
+    stroke: rgb(254, 254, 254);
     stroke-width: 14.2px;
     stroke-linecap: square;
 }
 
 .logo-path-outer {
     fill: none;
-    stroke: #ffffff;
+    stroke: rgb(254, 254, 254);
     stroke-width: 25.1px;
     stroke-linecap: square;
 }
 
 .logo-path-inner {
     fill: none;
-    stroke: #ffffff;
+    stroke: rgb(254, 254, 254);
     stroke-width: 17.2px;
     stroke-linecap: square;
 }
 
 .logo-path-spoke {
     fill: none;
-    stroke: #ffffff;
+    stroke: rgb(254, 254, 254);
     stroke-width: 8.3px;
     stroke-linecap: butt;
     stroke-linejoin: bevel;
