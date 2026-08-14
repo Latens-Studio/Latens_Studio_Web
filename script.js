@@ -602,7 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- WEB3FORMS CONTACT FORM ---
+    // --- FORMULARIO DE CONTACTO (RENDER BACKEND) ---
     const contactForm = document.getElementById('contactForm');
     const fileInput = document.getElementById('attachment');
     const fileNameDisplay = document.getElementById('fileNameDisplay');
