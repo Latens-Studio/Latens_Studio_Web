@@ -141,13 +141,13 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
-    padding: 1.5rem 2rem 1.5rem 125px;
+    padding: 1.5rem 2rem 1.5rem 135px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     box-shadow: var(--shadow-sm);
     position: relative;
-    margin-top: 2.75rem;
+    margin-top: 3.25rem;
     overflow: visible;
 }
 
@@ -159,11 +159,11 @@ body {
 
 .brand-avatar {
     position: absolute;
-    left: -48px;
+    left: -58px;
     top: 50%;
     transform: translateY(-50%);
-    width: 145px;
-    height: 145px;
+    width: 165px;
+    height: 165px;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -1422,81 +1422,77 @@ body {
    CHAPITA DE REGALO (BADGE)
    ========================================================================== */
 .gift-badge {
-    position: absolute;
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 0; /* Quitamos el gap globalmente para el solapamiento */
+    justify-content: center;
+    gap: 0;
     z-index: 15;
 }
 
 .gift-badge.catalog-badge {
-    position: relative;
     width: 100%;
-    max-width: 800px; /* Evita que corte la página entera de lado a lado */
-    margin: 0 auto 10px auto; /* Margen inferior para separarlo del título */
+    max-width: 800px;
+    margin: 0.5rem auto 1.25rem auto;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    transform: none;
 }
 
-/* Líneas laterales para rellenar el vacío en el catálogo */
+/* Líneas laterales en el catálogo */
 .gift-badge.catalog-badge::before,
 .gift-badge.catalog-badge::after {
     content: "";
     flex: 1;
     height: 1px;
-    background-color: rgba(0, 0, 0, 0.4); /* Líneas un poco más oscuras */
+    background-color: var(--border-medium);
 }
 
 .gift-badge.catalog-badge::before {
-    margin-right: 30px; /* Separación para que no toque la chapita */
+    margin-right: 20px;
 }
 
 .gift-badge.catalog-badge::after {
-    margin-left: 30px; /* Separación para que no toque la chapita */
+    margin-left: 20px;
 }
 
 .gift-badge.config-badge {
-    position: static;
-    margin-top: 5px; /* Movido más arriba (antes era 20px) */
+    width: 100%;
+    margin: 0.75rem auto 0 auto;
+    display: flex;
     justify-content: center;
-    transform: none;
-}
-
-.gift-badge.config-badge img {
-    width: 160px;
-    height: 160px;
+    align-items: center;
 }
 
 .gift-badge img {
-    width: 140px;
-    height: 140px;
+    width: 135px;
+    height: 135px;
     object-fit: contain;
-    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.25));
     animation: bounceBadge 3s infinite ease-in-out;
     z-index: 2;
-    margin-left: -10px;
+    margin-right: -48px; /* Acerca la chapita al contenedor a la derecha */
+    margin-left: 0;
 }
 
 .gift-text {
     display: flex;
     flex-direction: column;
     background: var(--bg-card);
-    padding: 8px 14px;
+    padding: 8px 16px 8px 54px;
     border-radius: var(--radius-md);
     border: 2px solid var(--primary);
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.15);
     flex-shrink: 0;
     white-space: nowrap;
     z-index: 1;
-    margin-left: -40px;
-    padding-left: 45px;
 }
 
 .gift-text strong {
     font-size: 0.95rem;
     font-weight: 800;
     color: var(--primary);
-    line-height: 1.1;
+    line-height: 1.15;
 }
 
 .gift-text span {
@@ -1508,16 +1504,6 @@ body {
 @keyframes bounceBadge {
     0%, 100% { transform: translateY(0) rotate(3deg); }
     50% { transform: translateY(-5px) rotate(5deg); }
-}
-
-@media (max-width: 600px) {
-    .gift-badge {
-        position: static;
-        margin-top: 15px;
-        transform: none !important;
-        animation: none;
-        display: inline-flex;
-    }
 }
 
 /* FAQ STYLES */
@@ -1745,8 +1731,9 @@ textarea.form-input {
     }
 
     .main-header {
-        padding: 0.9rem 0.85rem 0.9rem 88px;
-        margin-top: 1.25rem;
+        margin-left: 20px;
+        padding: 0.85rem 0.75rem 0.85rem 78px;
+        margin-top: 1.6rem;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
@@ -1764,11 +1751,11 @@ textarea.form-input {
 
     .brand-avatar {
         position: absolute;
-        left: -6px;
+        left: -28px;
         top: 50%;
         transform: translateY(-50%);
-        width: 82px;
-        height: 82px;
+        width: 104px;
+        height: 104px;
         z-index: 10;
     }
 
@@ -1816,55 +1803,74 @@ textarea.form-input {
         transform: none !important;
     }
 
-    /* Chapitas de regalo (Badge) Grande y Destacada en Móvil */
+    /* Chapitas de regalo (Badge) Centradas y con Líneas Laterales en Móvil */
     .gift-badge.catalog-badge {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        max-width: 100%;
-        margin: 0.5rem auto 1.25rem auto;
-        padding: 0.4rem 0;
-        position: relative;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0.5rem auto 1.25rem auto !important;
+        padding: 0.2rem 0 !important;
+        position: relative !important;
     }
 
     .gift-badge.catalog-badge::before,
     .gift-badge.catalog-badge::after {
-        display: none !important;
+        content: "" !important;
+        display: block !important;
+        flex: 1 !important;
+        height: 1px !important;
+        background-color: var(--border-medium) !important;
     }
 
-    .gift-badge.catalog-badge img,
+    .gift-badge.catalog-badge::before {
+        margin-right: 12px !important;
+    }
+
+    .gift-badge.catalog-badge::after {
+        margin-left: 12px !important;
+    }
+
+    .gift-badge.config-badge {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        margin: 0.75rem auto 0.25rem auto !important;
+    }
+
     .gift-badge img {
-        width: 125px;
-        height: 125px;
+        width: 115px !important;
+        height: 115px !important;
         object-fit: contain;
-        filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.28));
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
         animation: bounceBadge 3s infinite ease-in-out;
         z-index: 2;
-        margin-left: 0;
+        margin-right: -42px !important;
+        margin-left: 0 !important;
     }
 
-    .gift-badge.catalog-badge .gift-text,
     .gift-text {
-        margin-left: -32px;
-        padding: 10px 16px 10px 38px;
+        padding: 8px 14px 8px 48px !important;
         background: var(--bg-card);
         border: 2px solid var(--primary);
         border-radius: var(--radius-md);
-        box-shadow: 0 6px 16px rgba(79, 70, 229, 0.18);
+        box-shadow: 0 4px 14px rgba(79, 70, 229, 0.15);
         z-index: 1;
         white-space: nowrap;
+        margin-left: 0 !important;
     }
 
     .gift-text strong {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         color: var(--primary);
         font-weight: 800;
         line-height: 1.15;
     }
 
     .gift-text span {
-        font-size: 0.76rem;
+        font-size: 0.72rem;
         color: var(--text-muted);
         font-weight: 600;
     }
