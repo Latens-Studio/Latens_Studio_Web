@@ -168,6 +168,10 @@
                             <h3>¿Tienes una idea fuera del catálogo?</h3>
                             <p>Si está dentro de mis posibilidades, puedo diseñar tu pieza o imprimir archivos 3D (.STL / .OBJ) que ya tengas. Aunque no esculpo modelos complejos desde cero, ¡envíame tu idea sin compromiso y te respondo encantado si es posible hacerla!</p>
                             <form id="contactForm" class="custom-form">
+                                <!-- Campo trampa oculto anti-bots (Honeypot) -->
+                                <div style="display: none !important; position: absolute; left: -9999px;">
+                                    <input type="text" name="website_hp" tabindex="-1" autocomplete="off">
+                                </div>
                                 
                                 <div class="form-group">
                                     <input type="text" name="name" placeholder="Tu Nombre" required class="form-input">
@@ -565,6 +569,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=2.2"></script>
+    <script src="script.js?v=2.3"></script>
 </body>
 </html>

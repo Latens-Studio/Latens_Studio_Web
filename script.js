@@ -704,10 +704,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contactForm) {
         contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            formResult.textContent = 'Enviando...';
-            formResult.className = 'form-result';
             
             const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const emailInput = contactForm.querySelector('input[name="email"]');
+            const emailVal = emailInput ? emailInput.value.trim().toLowerCase() : '';
+            const hpInput = contactForm.querySelector('input[name="website_hp"]');
+
+            // 1. Anti-bot honeypot check (solo bloquea bots automáticos)
+            if (hpInput && hpInput.value) {
+                console.warn('Bot submission blocked');
+                return;
+            }
+
+            // 2. Validación de formato de correo estándar y extensión real
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(emailVal)) {
+                formResult.textContent = '❌ Por favor, introduce un correo electrónico válido (ej: tu_nombre@gmail.com).';
+                formResult.className = 'form-result error';
+                if (emailInput) emailInput.focus();
+                return;
+            }
+
+            formResult.textContent = 'Enviando...';
+            formResult.className = 'form-result';
             if (submitBtn) submitBtn.disabled = true;
 
             const formData = new FormData(contactForm);
