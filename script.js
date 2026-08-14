@@ -1,17 +1,58 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ─── TABS LOGIC ───
+    // ─── TABS & DEEP LINKING URL ROUTER ───
     const tabBtns = document.querySelectorAll('.nav-tab-btn');
     const tabPanes = document.querySelectorAll('.tab-pane');
 
-    function switchTab(targetId) {
+    const TAB_ALIASES = {
+        'tab-profile': 'tab-profile',
+        'perfil': 'tab-profile',
+        'sobre-mi': 'tab-profile',
+        'contacto': 'tab-profile',
+        'redes': 'tab-profile',
+
+        'tab-gallery': 'tab-gallery',
+        'catalogo': 'tab-gallery',
+        'galeria': 'tab-gallery',
+        'modelos': 'tab-gallery',
+        'productos': 'tab-gallery',
+
+        'tab-preview': 'tab-preview',
+        'personalizador': 'tab-preview',
+        'configurador': 'tab-preview',
+        'visor': 'tab-preview',
+        '3d': 'tab-preview',
+        'previsualizador': 'tab-preview',
+        'generar': 'tab-preview',
+
+        'tab-faq': 'tab-faq',
+        'faq': 'tab-faq',
+        'preguntas': 'tab-faq',
+        'dudas': 'tab-faq',
+        'ayuda': 'tab-faq'
+    };
+
+    function resolveTabId(alias) {
+        if (!alias) return null;
+        const clean = alias.toLowerCase().replace(/^[#?]/, '').trim();
+        return TAB_ALIASES[clean] || (document.getElementById(clean) ? clean : null);
+    }
+
+    function switchTab(targetId, updateUrl = true) {
+        const resolvedId = resolveTabId(targetId) || targetId;
+        const activeBtn = document.querySelector(`[data-target="${resolvedId}"]`);
+        const activePane = document.getElementById(resolvedId);
+
+        if (!activePane) return;
+
         tabBtns.forEach(btn => btn.classList.remove('active'));
         tabPanes.forEach(pane => pane.classList.remove('active'));
         
-        const activeBtn = document.querySelector(`[data-target="${targetId}"]`);
-        const activePane = document.getElementById(targetId);
-        
         if (activeBtn) activeBtn.classList.add('active');
-        if (activePane) activePane.classList.add('active');
+        activePane.classList.add('active');
+
+        if (updateUrl && window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', '#' + resolvedId);
+        }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -33,6 +74,58 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 100);
         });
     }
+
+    function handleUrlRouting() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const hash = window.location.hash;
+        
+        // 1. Prioridad: Parámetro ?tab= o ?seccion=
+        const paramTab = urlParams.get('tab') || urlParams.get('seccion') || urlParams.get('pestaña');
+        let targetTab = resolveTabId(paramTab);
+
+        // 2. Comprobar Hash de la URL (#catalogo, #tab-preview, #faq, etc.)
+        if (!targetTab && hash) {
+            targetTab = resolveTabId(hash);
+        }
+
+        // 3. Comprobar si hay producto seleccionado por URL (?producto=iniciales o ?producto=corazon)
+        const paramProduct = urlParams.get('producto') || urlParams.get('product') || urlParams.get('modelo');
+        if (paramProduct && productSelect) {
+            const productVal = paramProduct.toLowerCase();
+            if (productVal.includes('inicial')) {
+                productSelect.value = 'iniciales';
+            } else if (productVal.includes('corazon') || productVal.includes('nombre')) {
+                productSelect.value = 'corazon';
+            }
+            renderDynamicInputs();
+            if (!targetTab) targetTab = 'tab-preview';
+        }
+
+        // 4. Parámetros opcionales de nombres (?nombre1=Ana&nombre2=Juan o ?n1=A&n2=J)
+        const n1 = urlParams.get('nombre1') || urlParams.get('n1') || urlParams.get('nombre_izq');
+        const n2 = urlParams.get('nombre2') || urlParams.get('n2') || urlParams.get('nombre_der');
+        if (n1 || n2) {
+            setTimeout(() => {
+                const input1 = document.getElementById('name1');
+                const input2 = document.getElementById('name2');
+                if (input1 && n1) input1.value = decodeURIComponent(n1);
+                if (input2 && n2) input2.value = decodeURIComponent(n2);
+            }, 80);
+            if (!targetTab) targetTab = 'tab-preview';
+        }
+
+        // Si se resolvió una pestaña específica, cambiar a ella
+        if (targetTab) {
+            switchTab(targetTab, false);
+        }
+    }
+
+    window.addEventListener('hashchange', () => {
+        if (window.location.hash) {
+            const target = resolveTabId(window.location.hash);
+            if (target) switchTab(target, false);
+        }
+    });
 
     // ─── GALLERY PREVIEW TRIGGERS ───
     const previewTriggers = document.querySelectorAll('.preview-trigger');
@@ -93,6 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
         productSelect.addEventListener('change', renderDynamicInputs);
         renderDynamicInputs();
     }
+
+    // Inicializar navegación por URL / Parámetros
+    handleUrlRouting();
 
     // ─── API CALL & VIEWER STATE ───
     const generateBtn = document.getElementById('generateBtn');
