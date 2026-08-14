@@ -176,6 +176,35 @@ body {
     filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
 }
 
+.logo-path-bg {
+    fill: #000000;
+    stroke: #ffffff;
+    stroke-width: 14.2px;
+    stroke-linecap: square;
+}
+
+.logo-path-outer {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 25.1px;
+    stroke-linecap: square;
+}
+
+.logo-path-inner {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 17.2px;
+    stroke-linecap: square;
+}
+
+.logo-path-spoke {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 8.3px;
+    stroke-linecap: butt;
+    stroke-linejoin: bevel;
+}
+
 .brand-title {
     font-family: var(--font-heading);
     font-size: clamp(1.15rem, 2.5vw, 1.45rem);
@@ -1696,8 +1725,8 @@ textarea.form-input {
     }
 
     .main-header {
-        padding: 1.15rem 0.85rem 1.15rem 86px;
-        margin-top: 2rem;
+        padding: 1rem 0.85rem 1rem 96px;
+        margin-top: 1.8rem;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
@@ -1715,11 +1744,11 @@ textarea.form-input {
 
     .brand-avatar {
         position: absolute;
-        left: -26px;
+        left: -20px;
         top: 50%;
         transform: translateY(-50%);
-        width: 102px;
-        height: 102px;
+        width: 100px;
+        height: 100px;
         z-index: 10;
     }
 
@@ -1798,7 +1827,7 @@ textarea.form-input {
     .gift-text {
         margin-left: -32px;
         padding: 10px 16px 10px 38px;
-        background: #ffffff;
+        background: var(--bg-card);
         border: 2px solid var(--primary);
         border-radius: var(--radius-md);
         box-shadow: 0 6px 16px rgba(79, 70, 229, 0.18);
