@@ -141,13 +141,14 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
-    padding: 1.5rem 2rem 1.5rem 135px;
+    padding: 1.5rem 2rem 1.5rem 125px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     box-shadow: var(--shadow-sm);
     position: relative;
     margin-top: 3.25rem;
+    margin-left: 55px; /* Margen de seguridad para que el logo flotante no se corte en pantallas medianas o landscape */
     overflow: visible;
 }
 
@@ -159,11 +160,11 @@ body {
 
 .brand-avatar {
     position: absolute;
-    left: -58px;
+    left: -55px;
     top: 50%;
     transform: translateY(-50%);
-    width: 165px;
-    height: 165px;
+    width: 160px;
+    height: 160px;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -293,7 +294,7 @@ body {
     gap: 1.25rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (orientation: portrait), (max-width: 500px) {
     .structured-grid {
         grid-template-columns: 1fr;
     }
@@ -656,7 +657,7 @@ body {
     align-items: start;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 820px) and (orientation: portrait), (max-width: 500px) {
     .preview-container {
         grid-template-columns: 1fr;
     }
@@ -1507,6 +1508,27 @@ body {
 }
 
 /* FAQ STYLES */
+.faq-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.faq-card {
+    max-width: 780px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.faq-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.75rem;
+}
+
 .faq-list {
     display: flex;
     flex-direction: column;
@@ -1719,9 +1741,9 @@ textarea.form-input {
 .form-result.error { color: #dc2626; }
 
 /* ==========================================================================
-   MASTER RESPONSIVE BREAKPOINTS (FULL MOBILE ADAPTATION)
+   MASTER RESPONSIVE BREAKPOINTS (PORTRAIT MOBILE ADAPTATION)
    ========================================================================== */
-@media (max-width: 768px) {
+@media (max-width: 768px) and (orientation: portrait), (max-width: 500px) {
     body {
         padding: 0.75rem 0.5rem 2rem;
     }
@@ -2078,3 +2100,99 @@ textarea.form-input {
         font-size: 0.88rem;
     }
 }
+
+/* ==========================================================================
+   LANDSCAPE ORIENTATION (MOBILE HORIZONTAL -> DESKTOP-LIKE EXPERIENCE)
+   ========================================================================== */
+@media (orientation: landscape) and (max-height: 600px) {
+    body {
+        padding: 0.75rem 1rem 2rem 1rem;
+    }
+
+    .site-wrapper {
+        max-width: 960px;
+        margin: 0 auto;
+        width: 100%;
+        gap: 1.25rem;
+    }
+
+    /* Cabecera con margen de seguridad a la izquierda para que el logo nunca se corte */
+    .main-header {
+        margin-left: 55px !important;
+        padding: 1rem 1.5rem 1rem 120px !important;
+        margin-top: 1.6rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        overflow: visible !important;
+    }
+
+    .header-brand {
+        padding-left: 0 !important;
+    }
+
+    .brand-avatar {
+        position: absolute !important;
+        left: -55px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        width: 145px !important;
+        height: 145px !important;
+        z-index: 10 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .brand-title {
+        font-size: 1.3rem !important;
+        font-weight: 800 !important;
+        white-space: nowrap !important;
+        line-height: 1.2 !important;
+    }
+
+    .brand-subtitle {
+        font-size: 0.8rem !important;
+        color: var(--text-muted) !important;
+        display: block !important;
+    }
+
+    /* Pestañas en una sola fila horizontal fluida (como en PC) */
+    .nav-tabs {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 0.5rem !important;
+        padding: 0.4rem !important;
+    }
+
+    .nav-tab-btn {
+        flex: 1 !important;
+        padding: 0.7rem 0.85rem !important;
+        font-size: 0.88rem !important;
+        white-space: nowrap !important;
+    }
+
+    /* Cuadrículas en 2 columnas (diseño completo de escritorio) */
+    .structured-grid {
+        display: grid !important;
+        grid-template-columns: 1.2fr 0.8fr !important;
+        gap: 1.25rem !important;
+    }
+
+    .preview-container {
+        display: grid !important;
+        grid-template-columns: 320px 1fr !important;
+        gap: 1.25rem !important;
+    }
+
+    .products-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.25rem !important;
+    }
+
+    .product-preview-box {
+        height: 180px !important;
+    }
+}
+
