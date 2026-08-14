@@ -11,7 +11,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs1" />
+     id="defs1">
+    <style>
+      :root, svg { color-scheme: only light !important; forced-color-adjust: none !important; }
+      * { color-scheme: only light !important; forced-color-adjust: none !important; }
+      path { forced-color-adjust: none !important; }
+    </style>
+  </defs>
   <g
      id="g1">
     <g
