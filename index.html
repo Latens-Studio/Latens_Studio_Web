@@ -360,11 +360,38 @@
                             <p>Rellena los nombres en el panel izquierdo y pulsa "Generar" para obtener las capturas tridimensionales y medidas exactas.</p>
                         </div>
 
-                        <!-- Estado 2: Cargando -->
+                        <!-- Estado 2: Cargando con Barra de Progreso y Fases -->
                         <div id="viewerLoading" class="viewer-state">
-                            <div class="custom-loader"></div>
-                            <h3>Generando modelo y renders...</h3>
-                            <p>El servidor está procesando la geometría del texto y capturando 5 perspectivas de alta definición.</p>
+                            <div class="loader-visual-container">
+                                <div class="custom-loader"></div>
+                                <span id="loadingPercent" class="loading-percent-badge">0%</span>
+                            </div>
+                            
+                            <h3 id="loadingStatusTitle">Generando modelo 3D...</h3>
+                            <p id="loadingStatusDesc" class="loading-status-text">📐 Calculando geometría tipográfica y curvas...</p>
+                            
+                            <div class="progress-bar-track">
+                                <div id="loadingProgressBar" class="progress-bar-fill"></div>
+                            </div>
+
+                            <div class="loading-steps-list">
+                                <div class="step-badge active" id="step1">
+                                    <span class="step-dot"></span> 1. Geometría
+                                </div>
+                                <div class="step-badge" id="step2">
+                                    <span class="step-dot"></span> 2. Ensamblaje
+                                </div>
+                                <div class="step-badge" id="step3">
+                                    <span class="step-dot"></span> 3. Render 3D
+                                </div>
+                                <div class="step-badge" id="step4">
+                                    <span class="step-dot"></span> 4. Finalizado
+                                </div>
+                            </div>
+
+                            <div class="loading-timer-badge">
+                                <span id="loadingTimeText">⏱️ Tiempo estimado: ~8-10 seg</span>
+                            </div>
                         </div>
 
                         <!-- Estado 3: Resultados (Imágenes & Medidas) -->

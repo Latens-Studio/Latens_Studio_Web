@@ -524,6 +524,71 @@ document.addEventListener('DOMContentLoaded', () => {
             if (viewerLoading) viewerLoading.classList.add('active');
             generateBtn.disabled = true;
 
+            // ─── PROGRESS BAR & STEP CONTROLLER ───
+            const loadingPercent = document.getElementById('loadingPercent');
+            const loadingProgressBar = document.getElementById('loadingProgressBar');
+            const loadingStatusDesc = document.getElementById('loadingStatusDesc');
+            const loadingTimeText = document.getElementById('loadingTimeText');
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const step4 = document.getElementById('step4');
+
+            let currentProgress = 5;
+            const startTime = Date.now();
+
+            function setStepState(activeStep) {
+                const steps = [step1, step2, step3, step4];
+                steps.forEach((el, index) => {
+                    if (!el) return;
+                    if (index + 1 < activeStep) {
+                        el.className = 'step-badge done';
+                    } else if (index + 1 === activeStep) {
+                        el.className = 'step-badge active';
+                    } else {
+                        el.className = 'step-badge';
+                    }
+                });
+            }
+
+            setStepState(1);
+            if (loadingProgressBar) loadingProgressBar.style.width = '5%';
+            if (loadingPercent) loadingPercent.textContent = '5%';
+
+            const progressInterval = setInterval(() => {
+                const elapsedSec = (Date.now() - startTime) / 1000;
+                
+                if (elapsedSec < 2.0) {
+                    currentProgress = Math.min(28, currentProgress + 1.2);
+                    setStepState(1);
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '📐 Calculando geometría tipográfica y curvas...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ Tiempo estimado: ~${Math.max(1, Math.round(9 - elapsedSec))} seg`;
+                } else if (elapsedSec < 4.5) {
+                    currentProgress = Math.min(58, currentProgress + 0.9);
+                    setStepState(2);
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '❤️ Ensamblando corazón magnético y anillas...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ Tiempo estimado: ~${Math.max(1, Math.round(9 - elapsedSec))} seg`;
+                } else if (elapsedSec < 7.5) {
+                    currentProgress = Math.min(84, currentProgress + 0.7);
+                    setStepState(3);
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '📸 Renderizando 5 perspectivas en alta definición (OpenSCAD)...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ Tiempo estimado: ~${Math.max(1, Math.round(9 - elapsedSec))} seg`;
+                } else if (elapsedSec < 10.0) {
+                    currentProgress = Math.min(95, currentProgress + 0.4);
+                    setStepState(4);
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '⚡ Optimizando imágenes y calculando medidas exactas...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ Finalizando render...`;
+                } else {
+                    currentProgress = Math.min(98, currentProgress + 0.1);
+                    setStepState(4);
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '🌐 Despertando servidor en la nube... ¡Casi listo!';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ Procesando datos (${Math.round(elapsedSec)}s)`;
+                }
+
+                if (loadingPercent) loadingPercent.textContent = `${Math.round(currentProgress)}%`;
+                if (loadingProgressBar) loadingProgressBar.style.width = `${currentProgress}%`;
+            }, 100);
+
             try {
                 const API_URL = 'https://latens-studio-web-backend.onrender.com/api/preview';
                 
@@ -551,6 +616,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 currentApiData = await response.json();
+
+                // Animación de éxito 100%
+                clearInterval(progressInterval);
+                if (loadingProgressBar) loadingProgressBar.style.width = '100%';
+                if (loadingPercent) loadingPercent.textContent = '100%';
+                if (loadingStatusDesc) loadingStatusDesc.textContent = '✨ ¡Modelo 3D y renders completados con éxito!';
+                setStepState(5);
+                await new Promise(r => setTimeout(r, 400));
+
                 activeMode = 'juntos';
                 setActiveModeBtn('juntos');
                 
@@ -579,10 +653,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (viewerResults) viewerResults.classList.add('active');
 
             } catch (error) {
-                alert('Atención: ' + error.message + '\n\nAsegúrate de que el servidor local de Python esté ejecutándose.');
+                clearInterval(progressInterval);
+                alert('Atención: ' + error.message + '\n\nPor favor, inténtalo de nuevo en unos segundos.');
                 if (viewerLoading) viewerLoading.classList.remove('active');
                 if (viewerInitial) viewerInitial.classList.add('active');
             } finally {
+                clearInterval(progressInterval);
                 generateBtn.disabled = false;
             }
         });
