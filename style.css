@@ -1,11 +1,10 @@
 /* ==========================================================================
-   DESIGN TOKENS & SYSTEM (WHITE, CLEAN, STRUCTURED)
+   DESIGN TOKENS & SYSTEM (NATIVE LIGHT & DARK THEMES)
    ========================================================================== */
 :root {
-    color-scheme: only light !important;
-    forced-color-adjust: none !important;
+    color-scheme: light dark;
     
-    /* Color Palette */
+    /* Modo Claro (Default Light Theme) */
     --bg-page: #f8fafc;
     --bg-card: #ffffff;
     --bg-subtle: #f1f5f9;
@@ -27,8 +26,11 @@
     --accent-rose: #e11d48;
     --accent-emerald: #10b981;
     
-    --logo-fill: #000000;
-    --logo-stroke: #ffffff;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.03);
+    
+    --bg-pattern-dot: #cbd5e1;
     
     /* Typography */
     --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -39,31 +41,35 @@
     --radius-md: 12px;
     --radius-sm: 8px;
     
-    /* Elevation Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-    --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.03);
-    
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (prefers-color-scheme: dark) {
-    :root, html, body {
-        color-scheme: only light !important;
-        forced-color-adjust: none !important;
-        background-color: #f8fafc !important;
-        background: #f8fafc !important;
-        color: #334155 !important;
-        --bg-page: #f8fafc !important;
-        --bg-card: #ffffff !important;
-        --bg-subtle: #f1f5f9 !important;
-        --bg-hover: #e2e8f0 !important;
-        --border-light: #e2e8f0 !important;
-        --text-heading: #0f172a !important;
-        --text-body: #334155 !important;
-        --text-muted: #64748b !important;
-        --logo-fill: #000000 !important;
-        --logo-stroke: #ffffff !important;
+    :root {
+        /* Modo Oscuro Nativo (Premium Dark Slate Theme) */
+        --bg-page: #090d16;
+        --bg-card: #111827;
+        --bg-subtle: #1e293b;
+        --bg-hover: #26334d;
+        
+        --border-light: #1f293d;
+        --border-medium: #334155;
+        --border-focus: #818cf8;
+        
+        --text-heading: #f8fafc;
+        --text-body: #cbd5e1;
+        --text-muted: #94a3b8;
+        --text-dim: #64748b;
+        
+        --primary: #6366f1;
+        --primary-hover: #4f46e5;
+        --primary-light: rgba(99, 102, 241, 0.18);
+        
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 16px 36px -4px rgba(0, 0, 0, 0.7), 0 4px 10px -2px rgba(0, 0, 0, 0.4);
+        
+        --bg-pattern-dot: #1e293b;
     }
 }
 
@@ -74,7 +80,6 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    forced-color-adjust: none !important;
 }
 
 img, svg {
@@ -86,9 +91,7 @@ html {
     max-width: 100%;
     overflow-x: hidden;
     scroll-behavior: smooth;
-    color-scheme: only light !important;
-    forced-color-adjust: none !important;
-    background-color: #f8fafc !important;
+    background-color: var(--bg-page);
 }
 
 body {
@@ -96,16 +99,13 @@ body {
     max-width: 100%;
     overflow-x: hidden;
     font-family: var(--font-body);
-    background-color: var(--bg-page) !important;
-    background: #f8fafc !important;
-    color: var(--text-body) !important;
+    background-color: var(--bg-page);
+    color: var(--text-body);
     min-height: 100vh;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     padding: clamp(0.75rem, 2.5vw, 1.5rem) clamp(0.5rem, 2vw, 1.25rem) clamp(2rem, 4vw, 3.5rem);
-    color-scheme: only light !important;
-    forced-color-adjust: none !important;
 }
 
 /* Retícula de fondo discreta */
@@ -116,9 +116,9 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+    background-image: radial-gradient(var(--bg-pattern-dot) 1px, transparent 1px);
     background-size: 24px 24px;
-    opacity: 0.4;
+    opacity: 0.5;
     pointer-events: none;
 }
 
@@ -173,15 +173,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.35)) !important;
-    color-scheme: only light !important;
-    forced-color-adjust: none !important;
-}
-
-.brand-logo-svg path {
-    fill: var(--logo-fill, #000000) !important;
-    stroke: var(--logo-stroke, #ffffff) !important;
-    forced-color-adjust: none !important;
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
 }
 
 .brand-title {
@@ -417,7 +409,7 @@ body {
     border-radius: var(--radius-sm);
     display: grid;
     place-items: center;
-    background: #ffffff;
+    background: var(--bg-card);
     border: 1px solid var(--border-light);
 }
 
@@ -718,8 +710,8 @@ body {
 .form-field input:focus {
     outline: none;
     border-color: var(--border-focus);
-    background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    background: var(--bg-card);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
 .btn-generate {
@@ -1102,7 +1094,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #ffffff;
+    background: var(--bg-card);
     padding: 0.6rem 0.8rem;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-light);
@@ -1152,11 +1144,11 @@ body {
 
 .view-mode-btn:hover {
     color: var(--text-heading);
-    background: rgba(255, 255, 255, 0.6);
+    background: var(--bg-hover);
 }
 
 .view-mode-btn.active {
-    background: #ffffff;
+    background: var(--bg-card);
     color: var(--primary);
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-light);
@@ -1432,23 +1424,23 @@ body {
     object-fit: contain;
     filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
     animation: bounceBadge 3s infinite ease-in-out;
-    z-index: 2; /* Imagen por ENCIMA del texto (como el logo SVG) */
-    margin-left: -10px; 
+    z-index: 2;
+    margin-left: -10px;
 }
 
 .gift-text {
     display: flex;
     flex-direction: column;
-    background: #ffffff;
+    background: var(--bg-card);
     padding: 8px 14px;
     border-radius: var(--radius-md);
     border: 2px solid var(--primary);
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
     flex-shrink: 0;
     white-space: nowrap;
-    z-index: 1; /* Texto por DEBAJO (sale desde detrás de la imagen) */
-    margin-left: -40px; /* Se mete por detrás de la imagen de las chapitas */
-    padding-left: 45px; /* Compensa el margen para que el texto siga centrado y visible */
+    z-index: 1;
+    margin-left: -40px;
+    padding-left: 45px;
 }
 
 .gift-text strong {
@@ -1479,18 +1471,17 @@ body {
     }
 }
 
-
 /* FAQ STYLES */
 .faq-list {
     display: flex;
     flex-direction: column;
-    gap: 1.15rem; /* Separación generosa entre tarjetas */
+    gap: 1.15rem;
 }
 
 .faq-item {
     border: 1px solid var(--border-light);
     border-radius: var(--radius-md);
-    background: #ffffff;
+    background: var(--bg-card);
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
     overflow: hidden;
@@ -1639,7 +1630,7 @@ body {
     font-family: inherit;
     font-size: 0.95rem;
     color: var(--text-heading);
-    background: #ffffff;
+    background: var(--bg-card);
     transition: var(--transition);
 }
 textarea.form-input {
@@ -1651,7 +1642,7 @@ textarea.form-input {
 .form-input:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 .hidden-file {
     display: none;
@@ -1671,11 +1662,11 @@ textarea.form-input {
     transition: var(--transition);
 }
 .file-label:hover {
-    background: #f1f5f9;
+    background: var(--bg-hover);
     border-color: var(--text-muted);
 }
 .file-label.has-file {
-    background: #eff6ff;
+    background: var(--bg-card);
     border-color: var(--primary);
     color: var(--primary);
     font-weight: 500;
