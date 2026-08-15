@@ -948,7 +948,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearInterval(sendTimerInterval);
 
                 if (response.status == 200) {
-                    formResult.textContent = '¡Mensaje enviado con éxito! Te responderé pronto.';
+                    formResult.innerHTML = '✅ <strong>¡Mensaje entregado!</strong><br>He recibido tu solicitud y te contestaré lo antes posible a <strong>' + emailVal + '</strong>.';
                     formResult.className = 'form-result success';
                     contactForm.reset();
                     if (messageTextarea) messageTextarea.style.height = 'auto';
