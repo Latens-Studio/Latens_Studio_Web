@@ -88,12 +88,14 @@ document.addEventListener('DOMContentLoaded', () => {
             targetTab = resolveTabId(hash);
         }
 
-        // 3. Comprobar si hay producto seleccionado por URL (?producto=iniciales o ?producto=corazon)
+        // 3. Comprobar si hay producto seleccionado por URL (?producto=iniciales, ?producto=corazon, ?producto=individual)
         const paramProduct = urlParams.get('producto') || urlParams.get('product') || urlParams.get('modelo');
         if (paramProduct && productSelect) {
             const productVal = paramProduct.toLowerCase();
             if (productVal.includes('inicial')) {
                 productSelect.value = 'iniciales';
+            } else if (productVal.includes('individual') || productVal.includes('solo') || productVal.includes('unico')) {
+                productSelect.value = 'individual';
             } else if (productVal.includes('corazon') || productVal.includes('nombre')) {
                 productSelect.value = 'corazon';
             }
@@ -161,23 +163,32 @@ document.addEventListener('DOMContentLoaded', () => {
             fechaGroup.style.display = productosSoportanFecha.includes(val) ? 'block' : 'none';
         }
 
-        // Ambos productos soportados son de pareja (2 inputs)
-        const labelA = val === 'iniciales' ? 'Inicial Izquierda (A)' : 'Nombre Izquierda (Llavero A)';
-        const labelB = val === 'iniciales' ? 'Inicial Derecha (B)' : 'Nombre Derecha (Llavero B)';
-        const phA = val === 'iniciales' ? 'Ej: A' : 'Ej: Ana';
-        const phB = val === 'iniciales' ? 'Ej: J' : 'Ej: Juan';
-        const maxL = val === 'iniciales' ? '1' : '10';
+        if (val === 'individual') {
+            html = `
+                <div class="form-field">
+                    <label for="name1">Nombre para el Llavero</label>
+                    <input type="text" id="name1" placeholder="Ej: Carlos" maxlength="12" required>
+                </div>
+            `;
+        } else {
+            // Productos de pareja (2 inputs)
+            const labelA = val === 'iniciales' ? 'Inicial Izquierda (A)' : 'Nombre Izquierda (Llavero A)';
+            const labelB = val === 'iniciales' ? 'Inicial Derecha (B)' : 'Nombre Derecha (Llavero B)';
+            const phA = val === 'iniciales' ? 'Ej: A' : 'Ej: Ana';
+            const phB = val === 'iniciales' ? 'Ej: J' : 'Ej: Juan';
+            const maxL = val === 'iniciales' ? '1' : '10';
 
-        html = `
-            <div class="form-field">
-                <label for="name1">${labelA}</label>
-                <input type="text" id="name1" placeholder="${phA}" maxlength="${maxL}" required>
-            </div>
-            <div class="form-field">
-                <label for="name2">${labelB}</label>
-                <input type="text" id="name2" placeholder="${phB}" maxlength="${maxL}" required>
-            </div>
-        `;
+            html = `
+                <div class="form-field">
+                    <label for="name1">${labelA}</label>
+                    <input type="text" id="name1" placeholder="${phA}" maxlength="${maxL}" required>
+                </div>
+                <div class="form-field">
+                    <label for="name2">${labelB}</label>
+                    <input type="text" id="name2" placeholder="${phB}" maxlength="${maxL}" required>
+                </div>
+            `;
+        }
 
         dynamicInputsContainer.innerHTML = html;
     }
@@ -467,10 +478,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const imgList = getActiveImages();
         if (!imgList || !imgList[currentSlide]) return;
 
-        if (lightboxImg) lightboxImg.src = `data:image/png;base64,${imgList[currentSlide]}`;
-        const modeText = activeMode === 'juntos' ? 'Juntos' : 'Separados';
+        let modeText = '';
+        if (activeMode === 'tarjeta') {
+            modeText = ' - [Tarjeta 3D]';
+        } else if (productSelect && productSelect.value === 'individual') {
+            modeText = ' - [Individual]';
+        } else {
+            modeText = activeMode === 'juntos' ? ' - [Juntos]' : ' - [Separados]';
+        }
         const currentPerspectives = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
-        if (lightboxTitle) lightboxTitle.textContent = `${currentPerspectives[currentSlide] || 'Perspectiva'} - [${modeText}]`;
+        if (lightboxTitle) lightboxTitle.textContent = `${currentPerspectives[currentSlide] || 'Perspectiva'}${modeText}`;
     }
 
     if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
@@ -610,8 +627,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if ((type === 'corazon' || type === 'iniciales') && (!name1 || !name2)) {
                 alert('Por favor, introduce los dos nombres o iniciales para formar el corazón.');
                 return;
-            } else if (!name1) {
-                alert('Por favor, introduce el nombre.');
+            } else if (type === 'individual' && !name1) {
+                alert('Por favor, introduce el nombre para el llavero.');
                 return;
             }
 
@@ -725,6 +742,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 activeMode = 'juntos';
                 setActiveModeBtn('juntos');
+
+                // En modelo individual ocultamos el selector Juntos/Separados porque es 1 sola pieza
+                if (type === 'individual') {
+                    if (modeJuntosBtn) modeJuntosBtn.style.display = 'none';
+                    if (modeSeparadosBtn) modeSeparadosBtn.style.display = 'none';
+                } else {
+                    if (modeJuntosBtn) modeJuntosBtn.style.display = 'inline-block';
+                    if (modeSeparadosBtn) modeSeparadosBtn.style.display = 'inline-block';
+                }
                 
                 // Mostrar botón de tarjeta solo si se ha generado tarjeta
                 if (modeTarjetaBtn) {

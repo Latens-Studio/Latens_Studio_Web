@@ -529,6 +529,10 @@ body {
     background: linear-gradient(135deg, #0f172a, #1e293b);
 }
 
+.individual-theme {
+    background: linear-gradient(135deg, #0c1a2e, #132e3b);
+}
+
 .product-tag {
     position: absolute;
     top: 12px;
@@ -574,6 +578,20 @@ body {
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.3);
     border: 1px solid var(--border-light);
+}
+
+.mockup-name.single {
+    border-radius: 20px 10px 10px 20px;
+    border-left: 4px solid var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mockup-name.single::before {
+    content: "⭕";
+    font-size: 0.85rem;
+    opacity: 0.7;
 }
 
 .product-body {
