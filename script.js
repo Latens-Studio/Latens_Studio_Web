@@ -438,6 +438,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let startY = 0;
 
+    let lightboxMode = '3d'; // '3d' | 'catalog'
+    let catalogLightboxImages = [];
+    let catalogLightboxTitles = [];
+    let catalogSlideIndex = 0;
+
     function applyZoomTransform() {
         if (!lightboxImg) return;
         lightboxImg.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
@@ -461,7 +466,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openLightbox(index) {
+        lightboxMode = '3d';
         if (index !== undefined) currentSlide = index;
+        resetZoom();
+        updateLightboxContent();
+        if (lightboxModal) lightboxModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function openCatalogLightbox(images, index = 0, titles = []) {
+        lightboxMode = 'catalog';
+        catalogLightboxImages = images;
+        catalogLightboxTitles = titles;
+        catalogSlideIndex = index;
         resetZoom();
         updateLightboxContent();
         if (lightboxModal) lightboxModal.classList.add('active');
@@ -475,8 +492,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateLightboxContent() {
+        if (lightboxMode === 'catalog') {
+            if (!catalogLightboxImages || !catalogLightboxImages[catalogSlideIndex]) return;
+            if (lightboxImg) lightboxImg.src = catalogLightboxImages[catalogSlideIndex];
+            const title = catalogLightboxTitles[catalogSlideIndex] || `Foto ${catalogSlideIndex + 1} de ${catalogLightboxImages.length}`;
+            if (lightboxTitle) lightboxTitle.textContent = title;
+            return;
+        }
+
         const imgList = getActiveImages();
         if (!imgList || !imgList[currentSlide]) return;
+
+        if (lightboxImg) lightboxImg.src = `data:image/png;base64,${imgList[currentSlide]}`;
 
         let modeText = '';
         if (activeMode === 'tarjeta') {
@@ -490,26 +517,37 @@ document.addEventListener('DOMContentLoaded', () => {
         if (lightboxTitle) lightboxTitle.textContent = `${currentPerspectives[currentSlide] || 'Perspectiva'}${modeText}`;
     }
 
-    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
-    if (lightboxOverlay) lightboxOverlay.addEventListener('click', closeLightbox);
-
-    if (lightboxPrev) {
-        lightboxPrev.addEventListener('click', () => {
+    function lightboxPrevSlide() {
+        if (lightboxMode === 'catalog') {
+            catalogSlideIndex = (catalogSlideIndex > 0) ? catalogSlideIndex - 1 : catalogLightboxImages.length - 1;
+            resetZoom();
+            updateLightboxContent();
+        } else {
             const currentPerspectives = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
             currentSlide = (currentSlide > 0) ? currentSlide - 1 : currentPerspectives.length - 1;
             resetZoom();
             updateCarousel();
-        });
+        }
     }
 
-    if (lightboxNext) {
-        lightboxNext.addEventListener('click', () => {
+    function lightboxNextSlide() {
+        if (lightboxMode === 'catalog') {
+            catalogSlideIndex = (catalogSlideIndex < catalogLightboxImages.length - 1) ? catalogSlideIndex + 1 : 0;
+            resetZoom();
+            updateLightboxContent();
+        } else {
             const currentPerspectives = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
             currentSlide = (currentSlide < currentPerspectives.length - 1) ? currentSlide + 1 : 0;
             resetZoom();
             updateCarousel();
-        });
+        }
     }
+
+    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (lightboxOverlay) lightboxOverlay.addEventListener('click', closeLightbox);
+
+    if (lightboxPrev) lightboxPrev.addEventListener('click', lightboxPrevSlide);
+    if (lightboxNext) lightboxNext.addEventListener('click', lightboxNextSlide);
 
     if (zoomInBtn) zoomInBtn.addEventListener('click', () => setZoom(zoomLevel + 0.3));
     if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => setZoom(zoomLevel - 0.3));
@@ -552,15 +590,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape') {
             closeLightbox();
         } else if (e.key === 'ArrowLeft') {
-            const currentPerspectives = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
-            currentSlide = (currentSlide > 0) ? currentSlide - 1 : currentPerspectives.length - 1;
-            resetZoom();
-            updateCarousel();
+            lightboxPrevSlide();
         } else if (e.key === 'ArrowRight') {
-            const currentPerspectives = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
-            currentSlide = (currentSlide < currentPerspectives.length - 1) ? currentSlide + 1 : 0;
-            resetZoom();
-            updateCarousel();
+            lightboxNextSlide();
         }
     });
 
@@ -579,24 +611,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: true });
         
         function handleSwipe() {
-            // Si hay zoom activo, no hacemos swipe para cambiar de foto (para permitir panning)
             if (zoomLevel > 1.05) return;
-            
             const swipeThreshold = 50;
             const diff = touchEndX - touchStartX;
-            
             if (Math.abs(diff) > swipeThreshold) {
-                const currentPerspectives = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
-                
                 if (diff > 0) {
-                    // Swipe right (Previous)
-                    currentSlide = (currentSlide > 0) ? currentSlide - 1 : currentPerspectives.length - 1;
+                    lightboxPrevSlide();
                 } else {
-                    // Swipe left (Next)
-                    currentSlide = (currentSlide < currentPerspectives.length - 1) ? currentSlide + 1 : 0;
+                    lightboxNextSlide();
                 }
-                resetZoom();
-                updateCarousel();
             }
         }
     }
@@ -910,6 +933,20 @@ document.addEventListener('DOMContentLoaded', () => {
             slides.forEach((s, i) => s.classList.toggle('active', i === currentIdx));
             dots.forEach((d, i) => d.classList.toggle('active', i === currentIdx));
         }
+
+        // Clic en la foto para abrirla en grande en el Lightbox con zoom y navegación
+        slides.forEach((slide, sIdx) => {
+            slide.title = 'Haz clic para ampliar la foto';
+            slide.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const allSources = Array.from(slides).map(s => s.getAttribute('src'));
+                const allTitles = Array.from(slides).map((s, i) => {
+                    const alt = s.getAttribute('alt');
+                    return alt ? `${alt} (${i + 1}/${slides.length})` : `Foto ${i + 1} de ${slides.length}`;
+                });
+                openCatalogLightbox(allSources, sIdx, allTitles);
+            });
+        });
 
         if (prevBtn) {
             prevBtn.addEventListener('click', (e) => {
