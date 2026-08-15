@@ -1470,13 +1470,13 @@ body {
 }
 
 .gift-badge img {
-    width: 135px;
-    height: 135px;
+    width: 138px;
+    height: 138px;
     object-fit: contain;
     filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.25));
     animation: bounceBadge 3s infinite ease-in-out;
     z-index: 2;
-    margin-right: -48px; /* Acerca la chapita al contenedor a la derecha */
+    margin-right: -46px; /* Superposición armónica sobre el contenedor */
     margin-left: 0;
 }
 
@@ -1484,7 +1484,7 @@ body {
     display: flex;
     flex-direction: column;
     background: var(--bg-card);
-    padding: 8px 16px 8px 54px;
+    padding: 10px 22px 10px 32px; /* Proporción ligeramente mayor */
     border-radius: var(--radius-md);
     border: 2px solid var(--primary);
     box-shadow: 0 4px 14px rgba(79, 70, 229, 0.15);
@@ -1494,14 +1494,14 @@ body {
 }
 
 .gift-text strong {
-    font-size: 0.95rem;
+    font-size: 1.08rem;
     font-weight: 800;
     color: var(--primary);
     line-height: 1.15;
 }
 
 .gift-text span {
-    font-size: 0.75rem;
+    font-size: 0.84rem;
     color: var(--text-muted);
     font-weight: 600;
 }
@@ -1867,18 +1867,18 @@ textarea.form-input {
     }
 
     .gift-badge img {
-        width: 115px !important;
-        height: 115px !important;
+        width: 118px !important;
+        height: 118px !important;
         object-fit: contain;
         filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
         animation: bounceBadge 3s infinite ease-in-out;
         z-index: 2;
-        margin-right: -42px !important;
+        margin-right: -38px !important;
         margin-left: 0 !important;
     }
 
     .gift-text {
-        padding: 8px 14px 8px 48px !important;
+        padding: 8px 16px 8px 28px !important;
         background: var(--bg-card);
         border: 2px solid var(--primary);
         border-radius: var(--radius-md);
@@ -1889,14 +1889,14 @@ textarea.form-input {
     }
 
     .gift-text strong {
-        font-size: 0.9rem;
+        font-size: 0.98rem !important;
         color: var(--primary);
         font-weight: 800;
         line-height: 1.15;
     }
 
     .gift-text span {
-        font-size: 0.72rem;
+        font-size: 0.78rem !important;
         color: var(--text-muted);
         font-weight: 600;
     }
