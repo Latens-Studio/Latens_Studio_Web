@@ -232,7 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const carouselTrack = document.getElementById('carouselTrack');
     const perspectiveLabel = document.getElementById('perspectiveLabel');
-    const perspectiveThumbs = document.querySelectorAll('.thumb-btn');
     
     const modeJuntosBtn = document.getElementById('modeJuntosBtn');
     const modeSeparadosBtn = document.getElementById('modeSeparadosBtn');
@@ -386,13 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
             messageCounter.textContent = `${cardMessage.value.length}/81`;
         });
     }
-
-    perspectiveThumbs.forEach((thumb, idx) => {
-        thumb.addEventListener('click', () => {
-            currentSlide = idx;
-            updateCarousel();
-        });
-    });
 
     const carPrevBtn = document.getElementById('carouselPrev');
     const carNextBtn = document.getElementById('carouselNext');
@@ -839,7 +831,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (viewerResults) viewerResults.classList.add('active');
 
             } catch (error) {
-                clearInterval(timeTrackerInterval);
                 alert('Atenci\u00f3n: ' + error.message + '\n\nPor favor, int\u00e9ntalo de nuevo en unos segundos.');
                 if (viewerLoading) viewerLoading.classList.remove('active');
                 if (viewerInitial) viewerInitial.classList.add('active');

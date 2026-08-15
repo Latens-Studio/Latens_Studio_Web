@@ -522,14 +522,6 @@ body {
     overflow: hidden;
 }
 
-.heart-theme {
-    background: linear-gradient(135deg, #1e1b4b, #31102f);
-}
-
-.standard-theme {
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-}
-
 .individual-theme {
     background: linear-gradient(135deg, #0c1a2e, #132e3b);
 }
@@ -2164,40 +2156,6 @@ textarea.form-input {
         flex-wrap: wrap;
         gap: 0.25rem;
         margin-bottom: 0.45rem;
-    }
-
-    .meta-pill {
-        font-size: 0.62rem;
-        padding: 0.15rem 0.35rem;
-        background: var(--bg-subtle);
-        border-radius: 4px;
-        color: var(--text-muted);
-    }
-
-    .product-footer {
-        margin-top: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-        padding-top: 0.4rem;
-        border-top: 1px solid var(--border-light);
-    }
-
-    .product-price {
-        display: flex;
-        align-items: baseline;
-        gap: 0.2rem;
-    }
-
-    .price-val {
-        font-size: 1.05rem;
-        font-weight: 800;
-        color: var(--text-heading);
-    }
-
-    .price-unit {
-        font-size: 0.65rem;
-        color: var(--text-muted);
     }
 
     .btn-primary-block {
