@@ -701,41 +701,22 @@ document.addEventListener('DOMContentLoaded', () => {
             setStepState(1);
             if (loadingProgressBar) loadingProgressBar.style.width = '8%';
             if (loadingPercent) loadingPercent.textContent = '8%';
-            if (loadingTimeText) loadingTimeText.textContent = '\u23f1\ufe0f Iniciando conexi\u00f3n con el servidor 3D...';
-
-            const progressInterval = setInterval(() => {
+            let sseStarted = false;
+            const timeTrackerInterval = setInterval(() => {
                 const elapsedSec = (Date.now() - startTime) / 1000;
                 
-                if (elapsedSec < 2.5) {
-                    currentProgress = Math.min(30, 8 + elapsedSec * 9);
-                    setStepState(1);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '\ud83d\udcd0 1/4: Calculando geometr\u00eda tipogr\u00e1fica y curvas vectoriales...';
-                    if (loadingTimeText) loadingTimeText.textContent = `\u23f1\ufe0f ${elapsedSec.toFixed(1)}s \u2014 Generando mallas STL...`;
-                } else if (elapsedSec < 5.5) {
-                    currentProgress = Math.min(60, 30 + (elapsedSec - 2.5) * 10);
-                    setStepState(2);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '\u2764\ufe0f 2/4: Ensamblando coraz\u00f3n magn\u00e9tico y anillas...';
-                    if (loadingTimeText) loadingTimeText.textContent = `\u23f1\ufe0f ${elapsedSec.toFixed(1)}s \u2014 Fusionando piezas...`;
-                } else if (elapsedSec < 9.0) {
-                    currentProgress = Math.min(85, 60 + (elapsedSec - 5.5) * 7);
-                    setStepState(3);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '\ud83d\udcf8 3/4: Renderizando 5 perspectivas en alta definici\u00f3n (OpenSCAD)...';
-                    if (loadingTimeText) loadingTimeText.textContent = `\u23f1\ufe0f ${elapsedSec.toFixed(1)}s \u2014 Capturando \u00e1ngulos HD...`;
-                } else if (elapsedSec < 13.0) {
-                    currentProgress = Math.min(96, 85 + (elapsedSec - 9.0) * 2.8);
-                    setStepState(4);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '\u26a1 4/4: Optimizando im\u00e1genes y calculando medidas de impresi\u00f3n...';
-                    if (loadingTimeText) loadingTimeText.textContent = `\u23f1\ufe0f ${elapsedSec.toFixed(1)}s \u2014 Empaquetando resultado...`;
+                if (!sseStarted) {
+                    if (elapsedSec > 3) {
+                        currentProgress = Math.min(10, 5 + elapsedSec * 0.1);
+                        if (loadingStatusDesc) loadingStatusDesc.textContent = '🌐 Despertando servidor en la nube tras inactividad (puede tardar hasta ~50s)... ¡Ya casi está!';
+                        if (loadingPercent) loadingPercent.textContent = `${Math.round(currentProgress)}%`;
+                        if (loadingProgressBar) loadingProgressBar.style.width = `${currentProgress}%`;
+                    }
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(0)}s transcurridos — Esperando conexión...`;
                 } else {
-                    currentProgress = Math.min(99, 96 + (elapsedSec - 13.0) * 0.15);
-                    setStepState(4);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '\ud83c\udf10 Despertando servidor en la nube tras inactividad... \u00a1Ya casi est\u00e1!';
-                    if (loadingTimeText) loadingTimeText.textContent = `\u23f1\ufe0f ${elapsedSec.toFixed(0)}s transcurridos \u2014 Preparando render...`;
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(1)}s transcurridos`;
                 }
-
-                if (loadingPercent) loadingPercent.textContent = `${Math.round(currentProgress)}%`;
-                if (loadingProgressBar) loadingProgressBar.style.width = `${currentProgress}%`;
-            }, 80);
+            }, 100);
 
             try {
                 const API_URL = 'https://latens-studio-web-backend.onrender.com/api/preview';
@@ -753,9 +734,55 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(errData.detail || 'Error al conectar con el servidor 3D');
                 }
 
-                currentApiData = await response.json();
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
 
-                clearInterval(progressInterval);
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    sseStarted = true;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop(); // Mantener línea incompleta en el buffer
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const dataStr = line.slice(6).trim();
+                            if (!dataStr) continue;
+                            
+                            try {
+                                const data = JSON.parse(dataStr);
+                                
+                                if (data.type === 'progress') {
+                                    currentProgress = data.progress;
+                                    if (loadingPercent) loadingPercent.textContent = `${Math.round(currentProgress)}%`;
+                                    if (loadingProgressBar) loadingProgressBar.style.width = `${currentProgress}%`;
+                                    if (loadingStatusDesc) loadingStatusDesc.textContent = data.message;
+                                    
+                                    if (currentProgress < 30) setStepState(1);
+                                    else if (currentProgress < 60) setStepState(2);
+                                    else if (currentProgress < 90) setStepState(3);
+                                    else setStepState(4);
+                                    
+                                } else if (data.type === 'result') {
+                                    currentApiData = data.result;
+                                } else if (data.type === 'error') {
+                                    throw new Error(data.detail || 'Error durante la generación');
+                                }
+                            } catch (e) {
+                                console.error('Error parseando SSE:', e, dataStr);
+                            }
+                        }
+                    }
+                }
+
+                if (!currentApiData) {
+                    throw new Error("No se recibieron resultados válidos del servidor.");
+                }
+
+                clearInterval(timeTrackerInterval);
                 if (loadingProgressBar) loadingProgressBar.style.width = '100%';
                 if (loadingPercent) loadingPercent.textContent = '100%';
                 if (loadingStatusDesc) loadingStatusDesc.textContent = '\u2728 \u00a1Modelo 3D y renders completados con \u00e9xito!';
@@ -797,12 +824,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (viewerResults) viewerResults.classList.add('active');
 
             } catch (error) {
-                clearInterval(progressInterval);
+                clearInterval(timeTrackerInterval);
                 alert('Atenci\u00f3n: ' + error.message + '\n\nPor favor, int\u00e9ntalo de nuevo en unos segundos.');
                 if (viewerLoading) viewerLoading.classList.remove('active');
                 if (viewerInitial) viewerInitial.classList.add('active');
             } finally {
-                clearInterval(progressInterval);
+                clearInterval(timeTrackerInterval);
                 generateBtn.disabled = false;
             }
         });
@@ -827,6 +854,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileLabel = document.querySelector('.file-label');
 
     const messageTextarea = document.querySelector('textarea[name="message"]');
+    const formSubject = document.getElementById('formSubject');
+
+    if (formSubject && messageTextarea) {
+        formSubject.addEventListener('change', () => {
+            if (formSubject.value === 'feedback') {
+                messageTextarea.placeholder = "¿Qué crees que podría mejorar en la web o en los productos? Te leo...";
+            } else {
+                messageTextarea.placeholder = "Explícame tu idea o comenta el archivo que adjuntas...";
+            }
+        });
+    }
+
     if (messageTextarea) {
         function autoResize() {
             messageTextarea.style.height = 'auto';
@@ -869,15 +908,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             if (!emailRegex.test(emailVal)) {
-                formResult.textContent = '\u274c Por favor, introduce un correo electr\u00f3nico v\u00e1lido (ej: tu_nombre@gmail.com).';
+                formResult.textContent = '❌ Por favor, introduce un correo electrónico válido (ej: tu_nombre@gmail.com).';
                 formResult.className = 'form-result error';
                 if (emailInput) emailInput.focus();
                 return;
             }
 
             formResult.textContent = 'Enviando...';
-            formResult.className = 'form-result';
+            formResult.className = 'form-result loading';
             if (submitBtn) submitBtn.disabled = true;
+
+            const sendStartTime = Date.now();
+            const sendTimerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - sendStartTime) / 1000);
+                if (elapsed < 3) {
+                    formResult.textContent = 'Enviando...';
+                } else if (elapsed < 12) {
+                    formResult.textContent = `⏳ Conectando con el servidor (${elapsed}s)...`;
+                } else {
+                    formResult.textContent = `🌐 Despertando servidor en la nube (${elapsed}s / ~50s si estaba en reposo)...`;
+                }
+            }, 1000);
 
             const formData = new FormData(contactForm);
             
@@ -888,9 +939,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 const json = await response.json();
                 
+                clearInterval(sendTimerInterval);
+
                 if (response.status == 200) {
-                    formResult.textContent = '\u00a1Mensaje enviado con \u00e9xito! Te responder\u00e9 pronto.';
-                    formResult.classList.add('success');
+                    formResult.textContent = '¡Mensaje enviado con éxito! Te responderé pronto.';
+                    formResult.className = 'form-result success';
                     contactForm.reset();
                     if (messageTextarea) messageTextarea.style.height = 'auto';
                     if (fileNameDisplay) fileNameDisplay.textContent = 'Adjuntar archivo 3D o foto (Opcional)';
@@ -904,14 +957,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 5000);
                 } else {
                     console.error(response);
-                    formResult.textContent = json.detail || 'Error al enviar. Aseg\u00farate de tener el servidor encendido.';
-                    formResult.classList.add('error');
+                    formResult.textContent = json.detail || 'Error al enviar. Asegúrate de tener el servidor encendido.';
+                    formResult.className = 'form-result error';
                 }
             } catch (error) {
+                clearInterval(sendTimerInterval);
                 console.error(error);
-                formResult.textContent = 'Error de conexi\u00f3n. Verifica tu internet y reintenta.';
-                formResult.classList.add('error');
+                formResult.textContent = 'Error de conexión. Verifica tu internet y reintenta.';
+                formResult.className = 'form-result error';
             } finally {
+                clearInterval(sendTimerInterval);
                 if (submitBtn) submitBtn.disabled = false;
             }
         });

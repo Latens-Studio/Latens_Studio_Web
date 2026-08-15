@@ -43,7 +43,7 @@
     <link rel="alternate icon" type="image/png" href="LOGO%20LTSweb.png">
     <link rel="apple-touch-icon" href="LOGO%20LTSweb.png">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=19.0">
+    <link rel="stylesheet" href="style.css?v=20.0">
 </head>
 <body>
 
@@ -104,10 +104,14 @@
                     <div class="content-card bio-card">
                         <div class="card-header">
                             <span class="card-badge">Presentación</span>
-                            <h2>Calidad y precisión en cada pieza</h2>
+                            <h2>Quién soy y qué hago</h2>
                         </div>
                         <p class="bio-text">
-                            Soy un emprendedor primerizo lanzándome con este proyecto. Todo el feedback que me deis, ya sea bueno o malo, me resulta de una ayuda inmensa para poder aprender y mejorar en cualquier aspecto. Me esfuerzo día a día por ofrecer la máxima calidad dentro de mis posibilidades, diseñando y fabricando cada pieza 3D con todo el cariño y cuidado.
+                            Bienvenido a este pequeño emprendimiento llamado Latens Studio. Soy un apasionado del diseño y la impresión 3D, enfocado en crear piezas únicas con el máximo cuidado por el detalle.
+                            <br><br>
+                            Mi trabajo se divide en dos enfoques: por un lado, ofrezco un catálogo de productos personalizables (como la línea de llaveros), donde el diseño base está optimizado pero tú eliges los detalles. Por otro lado, me encanta aceptar el reto de convertir tus ideas fuera del catálogo en objetos reales y tangibles. Como estoy empezando en este mundo, trabajo siempre con honestidad sobre lo que está dentro de mis posibilidades actuales.
+                            <br><br>
+                            Cada pieza que sale de mi estudio está fabricada y revisada con la intención de ofrecerte la máxima calidad. Me considero un perfeccionista en constante aprendizaje, y en el futuro planeo lanzar diseños propios fijos. ¡Gracias por apoyar este proyecto!
                         </p>
                         <div class="features-list">
                             <div class="feature-item">
@@ -194,14 +198,19 @@
                     <!-- CTA Destacado -->
                     <div class="cta-banner mt-4">
                         <div class="cta-content">
-                            <h3>¿Tienes una idea fuera del catálogo?</h3>
-                            <p>Si está dentro de mis posibilidades, puedo diseñar tu pieza o imprimir archivos 3D (.STL / .OBJ) que ya tengas. Aunque no esculpo modelos complejos desde cero, ¡envíame tu idea sin compromiso y te respondo encantado si es posible hacerla!</p>
+                            <h3>¿Tienes una idea o quieres dar Feedback?</h3>
+                            <p>Tanto si quieres convertir una idea en realidad, imprimir un archivo 3D (.STL / .OBJ), o simplemente dejarme alguna sugerencia para mejorar la web o los productos, ¡escríbeme sin compromiso!</p>
                             <form id="contactForm" class="custom-form">
-                                <!-- Campo trampa oculto anti-bots (Honeypot) -->
                                 <div style="display: none !important; position: absolute; left: -9999px;">
                                     <input type="text" name="website_hp" tabindex="-1" autocomplete="off">
                                 </div>
                                 
+                                <div class="form-group">
+                                    <select name="asunto" id="formSubject" class="form-input" style="cursor: pointer;">
+                                        <option value="idea">💡 Tengo una idea o pedido personalizado</option>
+                                        <option value="feedback">🗣️ Quiero dar feedback o sugerencias</option>
+                                    </select>
+                                </div>
                                 <div class="form-group">
                                     <input type="text" name="name" placeholder="Tu Nombre" required class="form-input">
                                 </div>
@@ -220,9 +229,13 @@
                                 </div>
                                 <button type="submit" class="btn-primary w-full">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                                    Enviar Idea a Latens Studio
+                                    Enviar Mensaje a Latens Studio
                                 </button>
                                 <div id="formResult" class="form-result"></div>
+                                <div class="form-server-note">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                    <span>Nota: Si el servidor está en reposo por inactividad, el primer envío puede tardar hasta ~50 segundos en despertar. ¡Gracias por tu paciencia!</span>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -426,8 +439,8 @@
                         </form>
 
                         <div class="security-note">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            <span>Generación segura procesada en servidor en tiempo real.</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>Generación en tiempo real. Si el servidor está en reposo, el primer modelo puede tardar hasta ~50s en despertar.</span>
                         </div>
                     </div>
 
@@ -649,6 +662,6 @@
         </div>
     </div>
 
-    <script src="script.js?v=19.0"></script>
+    <script src="script.js?v=20.0"></script>
 </body>
 </html>

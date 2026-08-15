@@ -1920,8 +1920,25 @@ textarea.form-input {
     text-align: center;
     font-weight: 500;
 }
+.form-result.loading { color: var(--primary); }
 .form-result.success { color: #16a34a; }
 .form-result.error { color: #dc2626; }
+
+.form-server-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    margin-top: 0.75rem;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    text-align: center;
+}
+.form-server-note svg {
+    flex-shrink: 0;
+    color: #f59e0b;
+}
 
 /* ==========================================================================
    MASTER RESPONSIVE BREAKPOINTS (PORTRAIT MOBILE ADAPTATION)
