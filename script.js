@@ -892,3 +892,61 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // ─── CARD MINI-GALLERY SLIDER CONTROLLER ───
+    const galleryBoxes = document.querySelectorAll('.product-preview-box.has-gallery');
+    galleryBoxes.forEach(box => {
+        const slides = box.querySelectorAll('.gallery-slide');
+        const dots = box.querySelectorAll('.gallery-dot');
+        const prevBtn = box.querySelector('.gallery-prev');
+        const nextBtn = box.querySelector('.gallery-next');
+        let currentIdx = 0;
+
+        function showSlide(index) {
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+            currentIdx = index;
+
+            slides.forEach((s, i) => s.classList.toggle('active', i === currentIdx));
+            dots.forEach((d, i) => d.classList.toggle('active', i === currentIdx));
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showSlide(currentIdx - 1);
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showSlide(currentIdx + 1);
+            });
+        }
+
+        dots.forEach((dot, idx) => {
+            dot.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showSlide(idx);
+            });
+        });
+
+        // Soporte táctil / swipe para móvil
+        let touchStartX = 0;
+        box.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        box.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].screenX;
+            const diff = touchEndX - touchStartX;
+            if (Math.abs(diff) > 35) {
+                if (diff > 0) {
+                    showSlide(currentIdx - 1);
+                } else {
+                    showSlide(currentIdx + 1);
+                }
+            }
+        }, { passive: true });
+    });

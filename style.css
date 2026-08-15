@@ -533,6 +533,106 @@ body {
     background: linear-gradient(135deg, #0c1a2e, #132e3b);
 }
 
+/* Card Gallery Slider & Photos */
+.product-preview-box.has-gallery {
+    height: 195px;
+    background: #090d16;
+    padding: 0;
+    cursor: pointer;
+}
+
+.card-gallery-slider {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.gallery-slide {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+}
+
+.gallery-slide.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.card-gallery-nav {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.card-gallery-nav button {
+    pointer-events: auto;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.product-preview-box:hover .card-gallery-nav button {
+    opacity: 1;
+}
+
+.card-gallery-nav button:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: scale(1.1);
+}
+
+.card-gallery-dots {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 5px;
+    z-index: 4;
+    background: rgba(15, 23, 42, 0.55);
+    padding: 3px 6px;
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+}
+
+.gallery-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.gallery-dot.active {
+    background: #ffffff;
+    width: 14px;
+    border-radius: 4px;
+}
+
 .product-tag {
     position: absolute;
     top: 12px;
@@ -1933,8 +2033,20 @@ textarea.form-input {
     }
 
     .product-preview-box {
-        height: 130px !important;
-        min-height: 130px !important;
+        height: 135px !important;
+        min-height: 135px !important;
+    }
+
+    .product-preview-box.has-gallery {
+        height: 135px !important;
+        min-height: 135px !important;
+    }
+
+    .card-gallery-nav button {
+        opacity: 0.85 !important;
+        width: 22px !important;
+        height: 22px !important;
+        font-size: 13px !important;
     }
 
     .product-tag {
