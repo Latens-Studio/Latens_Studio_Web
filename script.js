@@ -1,4 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // ─── CATÁLOGO DE PRODUCTOS (Fuente única de verdad) ───
+    const PRODUCT_CATALOG = {
+        corazon: {
+            id: 'corazon',
+            name: 'Llavero Corazón Conectado',
+            shortName: 'Corazón Conectado'
+        },
+        iniciales: {
+            id: 'iniciales',
+            name: 'Llavero Iniciales con Corazón',
+            shortName: 'Iniciales'
+        },
+        individual: {
+            id: 'individual',
+            name: 'Llavero Individual con Nombre',
+            shortName: 'Individual'
+        }
+    };
+
     // ─── TABS & DEEP LINKING URL ROUTER ───
     const tabBtns = document.querySelectorAll('.nav-tab-btn');
     const tabPanes = document.querySelectorAll('.tab-pane');
@@ -680,27 +699,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const loadingPercent = document.getElementById('loadingPercent');
             const loadingProgressBar = document.getElementById('loadingProgressBar');
             const loadingStatusDesc = document.getElementById('loadingStatusDesc');
+            const loadingStatusTitle = document.getElementById('loadingStatusTitle');
             const loadingTimeText = document.getElementById('loadingTimeText');
-            const step1 = document.getElementById('step1');
-            const step2 = document.getElementById('step2');
-            const step3 = document.getElementById('step3');
-            const step4 = document.getElementById('step4');
+
+            const productInfo = PRODUCT_CATALOG[type] || PRODUCT_CATALOG.corazon;
 
             let currentProgress = 5;
             const startTime = Date.now();
 
-            function setStepState(activeStep) {
-                [step1, step2, step3, step4].forEach((el, index) => {
-                    if (!el) return;
-                    if (index + 1 < activeStep) el.className = 'step-badge done';
-                    else if (index + 1 === activeStep) el.className = 'step-badge active';
-                    else el.className = 'step-badge';
-                });
-            }
-
-            setStepState(1);
+            if (loadingStatusTitle) loadingStatusTitle.textContent = `Generando ${productInfo.name}...`;
             if (loadingProgressBar) loadingProgressBar.style.width = '8%';
             if (loadingPercent) loadingPercent.textContent = '8%';
+            if (loadingStatusDesc) loadingStatusDesc.textContent = `📐 Preparando generación de ${productInfo.shortName}...`;
             let sseStarted = false;
             const timeTrackerInterval = setInterval(() => {
                 const elapsedSec = (Date.now() - startTime) / 1000;
@@ -738,12 +748,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const decoder = new TextDecoder('utf-8');
                 let buffer = '';
 
+                let sseError = null;
+
                 while (true) {
                     const { done, value } = await reader.read();
-                    if (done) break;
-                    
-                    sseStarted = true;
-                    buffer += decoder.decode(value, { stream: true });
+                    if (done) {
+                        // Flush: procesar lo que quede en el buffer al cerrar el stream
+                        buffer += decoder.decode();
+                    } else {
+                        sseStarted = true;
+                        buffer += decoder.decode(value, { stream: true });
+                    }
+
                     const lines = buffer.split('\n');
                     buffer = lines.pop(); // Mantener línea incompleta en el buffer
 
@@ -756,27 +772,26 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const data = JSON.parse(dataStr);
                                 
                                 if (data.type === 'progress') {
-                                    currentProgress = data.progress;
+                                    currentProgress = (typeof data.progress === 'number') ? data.progress : currentProgress;
                                     if (loadingPercent) loadingPercent.textContent = `${Math.round(currentProgress)}%`;
                                     if (loadingProgressBar) loadingProgressBar.style.width = `${currentProgress}%`;
-                                    if (loadingStatusDesc) loadingStatusDesc.textContent = data.message;
+                                    if (data.message && loadingStatusDesc) loadingStatusDesc.textContent = data.message;
                                     
-                                    if (currentProgress < 30) setStepState(1);
-                                    else if (currentProgress < 60) setStepState(2);
-                                    else if (currentProgress < 90) setStepState(3);
-                                    else setStepState(4);
-                                    
-                                } else if (data.type === 'result') {
+                                } else if (data.type === 'done') {
                                     currentApiData = data.result;
                                 } else if (data.type === 'error') {
-                                    throw new Error(data.detail || 'Error durante la generación');
+                                    sseError = new Error(data.detail || 'Error durante la generación');
                                 }
-                            } catch (e) {
-                                console.error('Error parseando SSE:', e, dataStr);
+                            } catch (parseErr) {
+                                console.warn('SSE parse warning:', parseErr.message, dataStr.substring(0, 100));
                             }
                         }
                     }
+
+                    if (done) break;
                 }
+
+                if (sseError) throw sseError;
 
                 if (!currentApiData) {
                     throw new Error("No se recibieron resultados válidos del servidor.");
@@ -785,8 +800,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearInterval(timeTrackerInterval);
                 if (loadingProgressBar) loadingProgressBar.style.width = '100%';
                 if (loadingPercent) loadingPercent.textContent = '100%';
-                if (loadingStatusDesc) loadingStatusDesc.textContent = '\u2728 \u00a1Modelo 3D y renders completados con \u00e9xito!';
-                setStepState(5);
+                if (loadingStatusDesc) loadingStatusDesc.textContent = `✨ ¡${productInfo.name} generado con éxito!`;
+                if (loadingStatusTitle) loadingStatusTitle.textContent = '¡Completado!';
                 await new Promise(r => setTimeout(r, 400));
 
                 activeMode = 'juntos';
