@@ -90,6 +90,7 @@ img, svg {
 }
 
 html {
+    font-size: 16px;
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
@@ -538,13 +539,15 @@ body {
     height: 195px;
     background: #090d16;
     padding: 0;
-    cursor: pointer;
+    cursor: zoom-in;
 }
 
 .card-gallery-slider {
     width: 100%;
     height: 100%;
     position: relative;
+    cursor: zoom-in;
+    touch-action: pan-y;
 }
 
 .gallery-slide {
@@ -556,12 +559,41 @@ body {
     inset: 0;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
-    pointer-events: none;
+    cursor: zoom-in;
 }
 
 .gallery-slide.active {
     opacity: 1;
+    cursor: zoom-in;
+}
+
+.gallery-zoom-hint {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 10;
     pointer-events: auto;
+    cursor: pointer;
+    opacity: 0.9;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s, opacity 0.2s, background 0.2s;
+}
+
+.gallery-zoom-hint:hover {
+    transform: scale(1.05);
+    opacity: 1;
+    background: rgba(15, 23, 42, 0.9);
 }
 
 .card-gallery-nav {
@@ -907,6 +939,14 @@ body {
 .btn-generate:hover {
     background: var(--primary-hover);
     box-shadow: var(--shadow-md);
+}
+
+/* [FIX #9] Estado deshabilitado visible */
+.btn-generate:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
 }
 
 .security-note {
@@ -1540,6 +1580,26 @@ body {
     height: 22px;
 }
 
+/* [FIX #11] Contador de fotos en el lightbox */
+.lightbox-counter {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10001;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    letter-spacing: 0.05em;
+    display: none;
+}
+
 
 /* ==========================================================================
    CHAPITA DE REGALO (BADGE)
@@ -1813,9 +1873,10 @@ body {
     transition: var(--transition);
 }
 textarea.form-input {
-    resize: none; /* Desactiva el tirador manual de escalar */
-    overflow-y: hidden; /* Oculta la barra de scroll mientras crece */
+    resize: none;
+    overflow-y: hidden;
     min-height: 95px;
+    max-height: 300px;
     line-height: 1.5;
 }
 .form-input:focus {
@@ -2044,8 +2105,8 @@ textarea.form-input {
 
     .card-gallery-nav button {
         opacity: 0.85 !important;
-        width: 22px !important;
-        height: 22px !important;
+        width: 24px !important;
+        height: 24px !important;
         font-size: 13px !important;
     }
 
@@ -2232,6 +2293,26 @@ textarea.form-input {
     .faq-answer p {
         padding: 0.85rem 1.15rem 1.15rem;
         font-size: 0.88rem;
+    }
+
+    /* [FIX #2] Botón cerrar lightbox más grande en móvil */
+    .lightbox-close-btn {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 2rem !important;
+        top: 8px !important;
+        right: 8px !important;
+    }
+
+    .lightbox-counter {
+        bottom: 10px !important;
+        font-size: 0.75rem !important;
+        padding: 0.25rem 0.7rem !important;
+    }
+
+    .lightbox-nav-btn {
+        width: 38px !important;
+        height: 38px !important;
     }
 }
 

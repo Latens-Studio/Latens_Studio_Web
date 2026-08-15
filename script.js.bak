@@ -54,9 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
             window.history.replaceState(null, '', '#' + resolvedId);
         }
 
-        // Guardar tab activa en sessionStorage
-        try { sessionStorage.setItem('latens_active_tab', resolvedId); } catch(e) {}
-
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -77,6 +74,60 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 100);
         });
     }
+
+    function handleUrlRouting() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const hash = window.location.hash;
+        
+        // 1. Prioridad: Parámetro ?tab= o ?seccion=
+        const paramTab = urlParams.get('tab') || urlParams.get('seccion') || urlParams.get('pestaña');
+        let targetTab = resolveTabId(paramTab);
+
+        // 2. Comprobar Hash de la URL (#catalogo, #tab-preview, #faq, etc.)
+        if (!targetTab && hash) {
+            targetTab = resolveTabId(hash);
+        }
+
+        // 3. Comprobar si hay producto seleccionado por URL (?producto=iniciales, ?producto=corazon, ?producto=individual)
+        const paramProduct = urlParams.get('producto') || urlParams.get('product') || urlParams.get('modelo');
+        if (paramProduct && productSelect) {
+            const productVal = paramProduct.toLowerCase();
+            if (productVal.includes('inicial')) {
+                productSelect.value = 'iniciales';
+            } else if (productVal.includes('individual') || productVal.includes('solo') || productVal.includes('unico')) {
+                productSelect.value = 'individual';
+            } else if (productVal.includes('corazon') || productVal.includes('nombre')) {
+                productSelect.value = 'corazon';
+            }
+            renderDynamicInputs();
+            if (!targetTab) targetTab = 'tab-preview';
+        }
+
+        // 4. Parámetros opcionales de nombres (?nombre1=Ana&nombre2=Juan o ?n1=A&n2=J)
+        const n1 = urlParams.get('nombre1') || urlParams.get('n1') || urlParams.get('nombre_izq');
+        const n2 = urlParams.get('nombre2') || urlParams.get('n2') || urlParams.get('nombre_der');
+        if (n1 || n2) {
+            setTimeout(() => {
+                const input1 = document.getElementById('name1');
+                const input2 = document.getElementById('name2');
+                if (input1 && n1) input1.value = decodeURIComponent(n1);
+                if (input2 && n2) input2.value = decodeURIComponent(n2);
+            }, 80);
+            if (!targetTab) targetTab = 'tab-preview';
+        }
+
+        // Si se resolvió una pestaña específica, cambiar a ella
+        if (targetTab) {
+            switchTab(targetTab, false);
+        }
+    }
+
+    window.addEventListener('hashchange', () => {
+        if (window.location.hash) {
+            const target = resolveTabId(window.location.hash);
+            if (target) switchTab(target, false);
+        }
+    });
 
     // ─── GALLERY PREVIEW TRIGGERS ───
     const previewTriggers = document.querySelectorAll('.preview-trigger');
@@ -99,11 +150,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const val = productSelect.value;
         let html = '';
 
+        // Mostrar/ocultar opciones específicas de iniciales
         const opcionesIniciales = document.getElementById('opcionesIniciales');
         if (opcionesIniciales) {
             opcionesIniciales.style.display = (val === 'iniciales') ? 'block' : 'none';
         }
 
+        // Mostrar/ocultar campo de fecha (solo para productos de pareja: corazon e iniciales)
         const fechaGroup = document.getElementById('fechaGroup');
         if (fechaGroup) {
             const productosSoportanFecha = ['corazon', 'iniciales'];
@@ -118,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         } else {
+            // Productos de pareja (2 inputs)
             const labelA = val === 'iniciales' ? 'Inicial Izquierda (A)' : 'Nombre Izquierda (Llavero A)';
             const labelB = val === 'iniciales' ? 'Inicial Derecha (B)' : 'Nombre Derecha (Llavero B)';
             const phA = val === 'iniciales' ? 'Ej: A' : 'Ej: Ana';
@@ -144,65 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderDynamicInputs();
     }
 
-    // ─── URL ROUTING ───
-    function handleUrlRouting() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const hash = window.location.hash;
-        
-        const paramTab = urlParams.get('tab') || urlParams.get('seccion');
-        let targetTab = resolveTabId(paramTab);
-
-        if (!targetTab && hash) {
-            targetTab = resolveTabId(hash);
-        }
-
-        const paramProduct = urlParams.get('producto') || urlParams.get('product') || urlParams.get('modelo');
-        if (paramProduct && productSelect) {
-            const productVal = paramProduct.toLowerCase();
-            if (productVal.includes('inicial')) {
-                productSelect.value = 'iniciales';
-            } else if (productVal.includes('individual') || productVal.includes('solo') || productVal.includes('unico')) {
-                productSelect.value = 'individual';
-            } else if (productVal.includes('corazon') || productVal.includes('nombre')) {
-                productSelect.value = 'corazon';
-            }
-            renderDynamicInputs();
-            if (!targetTab) targetTab = 'tab-preview';
-        }
-
-        const n1 = urlParams.get('nombre1') || urlParams.get('n1') || urlParams.get('nombre_izq');
-        const n2 = urlParams.get('nombre2') || urlParams.get('n2') || urlParams.get('nombre_der');
-        if (n1 || n2) {
-            setTimeout(() => {
-                const input1 = document.getElementById('name1');
-                const input2 = document.getElementById('name2');
-                if (input1 && n1) input1.value = decodeURIComponent(n1);
-                if (input2 && n2) input2.value = decodeURIComponent(n2);
-            }, 80);
-            if (!targetTab) targetTab = 'tab-preview';
-        }
-
-        if (!targetTab) {
-            try {
-                const saved = sessionStorage.getItem('latens_active_tab');
-                if (saved && document.getElementById(saved)) {
-                    targetTab = saved;
-                }
-            } catch(e) {}
-        }
-
-        if (targetTab) {
-            switchTab(targetTab, false);
-        }
-    }
-
-    window.addEventListener('hashchange', () => {
-        if (window.location.hash) {
-            const target = resolveTabId(window.location.hash);
-            if (target) switchTab(target, false);
-        }
-    });
-
+    // Inicializar navegación por URL / Parámetros
     handleUrlRouting();
 
     // ─── API CALL & VIEWER STATE ───
@@ -220,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modeTarjetaBtn = document.getElementById('modeTarjetaBtn');
 
     let currentApiData = null;
-    let activeMode = 'juntos';
+    let activeMode = 'juntos'; // 'juntos' | 'separados' | 'tarjeta'
     let currentSlide = 0;
 
     const perspectivesLlavero = [
@@ -228,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Vista Trasera (Posterior)", 
         "Vista Lateral Izquierda", 
         "Vista Lateral Derecha", 
-        "Vista Isom\u00e9trica (Relieve 3D)"
+        "Vista Isométrica (Relieve 3D)"
     ];
 
     const perspectivesTarjeta = [
@@ -264,17 +260,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const label = currentPerspectives[index] || `Vista ${index}`;
             slide.innerHTML = `<img src="data:image/png;base64,${imgBase64}" alt="${label}">`;
             
+            // Open Lightbox on click
             slide.addEventListener('click', () => {
                 openLightbox(index);
             });
 
             carouselTrack.appendChild(slide);
 
+            // Generate thumbnail button
             if (thumbsContainer) {
                 const thumbBtn = document.createElement('button');
                 thumbBtn.className = 'thumb-btn';
                 if (index === currentSlide) thumbBtn.classList.add('active');
                 
+                // Short names for thumbs
                 let shortName = label.split(' ')[1] || `V${index}`;
                 if (activeMode === 'tarjeta') {
                     if (index === 0) shortName = 'Frontal';
@@ -291,6 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Ensure currentSlide is within bounds
         if (currentSlide >= imgList.length) {
             currentSlide = 0;
         }
@@ -307,14 +307,22 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const thumbs = document.querySelectorAll('#perspectiveThumbs .thumb-btn');
         thumbs.forEach((thumb, idx) => {
-            thumb.classList.toggle('active', idx === currentSlide);
+            if (idx === currentSlide) {
+                thumb.classList.add('active');
+            } else {
+                thumb.classList.remove('active');
+            }
         });
 
+        // Show/hide social note removed per user request
+
+        // Sync Lightbox if open
         if (lightboxModal && lightboxModal.classList.contains('active')) {
             updateLightboxContent();
         }
     }
 
+    // Mode switching (Juntos / Separados / Tarjeta)
     function setActiveModeBtn(mode) {
         if (modeJuntosBtn) modeJuntosBtn.classList.toggle('active', mode === 'juntos');
         if (modeSeparadosBtn) modeSeparadosBtn.classList.toggle('active', mode === 'separados');
@@ -343,6 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Lógica para la UI de Tarjeta 3D
     const addCardCb = document.getElementById('addCard');
     const cardInputsGroup = document.getElementById('cardInputsGroup');
     const cardTitle = document.getElementById('cardTitle');
@@ -352,7 +361,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (addCardCb && cardInputsGroup) {
         addCardCb.addEventListener('change', () => {
-            cardInputsGroup.style.display = addCardCb.checked ? 'block' : 'none';
+            if (addCardCb.checked) {
+                cardInputsGroup.style.display = 'block';
+            } else {
+                cardInputsGroup.style.display = 'none';
+            }
         });
     }
 
@@ -368,6 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Thumbnail navigation
     perspectiveThumbs.forEach((thumb, idx) => {
         thumb.addEventListener('click', () => {
             currentSlide = idx;
@@ -375,21 +389,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const carPrevBtn = document.getElementById('carouselPrev');
-    const carNextBtn = document.getElementById('carouselNext');
+    const prevBtn = document.getElementById('carouselPrev');
+    const nextBtn = document.getElementById('carouselNext');
 
-    if (carPrevBtn) {
-        carPrevBtn.addEventListener('click', () => {
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
             const totalSlides = carouselTrack ? carouselTrack.children.length : 1;
-            currentSlide = (currentSlide > 0) ? currentSlide - 1 : totalSlides - 1;
+            if (currentSlide > 0) {
+                currentSlide--;
+            } else {
+                currentSlide = totalSlides - 1;
+            }
             updateCarousel();
         });
     }
 
-    if (carNextBtn) {
-        carNextBtn.addEventListener('click', () => {
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
             const totalSlides = carouselTrack ? carouselTrack.children.length : 1;
-            currentSlide = (currentSlide < totalSlides - 1) ? currentSlide + 1 : 0;
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+            } else {
+                currentSlide = 0;
+            }
             updateCarousel();
         });
     }
@@ -403,7 +425,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightboxViewport = document.getElementById('lightboxViewport');
     const lightboxPrev = document.getElementById('lightboxPrev');
     const lightboxNext = document.getElementById('lightboxNext');
-    const lightboxCounter = document.getElementById('lightboxCounter');
     
     const zoomInBtn = document.getElementById('zoomInBtn');
     const zoomOutBtn = document.getElementById('zoomOutBtn');
@@ -417,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let startY = 0;
 
-    let lightboxMode = '3d';
+    let lightboxMode = '3d'; // '3d' | 'catalog'
     let catalogLightboxImages = [];
     let catalogLightboxTitles = [];
     let catalogSlideIndex = 0;
@@ -437,24 +458,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setZoom(newZoom) {
         zoomLevel = Math.max(0.8, Math.min(4.0, newZoom));
-        if (zoomLevel === 1) { panX = 0; panY = 0; }
-        applyZoomTransform();
-    }
-
-    function updateLightboxCounter() {
-        if (!lightboxCounter) return;
-        if (lightboxMode === 'catalog') {
-            lightboxCounter.textContent = `${catalogSlideIndex + 1} / ${catalogLightboxImages.length}`;
-            lightboxCounter.style.display = 'block';
-        } else {
-            const imgList = getActiveImages();
-            if (imgList.length > 1) {
-                lightboxCounter.textContent = `${currentSlide + 1} / ${imgList.length}`;
-                lightboxCounter.style.display = 'block';
-            } else {
-                lightboxCounter.style.display = 'none';
-            }
+        if (zoomLevel === 1) {
+            panX = 0;
+            panY = 0;
         }
+        applyZoomTransform();
     }
 
     function openLightbox(index) {
@@ -466,11 +474,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'hidden';
     }
 
-    function openCatalogLightbox(images, index, titles) {
+    function openCatalogLightbox(images, index = 0, titles = []) {
         lightboxMode = 'catalog';
         catalogLightboxImages = images;
-        catalogLightboxTitles = titles || [];
-        catalogSlideIndex = index || 0;
+        catalogLightboxTitles = titles;
+        catalogSlideIndex = index;
         resetZoom();
         updateLightboxContent();
         if (lightboxModal) lightboxModal.classList.add('active');
@@ -489,7 +497,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (lightboxImg) lightboxImg.src = catalogLightboxImages[catalogSlideIndex];
             const title = catalogLightboxTitles[catalogSlideIndex] || `Foto ${catalogSlideIndex + 1} de ${catalogLightboxImages.length}`;
             if (lightboxTitle) lightboxTitle.textContent = title;
-            updateLightboxCounter();
             return;
         }
 
@@ -508,7 +515,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const currentPerspectives = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
         if (lightboxTitle) lightboxTitle.textContent = `${currentPerspectives[currentSlide] || 'Perspectiva'}${modeText}`;
-        updateLightboxCounter();
     }
 
     function lightboxPrevSlide() {
@@ -517,8 +523,8 @@ document.addEventListener('DOMContentLoaded', () => {
             resetZoom();
             updateLightboxContent();
         } else {
-            const cp = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
-            currentSlide = (currentSlide > 0) ? currentSlide - 1 : cp.length - 1;
+            const currentPerspectives = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
+            currentSlide = (currentSlide > 0) ? currentSlide - 1 : currentPerspectives.length - 1;
             resetZoom();
             updateCarousel();
         }
@@ -530,8 +536,8 @@ document.addEventListener('DOMContentLoaded', () => {
             resetZoom();
             updateLightboxContent();
         } else {
-            const cp = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
-            currentSlide = (currentSlide < cp.length - 1) ? currentSlide + 1 : 0;
+            const currentPerspectives = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
+            currentSlide = (currentSlide < currentPerspectives.length - 1) ? currentSlide + 1 : 0;
             resetZoom();
             updateCarousel();
         }
@@ -539,12 +545,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
     if (lightboxOverlay) lightboxOverlay.addEventListener('click', closeLightbox);
+
     if (lightboxPrev) lightboxPrev.addEventListener('click', lightboxPrevSlide);
     if (lightboxNext) lightboxNext.addEventListener('click', lightboxNextSlide);
+
     if (zoomInBtn) zoomInBtn.addEventListener('click', () => setZoom(zoomLevel + 0.3));
     if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => setZoom(zoomLevel - 0.3));
     if (zoomResetBtn) zoomResetBtn.addEventListener('click', resetZoom);
 
+    // Mouse Wheel Zooming in Lightbox
     if (lightboxViewport) {
         lightboxViewport.addEventListener('wheel', (e) => {
             e.preventDefault();
@@ -552,6 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setZoom(zoomLevel + delta);
         }, { passive: false });
 
+        // Pan/Drag when zoomed
         lightboxViewport.addEventListener('mousedown', (e) => {
             if (zoomLevel > 1) {
                 isDragging = true;
@@ -573,25 +583,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Keyboard support (Escape to close, Left/Right arrows to navigate)
     window.addEventListener('keydown', (e) => {
         if (!lightboxModal || !lightboxModal.classList.contains('active')) return;
-        if (e.key === 'Escape') closeLightbox();
-        else if (e.key === 'ArrowLeft') lightboxPrevSlide();
-        else if (e.key === 'ArrowRight') lightboxNextSlide();
+
+        if (e.key === 'Escape') {
+            closeLightbox();
+        } else if (e.key === 'ArrowLeft') {
+            lightboxPrevSlide();
+        } else if (e.key === 'ArrowRight') {
+            lightboxNextSlide();
+        }
     });
 
-    // Touch / Swipe / Pinch-to-Zoom for Lightbox
+    // Touch / Swipe / Pinch-to-Zoom support for Lightbox in mobile
     if (lightboxViewport) {
-        let lbTouchStartX = 0;
-        let lbTouchStartY = 0;
+        let touchStartX = 0;
+        let touchStartY = 0;
         let initialDistance = null;
         let initialZoom = 1;
         let isPinching = false;
         
+        // Disable default touch behaviors to allow pinch zoom without scrolling
         lightboxViewport.addEventListener('touchstart', (e) => {
             if (e.touches.length === 1) {
-                lbTouchStartX = e.touches[0].screenX;
-                lbTouchStartY = e.touches[0].screenY;
+                touchStartX = e.touches[0].screenX;
+                touchStartY = e.touches[0].screenY;
                 isPinching = false;
                 if (zoomLevel > 1) {
                     isDragging = true;
@@ -616,7 +633,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.touches[0].screenX - e.touches[1].screenX,
                     e.touches[0].screenY - e.touches[1].screenY
                 );
-                setZoom(initialZoom * (currentDistance / initialDistance));
+                const scale = currentDistance / initialDistance;
+                setZoom(initialZoom * scale);
             } else if (isDragging && e.touches.length === 1 && zoomLevel > 1) {
                 e.preventDefault();
                 panX = e.touches[0].clientX - startX;
@@ -626,16 +644,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: false });
         
         lightboxViewport.addEventListener('touchend', (e) => {
-            if (isPinching || e.touches.length > 0) { isPinching = false; return; }
-            if (isDragging) { isDragging = false; return; }
-            if (zoomLevel <= 1.05) {
+            if (isPinching || e.touches.length > 0) {
+                isPinching = false;
+                return;
+            }
+            if (isDragging) {
+                isDragging = false;
+                return;
+            }
+            // Handle swipe if not zoomed in
+            if (zoomLevel <= 1.05 && !isPinching) {
                 const touchEndX = e.changedTouches[0].screenX;
                 const touchEndY = e.changedTouches[0].screenY;
-                const diffX = touchEndX - lbTouchStartX;
-                const diffY = touchEndY - lbTouchStartY;
+                const diffX = touchEndX - touchStartX;
+                const diffY = touchEndY - touchStartY;
                 if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
-                    if (diffX > 0) lightboxPrevSlide();
-                    else lightboxNextSlide();
+                    if (diffX > 0) {
+                        lightboxPrevSlide();
+                    } else {
+                        lightboxNextSlide();
+                    }
                 }
             }
         }, { passive: false });
@@ -665,7 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const tarjeta_mensaje = cardMessageEl ? cardMessageEl.value.trim() : '';
 
             if ((type === 'corazon' || type === 'iniciales') && (!name1 || !name2)) {
-                alert('Por favor, introduce los dos nombres o iniciales para formar el coraz\u00f3n.');
+                alert('Por favor, introduce los dos nombres o iniciales para formar el corazón.');
                 return;
             } else if (type === 'individual' && !name1) {
                 alert('Por favor, introduce el nombre para el llavero.');
@@ -677,6 +705,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (viewerLoading) viewerLoading.classList.add('active');
             generateBtn.disabled = true;
 
+            // ─── PROGRESS BAR & STEP CONTROLLER ───
             const loadingPercent = document.getElementById('loadingPercent');
             const loadingProgressBar = document.getElementById('loadingProgressBar');
             const loadingStatusDesc = document.getElementById('loadingStatusDesc');
@@ -690,18 +719,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const startTime = Date.now();
 
             function setStepState(activeStep) {
-                [step1, step2, step3, step4].forEach((el, index) => {
+                const steps = [step1, step2, step3, step4];
+                steps.forEach((el, index) => {
                     if (!el) return;
-                    if (index + 1 < activeStep) el.className = 'step-badge done';
-                    else if (index + 1 === activeStep) el.className = 'step-badge active';
-                    else el.className = 'step-badge';
+                    if (index + 1 < activeStep) {
+                        el.className = 'step-badge done';
+                    } else if (index + 1 === activeStep) {
+                        el.className = 'step-badge active';
+                    } else {
+                        el.className = 'step-badge';
+                    }
                 });
             }
 
             setStepState(1);
             if (loadingProgressBar) loadingProgressBar.style.width = '8%';
             if (loadingPercent) loadingPercent.textContent = '8%';
-            if (loadingTimeText) loadingTimeText.textContent = '\u23f1\ufe0f Iniciando conexi\u00f3n con el servidor 3D...';
+            if (loadingTimeText) loadingTimeText.textContent = '⏱️ Iniciando conexión con el servidor 3D...';
 
             const progressInterval = setInterval(() => {
                 const elapsedSec = (Date.now() - startTime) / 1000;
@@ -709,28 +743,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (elapsedSec < 2.5) {
                     currentProgress = Math.min(30, 8 + elapsedSec * 9);
                     setStepState(1);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '\ud83d\udcd0 1/4: Calculando geometr\u00eda tipogr\u00e1fica y curvas vectoriales...';
-                    if (loadingTimeText) loadingTimeText.textContent = `\u23f1\ufe0f ${elapsedSec.toFixed(1)}s \u2014 Generando mallas STL...`;
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '📐 1/4: Calculando geometría tipográfica y curvas vectoriales...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(1)}s — Generando mallas STL...`;
                 } else if (elapsedSec < 5.5) {
                     currentProgress = Math.min(60, 30 + (elapsedSec - 2.5) * 10);
                     setStepState(2);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '\u2764\ufe0f 2/4: Ensamblando coraz\u00f3n magn\u00e9tico y anillas...';
-                    if (loadingTimeText) loadingTimeText.textContent = `\u23f1\ufe0f ${elapsedSec.toFixed(1)}s \u2014 Fusionando piezas...`;
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '❤️ 2/4: Ensamblando corazón magnético y anillas...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(1)}s — Fusionando piezas...`;
                 } else if (elapsedSec < 9.0) {
                     currentProgress = Math.min(85, 60 + (elapsedSec - 5.5) * 7);
                     setStepState(3);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '\ud83d\udcf8 3/4: Renderizando 5 perspectivas en alta definici\u00f3n (OpenSCAD)...';
-                    if (loadingTimeText) loadingTimeText.textContent = `\u23f1\ufe0f ${elapsedSec.toFixed(1)}s \u2014 Capturando \u00e1ngulos HD...`;
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '📸 3/4: Renderizando 5 perspectivas en alta definición (OpenSCAD)...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(1)}s — Capturando ángulos HD...`;
                 } else if (elapsedSec < 13.0) {
                     currentProgress = Math.min(96, 85 + (elapsedSec - 9.0) * 2.8);
                     setStepState(4);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '\u26a1 4/4: Optimizando im\u00e1genes y calculando medidas de impresi\u00f3n...';
-                    if (loadingTimeText) loadingTimeText.textContent = `\u23f1\ufe0f ${elapsedSec.toFixed(1)}s \u2014 Empaquetando resultado...`;
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '⚡ 4/4: Optimizando imágenes y calculando medidas de impresión...';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(1)}s — Empaquetando resultado...`;
                 } else {
+                    // Servidor en frío (despertando tras inactividad en Render)
                     currentProgress = Math.min(99, 96 + (elapsedSec - 13.0) * 0.15);
                     setStepState(4);
-                    if (loadingStatusDesc) loadingStatusDesc.textContent = '\ud83c\udf10 Despertando servidor en la nube tras inactividad... \u00a1Ya casi est\u00e1!';
-                    if (loadingTimeText) loadingTimeText.textContent = `\u23f1\ufe0f ${elapsedSec.toFixed(0)}s transcurridos \u2014 Preparando render...`;
+                    if (loadingStatusDesc) loadingStatusDesc.textContent = '🌐 Despertando servidor en la nube tras inactividad... ¡Ya casi está!';
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(0)}s transcurridos — Preparando render...`;
                 }
 
                 if (loadingPercent) loadingPercent.textContent = `${Math.round(currentProgress)}%`;
@@ -740,7 +775,17 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const API_URL = 'https://latens-studio-web-backend.onrender.com/api/preview';
                 
-                const payload = { type, name1, name2, fecha, cruz, relieve, tarjeta, tarjeta_titulo, tarjeta_mensaje };
+                const payload = {
+                    type,
+                    name1,
+                    name2,
+                    fecha,
+                    cruz,
+                    relieve,
+                    tarjeta,
+                    tarjeta_titulo,
+                    tarjeta_mensaje
+                };
 
                 const response = await fetch(API_URL, {
                     method: 'POST',
@@ -755,16 +800,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 currentApiData = await response.json();
 
+                // Animación de éxito 100%
                 clearInterval(progressInterval);
                 if (loadingProgressBar) loadingProgressBar.style.width = '100%';
                 if (loadingPercent) loadingPercent.textContent = '100%';
-                if (loadingStatusDesc) loadingStatusDesc.textContent = '\u2728 \u00a1Modelo 3D y renders completados con \u00e9xito!';
+                if (loadingStatusDesc) loadingStatusDesc.textContent = '✨ ¡Modelo 3D y renders completados con éxito!';
                 setStepState(5);
                 await new Promise(r => setTimeout(r, 400));
 
                 activeMode = 'juntos';
                 setActiveModeBtn('juntos');
 
+                // En modelo individual ocultamos el selector Juntos/Separados porque es 1 sola pieza
                 if (type === 'individual') {
                     if (modeJuntosBtn) modeJuntosBtn.style.display = 'none';
                     if (modeSeparadosBtn) modeSeparadosBtn.style.display = 'none';
@@ -773,6 +820,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (modeSeparadosBtn) modeSeparadosBtn.style.display = 'inline-block';
                 }
                 
+                // Mostrar botón de tarjeta solo si se ha generado tarjeta
                 if (modeTarjetaBtn) {
                     modeTarjetaBtn.style.display = (currentApiData.images_tarjeta && currentApiData.images_tarjeta.length > 0) ? 'inline-block' : 'none';
                 }
@@ -798,7 +846,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } catch (error) {
                 clearInterval(progressInterval);
-                alert('Atenci\u00f3n: ' + error.message + '\n\nPor favor, int\u00e9ntalo de nuevo en unos segundos.');
+                alert('Atención: ' + error.message + '\n\nPor favor, inténtalo de nuevo en unos segundos.');
                 if (viewerLoading) viewerLoading.classList.remove('active');
                 if (viewerInitial) viewerInitial.classList.add('active');
             } finally {
@@ -808,7 +856,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ─── FAQ ACCORDION ───
+});
+
+
+    // --- FAQ ACCORDION ---
     const faqQuestions = document.querySelectorAll('.faq-question');
     faqQuestions.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -819,20 +870,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ─── FORMULARIO DE CONTACTO ───
+    // --- FORMULARIO DE CONTACTO (RENDER BACKEND) ---
     const contactForm = document.getElementById('contactForm');
     const fileInput = document.getElementById('attachment');
     const fileNameDisplay = document.getElementById('fileNameDisplay');
     const formResult = document.getElementById('formResult');
     const fileLabel = document.querySelector('.file-label');
 
+    // Auto-expansión dinámica del recuadro de mensaje hacia abajo
     const messageTextarea = document.querySelector('textarea[name="message"]');
     if (messageTextarea) {
         function autoResize() {
             messageTextarea.style.height = 'auto';
-            const newHeight = Math.max(95, messageTextarea.scrollHeight);
-            messageTextarea.style.height = newHeight + 'px';
-            messageTextarea.style.overflowY = (newHeight > 300) ? 'auto' : 'hidden';
+            messageTextarea.style.height = Math.max(95, messageTextarea.scrollHeight) + 'px';
         }
         messageTextarea.addEventListener('input', autoResize);
         window.addEventListener('resize', autoResize);
@@ -843,7 +893,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const fileName = e.target.files[0] ? e.target.files[0].name : 'Adjuntar archivo 3D o foto (Opcional)';
             if (fileNameDisplay) fileNameDisplay.textContent = fileName;
             if (fileLabel) {
-                fileLabel.classList.toggle('has-file', !!e.target.files[0]);
+                if (e.target.files[0]) {
+                    fileLabel.classList.add('has-file');
+                } else {
+                    fileLabel.classList.remove('has-file');
+                }
             }
         });
     }
@@ -857,19 +911,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailVal = emailInput ? emailInput.value.trim().toLowerCase() : '';
             const hpInput = contactForm.querySelector('input[name="website_hp"]');
 
-            if (formResult) {
-                formResult.textContent = '';
-                formResult.className = 'form-result';
-            }
-
+            // 1. Anti-bot honeypot check (solo bloquea bots automáticos)
             if (hpInput && hpInput.value) {
                 console.warn('Bot submission blocked');
                 return;
             }
 
+            // 2. Validación de formato de correo estándar y extensión real
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             if (!emailRegex.test(emailVal)) {
-                formResult.textContent = '\u274c Por favor, introduce un correo electr\u00f3nico v\u00e1lido (ej: tu_nombre@gmail.com).';
+                formResult.textContent = '❌ Por favor, introduce un correo electrónico válido (ej: tu_nombre@gmail.com).';
                 formResult.className = 'form-result error';
                 if (emailInput) emailInput.focus();
                 return;
@@ -889,27 +940,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 const json = await response.json();
                 
                 if (response.status == 200) {
-                    formResult.textContent = '\u00a1Mensaje enviado con \u00e9xito! Te responder\u00e9 pronto.';
+                    formResult.textContent = '¡Mensaje enviado con éxito! Te responderé pronto.';
                     formResult.classList.add('success');
                     contactForm.reset();
                     if (messageTextarea) messageTextarea.style.height = 'auto';
                     if (fileNameDisplay) fileNameDisplay.textContent = 'Adjuntar archivo 3D o foto (Opcional)';
                     if (fileLabel) fileLabel.classList.remove('has-file');
-                    
-                    setTimeout(() => {
-                        if (formResult) {
-                            formResult.textContent = '';
-                            formResult.className = 'form-result';
-                        }
-                    }, 5000);
                 } else {
                     console.error(response);
-                    formResult.textContent = json.detail || 'Error al enviar. Aseg\u00farate de tener el servidor encendido.';
+                    formResult.textContent = json.detail || 'Error al enviar. Asegúrate de tener el servidor encendido.';
                     formResult.classList.add('error');
                 }
             } catch (error) {
                 console.error(error);
-                formResult.textContent = 'Error de conexi\u00f3n. Verifica tu internet y reintenta.';
+                formResult.textContent = 'Error de conexión. Verifica tu internet y reintenta.';
                 formResult.classList.add('error');
             } finally {
                 if (submitBtn) submitBtn.disabled = false;
@@ -922,14 +966,15 @@ document.addEventListener('DOMContentLoaded', () => {
     galleryBoxes.forEach(box => {
         const slides = box.querySelectorAll('.gallery-slide');
         const dots = box.querySelectorAll('.gallery-dot');
-        const gPrevBtn = box.querySelector('.gallery-prev');
-        const gNextBtn = box.querySelector('.gallery-next');
+        const prevBtn = box.querySelector('.gallery-prev');
+        const nextBtn = box.querySelector('.gallery-next');
         let currentIdx = 0;
 
         function showSlide(index) {
             if (index < 0) index = slides.length - 1;
             if (index >= slides.length) index = 0;
             currentIdx = index;
+
             slides.forEach((s, i) => s.classList.toggle('active', i === currentIdx));
             dots.forEach((d, i) => d.classList.toggle('active', i === currentIdx));
         }
@@ -954,23 +999,24 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        // Clic directo en el contenedor o en las imágenes para abrir Lightbox
         box.addEventListener('click', (e) => {
-            if (Date.now() - lastBoxSwipeTime < 200) return;
-            if (e.target.closest('.card-gallery-nav button') || e.target.closest('.card-gallery-dots') || e.target.closest('.gallery-prev') || e.target.closest('.gallery-next') || e.target.closest('.gallery-dot') || e.target.closest('.gallery-zoom-hint')) {
+            if (Date.now() - lastBoxSwipeTime < 100) return; // Prevent click after swipe
+            if (e.target.closest('.card-gallery-nav button') || e.target.closest('.card-gallery-dots') || e.target.closest('.gallery-prev') || e.target.closest('.gallery-next') || e.target.closest('.gallery-dot')) {
                 return;
             }
             triggerLightbox();
         });
 
-        if (gPrevBtn) {
-            gPrevBtn.addEventListener('click', (e) => {
+        if (prevBtn) {
+            prevBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 showSlide(currentIdx - 1);
             });
         }
 
-        if (gNextBtn) {
-            gNextBtn.addEventListener('click', (e) => {
+        if (nextBtn) {
+            nextBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 showSlide(currentIdx + 1);
             });
@@ -983,6 +1029,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Soporte táctil / swipe para móvil
         let touchStartX = 0;
         let touchStartY = 0;
         box.addEventListener('touchstart', (e) => {
@@ -995,12 +1042,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const touchEndY = e.changedTouches[0].screenY;
             const diffX = touchEndX - touchStartX;
             const diffY = touchEndY - touchStartY;
-            if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+            if (Math.abs(diffX) > 15 && Math.abs(diffX) > Math.abs(diffY)) {
                 lastBoxSwipeTime = Date.now();
-                if (diffX > 0) showSlide(currentIdx - 1);
-                else showSlide(currentIdx + 1);
+                if (diffX > 0) {
+                    showSlide(currentIdx - 1);
+                } else {
+                    showSlide(currentIdx + 1);
+                }
             }
         }, { passive: true });
     });
-
-}); // ─── FIN de DOMContentLoaded ───
