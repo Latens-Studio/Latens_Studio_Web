@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             price: '15€',
             priceNum: 15,
             priceQualifier: 'Pareja completa (2 llaveros)',
-            desc: 'Dos llaveros independientes con nombres totalmente personalizados que encajan magnéticamente de forma perfecta gracias a sus imanes de neodimio integrados. Incluye tarjeta de presentación en caja con título y dedicatoria personalizada corta.',
+            desc: 'Dos llaveros independientes con nombres totalmente personalizados que encajan magnéticamente de forma perfecta gracias a sus imanes de neodimio integrados. Incluye tarjeta de presentación en caja con título, dedicatoria personalizada corta y soporte expositor.',
             images: [
                 'llaverocompleto3.jpg',
                 'llaverocompleto2.jpg',
@@ -97,11 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
             specs: [
                 'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
                 'Personalización de 2 nombres en relieve 3D de alta definición.',
-                'Incluye tarjeta con título y dedicatoria personalizada corta.',
+                'Incluye tarjeta con título y dedicatoria personalizada corta + soporte expositor.',
                 'Fabricado en PLA+ Premium ecológico de máxima resistencia y ligereza.',
                 'Incluye 2 anillas de acero reforzadas + Chapita de regalo gratis.',
                 'Entrega física rápida en Alicante el mismo día o 24h.'
             ],
+            careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones con la manipulación.',
             instagramCta: 'Pídelo ya por MD'
         },
         iniciales: {
@@ -112,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             price: '12€',
             priceNum: 12,
             priceQualifier: 'Pareja completa (2 llaveros)',
-            desc: 'Dos llaveros de pareja con las iniciales en relieve o grabado sobre un corazón central que se unen magnéticamente. Incluye tarjeta de presentación en caja con título y dedicatoria personalizada corta.',
+            desc: 'Dos llaveros magnéticos con la inicial de cada persona sobre un corazón central y cruz opcional. Incluye tarjeta de presentación en caja con título, dedicatoria personalizada corta y soporte expositor.',
             images: [
                 'llavero3iniciales.jpg',
                 'llavero2iniciales.jpg',
@@ -121,13 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             specs: [
                 'Imanes de neodimio integrados para unión magnética perfecta.',
-                '2 Iniciales personalizadas en relieve o grabado a elegir.',
-                'Incluye tarjeta con título y dedicatoria personalizada corta.',
-                'Opción de cruz decorativa lateral y acabado de precisión.',
-                'Material PLA biodegradable de tacto suave y alta durabilidad.',
+                '2 Iniciales personalizadas en 3D de alta definición.',
+                'Incluye tarjeta con título y dedicatoria personalizada corta + soporte expositor.',
+                'Cruz opcional según tu preferencia.',
+                'Fabricado en PLA+ Premium ecológico de máxima resistencia y ligereza.',
                 'Incluye 2 anillas reforzadas + Chapita de regalo gratis.',
                 'Listo en 24h para entrega directa en mano en Alicante.'
             ],
+            careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones con la manipulación.',
             instagramCta: 'Pídelo ya por MD'
         },
         individual: {
@@ -146,11 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             specs: [
                 '1 Nombre personalizado en relieve 3D de alto contraste.',
+                'Fabricado en PLA+ Premium ecológico de máxima resistencia y ligereza.',
                 'Anilla lateral reforzada de alta resistencia al uso diario.',
                 'Diseño compacto y ergonómico que no abulta en el bolsillo.',
                 'Incluye Chapita de regalo gratis con tu encargo.',
                 'Fabricación inmediata y entrega local en Alicante.'
             ],
+            careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones con la manipulación.',
             instagramCta: 'Pídelo ya por MD'
         }
     };
@@ -1558,9 +1562,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modalProductQualifier) modalProductQualifier.textContent = product.priceQualifier || '';
         if (modalProductDesc) modalProductDesc.textContent = product.desc;
 
-        // 2. Inyectar Especificaciones Estilo Amazon
+        // 2. Inyectar Especificaciones Estilo Amazon (con aviso de cuidado al final sin tick)
         if (modalSpecsList) {
-            modalSpecsList.innerHTML = (product.specs || []).map(spec => `<li><span>${spec}</span></li>`).join('');
+            const specsHtml = (product.specs || []).map(spec => `<li><span>${spec}</span></li>`).join('');
+            const careHtml = product.careNote ? `<li class="spec-care-note"><span><strong>Recomendación de cuidado:</strong> ${product.careNote}</span></li>` : '';
+            modalSpecsList.innerHTML = specsHtml + careHtml;
         }
 
         // 3. Configurar Galería y Miniaturas Interactivas

@@ -2155,6 +2155,35 @@ body {
     flex-shrink: 0;
 }
 
+.modal-specs-list li.spec-care-note {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: var(--radius-sm);
+    color: var(--text-body);
+    font-size: 0.78rem;
+    line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+}
+
+.modal-specs-list li.spec-care-note::before {
+    content: "⚠️";
+    color: inherit;
+    font-weight: normal;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+    .modal-specs-list li.spec-care-note {
+        background: rgba(245, 158, 11, 0.12);
+        border-color: rgba(245, 158, 11, 0.35);
+    }
+}
+
 /* Botones CTA */
 .modal-actions-group {
     display: flex;
