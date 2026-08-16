@@ -1,24 +1,161 @@
+// ─── LATENS STUDIO WEB ENGINE (VANILLA ES6) ───
+
+// ─── TOAST NOTIFICATION SYSTEM (SINGLETON) ───
+const Toast = {
+    container: null,
+
+    init() {
+        this.container = document.getElementById('toastContainer');
+        if (!this.container) {
+            this.container = document.createElement('div');
+            this.container.id = 'toastContainer';
+            this.container.className = 'toast-container';
+            this.container.setAttribute('aria-live', 'polite');
+            this.container.setAttribute('aria-atomic', 'true');
+            document.body.appendChild(this.container);
+        }
+    },
+
+    show({ title = '', message = '', type = 'info', duration = 4000 }) {
+        if (!this.container) this.init();
+
+        const icons = {
+            success: '✅',
+            error: '❌',
+            warning: '⚠️',
+            info: 'ℹ️'
+        };
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = `
+            <span class="toast-icon">${icons[type] || icons.info}</span>
+            <div class="toast-body">
+                ${title ? `<div class="toast-title">${title}</div>` : ''}
+                <div class="toast-msg">${message}</div>
+            </div>
+            <button class="toast-close" aria-label="Cerrar notificacion">&times;</button>
+            <div class="toast-progress" style="animation-duration: ${duration}ms;"></div>
+        `;
+
+        const closeBtn = toast.querySelector('.toast-close');
+        const dismiss = () => {
+            toast.classList.remove('show');
+            toast.classList.add('hide');
+            setTimeout(() => toast.remove(), 300);
+        };
+
+        if (closeBtn) closeBtn.addEventListener('click', dismiss);
+        this.container.appendChild(toast);
+
+        // Trigger reflow for CSS smooth transition
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+
+        const timer = setTimeout(dismiss, duration);
+        toast.addEventListener('mouseenter', () => clearTimeout(timer));
+    },
+
+    success(message, title = '¡Éxito!') {
+        this.show({ title, message, type: 'success', duration: 4500 });
+    },
+
+    error(message, title = 'Atención') {
+        this.show({ title, message, type: 'error', duration: 6000 });
+    },
+
+    warning(message, title = 'Aviso') {
+        this.show({ title, message, type: 'warning', duration: 5000 });
+    },
+
+    info(message, title = 'Información') {
+        this.show({ title, message, type: 'info', duration: 4000 });
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
+    Toast.init();
+
     // ─── CATÁLOGO DE PRODUCTOS (Fuente única de verdad) ───
     const PRODUCT_CATALOG = {
         corazon: {
             id: 'corazon',
-            name: 'Llavero Corazón Conectado',
-            shortName: 'Corazón Conectado'
+            name: 'Llaveros Magnéticos con Corazón y Nombres',
+            shortName: 'Llaveros Magnéticos con Corazón y Nombres',
+            badge: 'Más Vendido ⭐',
+            price: '15€',
+            priceNum: 15,
+            priceQualifier: 'Pareja completa (2 llaveros)',
+            desc: 'Dos llaveros independientes con nombres totalmente personalizados que encajan magnéticamente de forma perfecta gracias a sus imanes de neodimio integrados. Incluye tarjeta de presentación en caja con título y dedicatoria personalizada corta.',
+            images: [
+                'llaverocompleto3.jpg',
+                'llaverocompleto2.jpg',
+                'llaverocompleto1.jpg',
+                'imagen llaveros pareja ambos(tarjeta en caja).jpg'
+            ],
+            specs: [
+                'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
+                'Personalización de 2 nombres en relieve 3D de alta definición.',
+                'Incluye tarjeta con título y dedicatoria personalizada corta.',
+                'Fabricado en PLA+ Premium ecológico de máxima resistencia y ligereza.',
+                'Incluye 2 anillas de acero reforzadas + Chapita de regalo gratis.',
+                'Entrega física rápida en Alicante el mismo día o 24h.'
+            ],
+            instagramCta: 'Pídelo ya por MD'
         },
         iniciales: {
             id: 'iniciales',
-            name: 'Llavero Iniciales con Corazón',
-            shortName: 'Iniciales'
+            name: 'Llaveros Magnéticos con Corazón e Iniciales',
+            shortName: 'Llaveros Magnéticos con Corazón e Iniciales',
+            badge: 'Personalizable',
+            price: '12€',
+            priceNum: 12,
+            priceQualifier: 'Pareja completa (2 llaveros)',
+            desc: 'Dos llaveros de pareja con las iniciales en relieve o grabado sobre un corazón central que se unen magnéticamente. Incluye tarjeta de presentación en caja con título y dedicatoria personalizada corta.',
+            images: [
+                'llavero3iniciales.jpg',
+                'llavero2iniciales.jpg',
+                'llavero1iniciales.jpg',
+                'imagen llaveros pareja ambos(tarjeta en caja).jpg'
+            ],
+            specs: [
+                'Imanes de neodimio integrados para unión magnética perfecta.',
+                '2 Iniciales personalizadas en relieve o grabado a elegir.',
+                'Incluye tarjeta con título y dedicatoria personalizada corta.',
+                'Opción de cruz decorativa lateral y acabado de precisión.',
+                'Material PLA biodegradable de tacto suave y alta durabilidad.',
+                'Incluye 2 anillas reforzadas + Chapita de regalo gratis.',
+                'Listo en 24h para entrega directa en mano en Alicante.'
+            ],
+            instagramCta: 'Pídelo ya por MD'
         },
         individual: {
             id: 'individual',
-            name: 'Llavero Individual con Nombre',
-            shortName: 'Individual'
+            name: 'Llavero con Nombre',
+            shortName: 'Llavero con Nombre',
+            badge: 'Individual',
+            price: '3€',
+            priceNum: 3,
+            priceQualifier: 'Por unidad (1 llavero)',
+            desc: 'Tu nombre personalizado en relieve blanco sobre una base orgánica oscura y resistente. Compacto, duradero e ideal para llaves de coche, mochilas o regalo.',
+            images: [
+                'llaverocompleto1.jpg',
+                'chapita.png',
+                'LOGO LTSweb.png'
+            ],
+            specs: [
+                '1 Nombre personalizado en relieve 3D de alto contraste.',
+                'Anilla lateral reforzada de alta resistencia al uso diario.',
+                'Diseño compacto y ergonómico que no abulta en el bolsillo.',
+                'Incluye Chapita de regalo gratis con tu encargo.',
+                'Fabricación inmediata y entrega local en Alicante.'
+            ],
+            instagramCta: 'Pídelo ya por MD'
         }
     };
 
-    // ─── TABS & DEEP LINKING URL ROUTER ───
+    // ─── TABS & DEEP LINKING URL ROUTER (CON WAI-ARIA SYNC) ───
     const tabBtns = document.querySelectorAll('.nav-tab-btn');
     const tabPanes = document.querySelectorAll('.tab-pane');
 
@@ -63,11 +200,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!activePane) return;
 
-        tabBtns.forEach(btn => btn.classList.remove('active'));
-        tabPanes.forEach(pane => pane.classList.remove('active'));
+        tabBtns.forEach(btn => {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false');
+            btn.setAttribute('tabindex', '-1');
+        });
+        tabPanes.forEach(pane => {
+            pane.classList.remove('active');
+            pane.setAttribute('aria-hidden', 'true');
+        });
         
-        if (activeBtn) activeBtn.classList.add('active');
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+            activeBtn.setAttribute('aria-selected', 'true');
+            activeBtn.setAttribute('tabindex', '0');
+        }
         activePane.classList.add('active');
+        activePane.setAttribute('aria-hidden', 'false');
 
         if (updateUrl && window.history && window.history.replaceState) {
             window.history.replaceState(null, '', '#' + resolvedId);
@@ -107,15 +256,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (productSelect) productSelect.value = product;
             renderDynamicInputs();
             switchTab('tab-preview');
+            updateOrderSummaryCard();
         });
     });
 
-    // ─── DYNAMIC INPUTS FOR PREVIEWER ───
+    // ─── DYNAMIC INPUTS FOR PREVIEWER (CON PRESERVACIÓN DE ESTADO) ───
     const dynamicInputsContainer = document.getElementById('dynamicInputs');
     
     function renderDynamicInputs() {
         if (!productSelect || !dynamicInputsContainer) return;
         const val = productSelect.value;
+
+        // Preservar valores ingresados previamente por el usuario
+        const oldName1 = (document.getElementById('name1')?.value || '');
+        const oldName2 = (document.getElementById('name2')?.value || '');
+
         let html = '';
 
         const opcionesIniciales = document.getElementById('opcionesIniciales');
@@ -133,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
             html = `
                 <div class="form-field">
                     <label for="name1">Nombre para el Llavero</label>
-                    <input type="text" id="name1" placeholder="Ej: Carlos" maxlength="12" required>
+                    <input type="text" id="name1" placeholder="Ej: Carlos" maxlength="12" required autocomplete="off">
                 </div>
             `;
         } else {
@@ -146,21 +301,262 @@ document.addEventListener('DOMContentLoaded', () => {
             html = `
                 <div class="form-field">
                     <label for="name1">${labelA}</label>
-                    <input type="text" id="name1" placeholder="${phA}" maxlength="${maxL}" required>
+                    <input type="text" id="name1" placeholder="${phA}" maxlength="${maxL}" required autocomplete="off">
                 </div>
                 <div class="form-field">
                     <label for="name2">${labelB}</label>
-                    <input type="text" id="name2" placeholder="${phB}" maxlength="${maxL}" required>
+                    <input type="text" id="name2" placeholder="${phB}" maxlength="${maxL}" required autocomplete="off">
                 </div>
             `;
         }
 
         dynamicInputsContainer.innerHTML = html;
+
+        // Restaurar valores previos
+        const newInp1 = document.getElementById('name1');
+        const newInp2 = document.getElementById('name2');
+        if (newInp1 && oldName1) {
+            newInp1.value = (val === 'iniciales') ? oldName1.charAt(0).toUpperCase() : oldName1;
+        }
+        if (newInp2 && oldName2) {
+            newInp2.value = (val === 'iniciales') ? oldName2.charAt(0).toUpperCase() : oldName2;
+        }
+
+        // Listeners de actualización de resumen en vivo
+        if (newInp1) newInp1.addEventListener('input', updateOrderSummaryCard);
+        if (newInp2) newInp2.addEventListener('input', updateOrderSummaryCard);
     }
 
     if (productSelect) {
-        productSelect.addEventListener('change', renderDynamicInputs);
+        productSelect.addEventListener('change', () => {
+            renderDynamicInputs();
+            updateOrderSummaryCard();
+        });
         renderDynamicInputs();
+    }
+
+    // ─── CONTROLADOR DE FECHA INTERACTIVA RE-DISEÑADA (SIN TECLADO) ───
+    const fechaNativeInput = document.getElementById('fechaNative');
+    const fechaHiddenInput = document.getElementById('fecha');
+    const btnDateClear = document.getElementById('btnDateClear');
+    const datePreviewBadge = document.getElementById('datePreviewBadge');
+    const datePreviewFormatted = document.getElementById('datePreviewFormatted');
+    const datePresetPills = document.querySelectorAll('.date-preset-pill');
+
+    function formatCompactDate(isoDateStr) {
+        if (!isoDateStr) return '';
+        const parts = isoDateStr.split('-');
+        if (parts.length === 3) {
+            const year = parts[0];
+            const month = parts[1];
+            const day = parts[2];
+            const shortYear = year.slice(-2);
+            return `${day}.${month}.${shortYear}`;
+        }
+        return isoDateStr;
+    }
+
+    function setDateValue(isoDateStr) {
+        if (fechaNativeInput) fechaNativeInput.value = isoDateStr || '';
+        const compact = formatCompactDate(isoDateStr);
+        if (fechaHiddenInput) {
+            fechaHiddenInput.value = compact;
+        }
+
+        if (compact) {
+            if (datePreviewFormatted) datePreviewFormatted.textContent = compact;
+            if (datePreviewBadge) datePreviewBadge.style.display = 'flex';
+            if (btnDateClear) btnDateClear.style.display = 'grid';
+        } else {
+            if (datePreviewBadge) datePreviewBadge.style.display = 'none';
+            if (btnDateClear) btnDateClear.style.display = 'none';
+        }
+
+        // Marcar pill activo si coincide
+        datePresetPills.forEach(pill => {
+            const preset = pill.getAttribute('data-preset');
+            if (preset === 'today') {
+                const now = new Date();
+                const year = now.getFullYear();
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const d = String(now.getDate()).padStart(2, '0');
+                pill.classList.toggle('active', isoDateStr === `${year}-${m}-${d}`);
+            } else if (preset === 'valentine') {
+                const currentYear = new Date().getFullYear();
+                pill.classList.toggle('active', isoDateStr === `${currentYear}-02-14` || (isoDateStr && isoDateStr.endsWith('-02-14')));
+            } else {
+                pill.classList.remove('active');
+            }
+        });
+
+        updateOrderSummaryCard();
+    }
+
+    if (fechaNativeInput) {
+        // Al hacer clic en cualquier parte del campo, abre inmediatamente el desplegable del calendario
+        fechaNativeInput.addEventListener('click', () => {
+            try {
+                if (typeof fechaNativeInput.showPicker === 'function') {
+                    fechaNativeInput.showPicker();
+                }
+            } catch (err) {}
+        });
+
+        fechaNativeInput.addEventListener('change', () => {
+            setDateValue(fechaNativeInput.value);
+        });
+        fechaNativeInput.addEventListener('input', () => {
+            setDateValue(fechaNativeInput.value);
+        });
+    }
+
+    if (btnDateClear) {
+        btnDateClear.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setDateValue('');
+            Toast.info('Fecha en el reverso eliminada.');
+        });
+    }
+
+    datePresetPills.forEach(pill => {
+        pill.addEventListener('click', (e) => {
+            e.preventDefault();
+            const preset = pill.getAttribute('data-preset');
+            const now = new Date();
+            const year = now.getFullYear();
+
+            if (preset === 'today') {
+                const m = String(now.getMonth() + 1).padStart(2, '0');
+                const d = String(now.getDate()).padStart(2, '0');
+                setDateValue(`${year}-${m}-${d}`);
+                Toast.success(`Fecha establecida: ${d}.${m}.${String(year).slice(-2)}`);
+            } else if (preset === 'valentine') {
+                setDateValue(`${year}-02-14`);
+                Toast.success(`Fecha establecida: 14.02.${String(year).slice(-2)} (San Valentín)`);
+            }
+        });
+    });
+
+    const checkCruz = document.getElementById('checkCruz');
+    const checkRelieve = document.getElementById('checkRelieve');
+    if (checkCruz) checkCruz.addEventListener('change', updateOrderSummaryCard);
+    if (checkRelieve) checkRelieve.addEventListener('change', updateOrderSummaryCard);
+
+    // ─── ORDER SUMMARY & INSTAGRAM DM BRIDGE ───
+    function generateOrderSpecs() {
+        const type = productSelect ? productSelect.value : 'corazon';
+        const productInfo = PRODUCT_CATALOG[type] || PRODUCT_CATALOG.corazon;
+        const name1 = (document.getElementById('name1')?.value || '').trim();
+        const name2 = (document.getElementById('name2')?.value || '').trim();
+        const fecha = (document.getElementById('fecha')?.value || '').trim();
+        const addCard = document.getElementById('addCard')?.checked;
+        const cardTitleVal = (document.getElementById('cardTitle')?.value || '').trim();
+        const cardMessageVal = (document.getElementById('cardMessage')?.value || '').trim();
+
+        let namesFormatted = (type === 'individual') ? (name1 || 'Sin nombre') : `${name1 || 'Nombre 1'} + ${name2 || 'Nombre 2'}`;
+        
+        return {
+            type,
+            productName: productInfo.name,
+            price: productInfo.price,
+            names: namesFormatted,
+            fecha: fecha || 'No grabada',
+            hasCard: !!addCard,
+            cardTitle: addCard ? (cardTitleVal || 'Sin título') : null,
+            cardMessage: addCard ? (cardMessageVal || 'Sin mensaje') : null
+        };
+    }
+
+    function updateOrderSummaryCard() {
+        const specs = generateOrderSpecs();
+        const container = document.getElementById('summaryDetailsList');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="summary-item">
+                <span class="summary-item-label">Modelo & Precio</span>
+                <span class="summary-item-val">🏷️ ${specs.productName} <strong>(${specs.price})</strong></span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-item-label">Nombres / Iniciales</span>
+                <span class="summary-item-val">✍️ ${specs.names}</span>
+            </div>
+            ${specs.fecha !== 'No grabada' ? `
+            <div class="summary-item">
+                <span class="summary-item-label">Fecha Reverso</span>
+                <span class="summary-item-val">📅 ${specs.fecha}</span>
+            </div>` : ''}
+            ${specs.hasCard ? `
+            <div class="summary-item">
+                <span class="summary-item-label">Tarjeta 3D Regalo</span>
+                <span class="summary-item-val">💌 "${specs.cardTitle}": ${specs.cardMessage}</span>
+            </div>` : ''}
+        `;
+    }
+
+    // Botón de Copiar Resumen para Instagram DM
+    const btnCopySummary = document.getElementById('btnCopySummary');
+    if (btnCopySummary) {
+        btnCopySummary.addEventListener('click', async () => {
+            const specs = generateOrderSpecs();
+            
+            let textToCopy = `✨ ¡Hola Latens Studio! 👋 Quiero encargar este llavero personalizado:\n\n` +
+                `📋 Modelo: ${specs.productName} (${specs.price})\n` +
+                `✍️ Nombres/Iniciales: ${specs.names}\n`;
+            
+            if (specs.fecha !== 'No grabada') {
+                textToCopy += `📅 Fecha Reverso: ${specs.fecha}\n`;
+            }
+            if (specs.hasCard) {
+                textToCopy += `💌 Tarjeta 3D Regalo: "${specs.cardTitle}" - ${specs.cardMessage}\n`;
+            }
+            
+            textToCopy += `🎁 Incluye: Chapita de Regalo Gratis\n` +
+                `🎨 Acabado: Base Negro Sombra / Letras Blanco Nieve (PLA+)\n\n` +
+                `¿Podríais confirmarme disponibilidad y plazo de entrega? ¡Muchas gracias!`;
+
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(textToCopy);
+                } else {
+                    const tempTa = document.createElement('textarea');
+                    tempTa.value = textToCopy;
+                    tempTa.style.position = 'fixed';
+                    tempTa.style.left = '-9999px';
+                    document.body.appendChild(tempTa);
+                    tempTa.select();
+                    document.execCommand('copy');
+                    tempTa.remove();
+                }
+
+                // Feedback visual en el botón
+                const originalContent = btnCopySummary.innerHTML;
+                btnCopySummary.innerHTML = `
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>¡Resumen copiado!</span>
+                `;
+                btnCopySummary.classList.add('copied');
+                
+                Toast.success('¡Resumen copiado! Listo para pegar en el chat de Instagram (@latens.studio)', 'Copiado al portapapeles');
+                
+                setTimeout(() => {
+                    btnCopySummary.innerHTML = originalContent;
+                    btnCopySummary.classList.remove('copied');
+                }, 2500);
+
+            } catch (err) {
+                Toast.info('Resumen preparado para copiar.', 'Aviso');
+            }
+        });
+    }
+
+    // Botón directo a Instagram
+    const btnOpenInstagram = document.getElementById('btnOpenInstagram');
+    if (btnOpenInstagram) {
+        btnOpenInstagram.addEventListener('click', () => {
+            Toast.info('Abriendo perfil de Instagram (@latens.studio). Pega tu resumen copiado en el mensaje directo.', 'Instagram DM');
+        });
     }
 
     // ─── URL ROUTING ───
@@ -197,6 +593,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const input2 = document.getElementById('name2');
                 if (input1 && n1) input1.value = decodeURIComponent(n1);
                 if (input2 && n2) input2.value = decodeURIComponent(n2);
+                updateOrderSummaryCard();
             }, 80);
             if (!targetTab) targetTab = 'tab-preview';
         }
@@ -220,6 +617,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = resolveTabId(window.location.hash);
             if (target) switchTab(target, false);
         }
+    });
+
+    // Enlaces de navegación rápida del footer con soporte para switchTab y scroll suave
+    document.querySelectorAll('.footer-links a[href^="#tab-"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            const target = resolveTabId(href);
+            if (target) {
+                e.preventDefault();
+                switchTab(target);
+            }
+        });
     });
 
     handleUrlRouting();
@@ -246,7 +655,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Vista Trasera (Posterior)", 
         "Vista Lateral Izquierda", 
         "Vista Lateral Derecha", 
-        "Vista Isom\u00e9trica (Relieve 3D)"
+        "Vista Isométrica (Relieve 3D)"
     ];
 
     const perspectivesTarjeta = [
@@ -371,18 +780,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (addCardCb && cardInputsGroup) {
         addCardCb.addEventListener('change', () => {
             cardInputsGroup.style.display = addCardCb.checked ? 'block' : 'none';
+            updateOrderSummaryCard();
         });
     }
 
     if (cardTitle && titleCounter) {
         cardTitle.addEventListener('input', () => {
             titleCounter.textContent = `${cardTitle.value.length}/10`;
+            updateOrderSummaryCard();
         });
     }
 
     if (cardMessage && messageCounter) {
         cardMessage.addEventListener('input', () => {
             messageCounter.textContent = `${cardMessage.value.length}/81`;
+            updateOrderSummaryCard();
         });
     }
 
@@ -405,21 +817,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ─── LIGHTBOX MODAL WITH ZOOM & PAN ───
+    // ─── LIGHTBOX MODAL WITH ZOOM & PAN (ESTILO AMAZON CLEAN) ───
     const lightboxModal = document.getElementById('lightboxModal');
     const lightboxOverlay = document.getElementById('lightboxOverlay');
     const lightboxClose = document.getElementById('lightboxClose');
-    const lightboxTitle = document.getElementById('lightboxTitle');
     const lightboxImg = document.getElementById('lightboxImg');
     const lightboxViewport = document.getElementById('lightboxViewport');
     const lightboxPrev = document.getElementById('lightboxPrev');
     const lightboxNext = document.getElementById('lightboxNext');
     const lightboxCounter = document.getElementById('lightboxCounter');
-    
-    const zoomInBtn = document.getElementById('zoomInBtn');
-    const zoomOutBtn = document.getElementById('zoomOutBtn');
-    const zoomResetBtn = document.getElementById('zoomResetBtn');
-    const zoomLevelEl = document.getElementById('zoomLevel');
 
     let zoomLevel = 1;
     let panX = 0;
@@ -430,13 +836,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let lightboxMode = '3d';
     let catalogLightboxImages = [];
-    let catalogLightboxTitles = [];
     let catalogSlideIndex = 0;
 
     function applyZoomTransform() {
         if (!lightboxImg) return;
         lightboxImg.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
-        if (zoomLevelEl) zoomLevelEl.textContent = `${Math.round(zoomLevel * 100)}%`;
     }
 
     function resetZoom() {
@@ -448,122 +852,177 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setZoom(newZoom) {
         zoomLevel = Math.max(0.8, Math.min(4.0, newZoom));
-        if (zoomLevel === 1) { panX = 0; panY = 0; }
+        if (zoomLevel <= 1.05) {
+            panX = 0;
+            panY = 0;
+        }
         applyZoomTransform();
     }
 
-    function updateLightboxCounter() {
-        if (!lightboxCounter) return;
-        if (lightboxMode === 'catalog') {
-            lightboxCounter.textContent = `${catalogSlideIndex + 1} / ${catalogLightboxImages.length}`;
-            lightboxCounter.style.display = 'block';
-        } else {
+    function updateLightboxContent() {
+        if (!lightboxImg) return;
+        
+        if (lightboxMode === '3d') {
             const imgList = getActiveImages();
-            if (imgList.length > 1) {
-                lightboxCounter.textContent = `${currentSlide + 1} / ${imgList.length}`;
-                lightboxCounter.style.display = 'block';
-            } else {
-                lightboxCounter.style.display = 'none';
+            const currentPerspectives = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
+            if (imgList[currentSlide]) {
+                lightboxImg.src = `data:image/png;base64,${imgList[currentSlide]}`;
+                const pLabel = currentPerspectives[currentSlide] || `Perspectiva ${currentSlide + 1}`;
+                lightboxImg.alt = `Vista 3D: ${pLabel}`;
             }
+            const hasMultiple = imgList.length > 1;
+            if (lightboxPrev) lightboxPrev.style.display = hasMultiple ? 'grid' : 'none';
+            if (lightboxNext) lightboxNext.style.display = hasMultiple ? 'grid' : 'none';
+            if (lightboxCounter) {
+                if (hasMultiple) {
+                    const pLabel = currentPerspectives[currentSlide] || `Vista ${currentSlide + 1}`;
+                    lightboxCounter.textContent = `${pLabel} · ${currentSlide + 1} / ${imgList.length}`;
+                    lightboxCounter.style.display = 'block';
+                } else {
+                    lightboxCounter.style.display = 'none';
+                }
+            }
+        } else if (lightboxMode === 'catalog') {
+            if (catalogLightboxImages[catalogSlideIndex]) {
+                lightboxImg.src = catalogLightboxImages[catalogSlideIndex];
+                lightboxImg.alt = `Foto de producto ${catalogSlideIndex + 1}`;
+            }
+            const hasMultiple = catalogLightboxImages.length > 1;
+            if (lightboxPrev) lightboxPrev.style.display = hasMultiple ? 'grid' : 'none';
+            if (lightboxNext) lightboxNext.style.display = hasMultiple ? 'grid' : 'none';
+            if (lightboxCounter) {
+                if (hasMultiple) {
+                    lightboxCounter.textContent = `${catalogSlideIndex + 1} / ${catalogLightboxImages.length}`;
+                    lightboxCounter.style.display = 'block';
+                } else {
+                    lightboxCounter.style.display = 'none';
+                }
+            }
+        }
+        resetZoom();
+    }
+
+    function openLightbox(slideIndex = 0) {
+        lightboxMode = '3d';
+        currentSlide = slideIndex;
+        if (lightboxModal) {
+            lightboxModal.classList.add('active');
+            updateLightboxContent();
+            document.body.style.overflow = 'hidden';
         }
     }
 
-    function openLightbox(index) {
-        lightboxMode = '3d';
-        if (index !== undefined) currentSlide = index;
-        resetZoom();
-        updateLightboxContent();
-        if (lightboxModal) lightboxModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function openCatalogLightbox(images, index, titles) {
+    function openCatalogLightbox(images, startIndex = 0) {
+        if (!images || images.length === 0) return;
         lightboxMode = 'catalog';
         catalogLightboxImages = images;
-        catalogLightboxTitles = titles || [];
-        catalogSlideIndex = index || 0;
-        resetZoom();
-        updateLightboxContent();
-        if (lightboxModal) lightboxModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        catalogSlideIndex = startIndex;
+        if (lightboxModal) {
+            lightboxModal.classList.add('active');
+            updateLightboxContent();
+            document.body.style.overflow = 'hidden';
+        }
     }
 
     function closeLightbox() {
-        if (lightboxModal) lightboxModal.classList.remove('active');
-        document.body.style.overflow = '';
-        resetZoom();
-    }
-
-    function updateLightboxContent() {
-        if (lightboxMode === 'catalog') {
-            if (!catalogLightboxImages || !catalogLightboxImages[catalogSlideIndex]) return;
-            if (lightboxImg) lightboxImg.src = catalogLightboxImages[catalogSlideIndex];
-            const title = catalogLightboxTitles[catalogSlideIndex] || `Foto ${catalogSlideIndex + 1} de ${catalogLightboxImages.length}`;
-            if (lightboxTitle) lightboxTitle.textContent = title;
-            updateLightboxCounter();
-            return;
-        }
-
-        const imgList = getActiveImages();
-        if (!imgList || !imgList[currentSlide]) return;
-
-        if (lightboxImg) lightboxImg.src = `data:image/png;base64,${imgList[currentSlide]}`;
-
-        let modeText = '';
-        if (activeMode === 'tarjeta') {
-            modeText = ' - [Tarjeta 3D]';
-        } else if (productSelect && productSelect.value === 'individual') {
-            modeText = ' - [Individual]';
-        } else {
-            modeText = activeMode === 'juntos' ? ' - [Juntos]' : ' - [Separados]';
-        }
-        const currentPerspectives = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
-        if (lightboxTitle) lightboxTitle.textContent = `${currentPerspectives[currentSlide] || 'Perspectiva'}${modeText}`;
-        updateLightboxCounter();
-    }
-
-    function lightboxPrevSlide() {
-        if (lightboxMode === 'catalog') {
-            catalogSlideIndex = (catalogSlideIndex > 0) ? catalogSlideIndex - 1 : catalogLightboxImages.length - 1;
+        if (lightboxModal) {
+            lightboxModal.classList.remove('active');
+            // Si el modal de detalles sigue abierto, mantener overflow hidden en body
+            if (productModal && productModal.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
             resetZoom();
-            updateLightboxContent();
-        } else {
-            const cp = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
-            currentSlide = (currentSlide > 0) ? currentSlide - 1 : cp.length - 1;
-            resetZoom();
-            updateCarousel();
-        }
-    }
-
-    function lightboxNextSlide() {
-        if (lightboxMode === 'catalog') {
-            catalogSlideIndex = (catalogSlideIndex < catalogLightboxImages.length - 1) ? catalogSlideIndex + 1 : 0;
-            resetZoom();
-            updateLightboxContent();
-        } else {
-            const cp = (activeMode === 'tarjeta') ? perspectivesTarjeta : perspectivesLlavero;
-            currentSlide = (currentSlide < cp.length - 1) ? currentSlide + 1 : 0;
-            resetZoom();
-            updateCarousel();
         }
     }
 
     if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
     if (lightboxOverlay) lightboxOverlay.addEventListener('click', closeLightbox);
-    if (lightboxPrev) lightboxPrev.addEventListener('click', lightboxPrevSlide);
-    if (lightboxNext) lightboxNext.addEventListener('click', lightboxNextSlide);
-    if (zoomInBtn) zoomInBtn.addEventListener('click', () => setZoom(zoomLevel + 0.3));
-    if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => setZoom(zoomLevel - 0.3));
-    if (zoomResetBtn) zoomResetBtn.addEventListener('click', resetZoom);
+
+    if (lightboxPrev) {
+        lightboxPrev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (lightboxMode === '3d') {
+                const imgList = getActiveImages();
+                currentSlide = (currentSlide > 0) ? currentSlide - 1 : imgList.length - 1;
+                updateCarousel();
+            } else if (lightboxMode === 'catalog') {
+                catalogSlideIndex = (catalogSlideIndex > 0) ? catalogSlideIndex - 1 : catalogLightboxImages.length - 1;
+                updateLightboxContent();
+            }
+        });
+    }
+
+    if (lightboxNext) {
+        lightboxNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (lightboxMode === '3d') {
+                const imgList = getActiveImages();
+                currentSlide = (currentSlide < imgList.length - 1) ? currentSlide + 1 : 0;
+                updateCarousel();
+            } else if (lightboxMode === 'catalog') {
+                catalogSlideIndex = (catalogSlideIndex < catalogLightboxImages.length - 1) ? catalogSlideIndex + 1 : 0;
+                updateLightboxContent();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (lightboxModal && lightboxModal.classList.contains('active')) {
+                closeLightbox();
+                return;
+            }
+            if (productModal && productModal.classList.contains('active')) {
+                closeProductDetailsModal();
+                return;
+            }
+        }
+        if (!lightboxModal || !lightboxModal.classList.contains('active')) return;
+        if (e.key === 'ArrowLeft') {
+            if (lightboxMode === '3d') {
+                const imgList = getActiveImages();
+                currentSlide = (currentSlide > 0) ? currentSlide - 1 : imgList.length - 1;
+                updateCarousel();
+            } else {
+                catalogSlideIndex = (catalogSlideIndex > 0) ? catalogSlideIndex - 1 : catalogLightboxImages.length - 1;
+                updateLightboxContent();
+            }
+        }
+        if (e.key === 'ArrowRight') {
+            if (lightboxMode === '3d') {
+                const imgList = getActiveImages();
+                currentSlide = (currentSlide < imgList.length - 1) ? currentSlide + 1 : 0;
+                updateCarousel();
+            } else {
+                catalogSlideIndex = (catalogSlideIndex < catalogLightboxImages.length - 1) ? catalogSlideIndex + 1 : 0;
+                updateLightboxContent();
+            }
+        }
+        if (e.key === '+' || e.key === '=') setZoom(zoomLevel + 0.25);
+        if (e.key === '-') setZoom(zoomLevel - 0.25);
+        if (e.key === '0') resetZoom();
+    });
 
     if (lightboxViewport) {
+        lightboxViewport.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            if (zoomLevel > 1.1) {
+                resetZoom();
+            } else {
+                setZoom(2.2);
+            }
+        });
+
         lightboxViewport.addEventListener('wheel', (e) => {
             e.preventDefault();
-            const delta = e.deltaY < 0 ? 0.2 : -0.2;
+            const delta = (e.deltaY < 0) ? 0.2 : -0.2;
             setZoom(zoomLevel + delta);
         }, { passive: false });
 
         lightboxViewport.addEventListener('mousedown', (e) => {
+            if (e.target === lightboxPrev || e.target === lightboxNext || e.target.closest('.lightbox-nav-btn')) return;
             if (zoomLevel > 1) {
                 isDragging = true;
                 startX = e.clientX - panX;
@@ -572,87 +1031,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         window.addEventListener('mousemove', (e) => {
-            if (isDragging && zoomLevel > 1) {
-                panX = e.clientX - startX;
-                panY = e.clientY - startY;
-                applyZoomTransform();
-            }
+            if (!isDragging) return;
+            panX = e.clientX - startX;
+            panY = e.clientY - startY;
+            applyZoomTransform();
         });
 
         window.addEventListener('mouseup', () => {
             isDragging = false;
         });
-    }
 
-    window.addEventListener('keydown', (e) => {
-        if (!lightboxModal || !lightboxModal.classList.contains('active')) return;
-        if (e.key === 'Escape') closeLightbox();
-        else if (e.key === 'ArrowLeft') lightboxPrevSlide();
-        else if (e.key === 'ArrowRight') lightboxNextSlide();
-    });
-
-    // Touch / Swipe / Pinch-to-Zoom for Lightbox
-    if (lightboxViewport) {
-        let lbTouchStartX = 0;
-        let lbTouchStartY = 0;
-        let initialDistance = null;
+        let touchDistStart = 0;
         let initialZoom = 1;
-        let isPinching = false;
-        
+        let lastTouchX = 0;
+        let lastTouchY = 0;
+
         lightboxViewport.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 1) {
-                lbTouchStartX = e.touches[0].screenX;
-                lbTouchStartY = e.touches[0].screenY;
-                isPinching = false;
-                if (zoomLevel > 1) {
-                    isDragging = true;
-                    startX = e.touches[0].clientX - panX;
-                    startY = e.touches[0].clientY - panY;
-                }
-            } else if (e.touches.length === 2) {
-                isPinching = true;
-                isDragging = false;
-                initialDistance = Math.hypot(
-                    e.touches[0].screenX - e.touches[1].screenX,
-                    e.touches[0].screenY - e.touches[1].screenY
+            if (e.touches.length === 2) {
+                touchDistStart = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
                 );
                 initialZoom = zoomLevel;
+            } else if (e.touches.length === 1) {
+                isDragging = true;
+                lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
             }
-        }, { passive: false });
+        }, { passive: true });
 
         lightboxViewport.addEventListener('touchmove', (e) => {
-            if (isPinching && e.touches.length === 2) {
-                e.preventDefault();
-                const currentDistance = Math.hypot(
-                    e.touches[0].screenX - e.touches[1].screenX,
-                    e.touches[0].screenY - e.touches[1].screenY
+            if (e.touches.length === 2 && touchDistStart > 0) {
+                const dist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
                 );
-                setZoom(initialZoom * (currentDistance / initialDistance));
-            } else if (isDragging && e.touches.length === 1 && zoomLevel > 1) {
-                e.preventDefault();
-                panX = e.touches[0].clientX - startX;
-                panY = e.touches[0].clientY - startY;
-                applyZoomTransform();
-            }
-        }, { passive: false });
-        
-        lightboxViewport.addEventListener('touchend', (e) => {
-            if (isPinching || e.touches.length > 0) { isPinching = false; return; }
-            if (isDragging) { isDragging = false; return; }
-            if (zoomLevel <= 1.05) {
-                const touchEndX = e.changedTouches[0].screenX;
-                const touchEndY = e.changedTouches[0].screenY;
-                const diffX = touchEndX - lbTouchStartX;
-                const diffY = touchEndY - lbTouchStartY;
-                if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
-                    if (diffX > 0) lightboxPrevSlide();
-                    else lightboxNextSlide();
+                const factor = dist / touchDistStart;
+                setZoom(initialZoom * factor);
+            } else if (e.touches.length === 1 && isDragging) {
+                const deltaX = e.touches[0].clientX - lastTouchX;
+                const deltaY = e.touches[0].clientY - lastTouchY;
+                lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
+                
+                if (zoomLevel > 1) {
+                    panX += deltaX;
+                    panY += deltaY;
+                    applyZoomTransform();
                 }
             }
         }, { passive: false });
     }
 
-    // ─── GENERATE BUTTON CLICK ───
+    // ─── GENERATE BUTTON CLICK (CON INTEGRACIÓN DE TOASTS & OPTIMIZACIÓN) ───
     if (generateBtn) {
         generateBtn.addEventListener('click', async () => {
             const type = productSelect ? productSelect.value : 'corazon';
@@ -676,10 +1107,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const tarjeta_mensaje = cardMessageEl ? cardMessageEl.value.trim() : '';
 
             if ((type === 'corazon' || type === 'iniciales') && (!name1 || !name2)) {
-                alert('Por favor, introduce los dos nombres o iniciales para formar el coraz\u00f3n.');
+                Toast.warning('Por favor, introduce los dos nombres o iniciales para formar el corazón.', 'Datos incompletos');
+                if (!name1 && name1El) name1El.focus();
+                else if (!name2 && name2El) name2El.focus();
                 return;
             } else if (type === 'individual' && !name1) {
-                alert('Por favor, introduce el nombre para el llavero.');
+                Toast.warning('Por favor, introduce el nombre para el llavero.', 'Nombre requerido');
+                if (name1El) name1El.focus();
                 return;
             }
 
@@ -690,39 +1124,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const loadingPercent = document.getElementById('loadingPercent');
             const loadingProgressBar = document.getElementById('loadingProgressBar');
+            const progressTrack = document.querySelector('.progress-bar-track');
             const loadingStatusDesc = document.getElementById('loadingStatusDesc');
             const loadingStatusTitle = document.getElementById('loadingStatusTitle');
             const loadingTimeText = document.getElementById('loadingTimeText');
 
             const productInfo = PRODUCT_CATALOG[type] || PRODUCT_CATALOG.corazon;
 
-            let currentProgress = 5;
+            let currentProgress = 8;
             const startTime = Date.now();
 
             if (loadingStatusTitle) loadingStatusTitle.textContent = `Generando ${productInfo.name}...`;
             if (loadingProgressBar) loadingProgressBar.style.width = '8%';
+            if (progressTrack) progressTrack.setAttribute('aria-valuenow', '8');
             if (loadingPercent) loadingPercent.textContent = '8%';
             if (loadingStatusDesc) loadingStatusDesc.textContent = `📐 Preparando generación de ${productInfo.shortName}...`;
+            
             let sseStarted = false;
+            // Optimización de intervalo a 500ms para menor consumo de CPU en móviles
             const timeTrackerInterval = setInterval(() => {
                 const elapsedSec = (Date.now() - startTime) / 1000;
                 
                 if (!sseStarted) {
                     if (elapsedSec > 3) {
-                        currentProgress = Math.min(10, 5 + elapsedSec * 0.1);
-                        if (loadingStatusDesc) loadingStatusDesc.textContent = '🌐 Despertando servidor en la nube tras inactividad (puede tardar hasta ~50s)... ¡Ya casi está!';
+                        currentProgress = Math.min(15, 8 + elapsedSec * 0.15);
+                        if (loadingStatusDesc) loadingStatusDesc.textContent = '🌐 Despertando servidor en la nube tras reposo (~50s)... ¡Ya casi está!';
                         if (loadingPercent) loadingPercent.textContent = `${Math.round(currentProgress)}%`;
                         if (loadingProgressBar) loadingProgressBar.style.width = `${currentProgress}%`;
+                        if (progressTrack) progressTrack.setAttribute('aria-valuenow', Math.round(currentProgress).toString());
                     }
-                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(0)}s transcurridos — Esperando conexión...`;
+                    if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(0)}s transcurridos — Conectando...`;
                 } else {
                     if (loadingTimeText) loadingTimeText.textContent = `⏱️ ${elapsedSec.toFixed(1)}s transcurridos`;
                 }
-            }, 100);
+            }, 500);
 
             try {
                 const API_URL = 'https://latens-studio-web-backend.onrender.com/api/preview';
-                
                 const payload = { type, name1, name2, fecha, cruz, relieve, tarjeta, tarjeta_titulo, tarjeta_mensaje };
 
                 const response = await fetch(API_URL, {
@@ -732,20 +1170,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (!response.ok) {
-                    const errData = await response.json().catch(() => ({ detail: 'Error en el servidor' }));
+                    const errData = await response.json().catch(() => ({ detail: 'Error en el servidor de renderizado 3D' }));
                     throw new Error(errData.detail || 'Error al conectar con el servidor 3D');
                 }
 
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder('utf-8');
                 let buffer = '';
-
                 let sseError = null;
 
                 while (true) {
                     const { done, value } = await reader.read();
                     if (done) {
-                        // Flush: procesar lo que quede en el buffer al cerrar el stream
+                        // Flush obligatorio de buffer para no perder el último chunk
                         buffer += decoder.decode();
                     } else {
                         sseStarted = true;
@@ -753,7 +1190,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     const lines = buffer.split('\n');
-                    buffer = lines.pop(); // Mantener línea incompleta en el buffer
+                    buffer = lines.pop(); // Mantener fragmento incompleto
 
                     for (const line of lines) {
                         if (line.startsWith('data: ')) {
@@ -767,12 +1204,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                     currentProgress = (typeof data.progress === 'number') ? data.progress : currentProgress;
                                     if (loadingPercent) loadingPercent.textContent = `${Math.round(currentProgress)}%`;
                                     if (loadingProgressBar) loadingProgressBar.style.width = `${currentProgress}%`;
+                                    if (progressTrack) progressTrack.setAttribute('aria-valuenow', Math.round(currentProgress).toString());
                                     if (data.message && loadingStatusDesc) loadingStatusDesc.textContent = data.message;
                                     
                                 } else if (data.type === 'done') {
                                     currentApiData = data.result;
                                 } else if (data.type === 'error') {
-                                    sseError = new Error(data.detail || 'Error durante la generación');
+                                    sseError = new Error(data.detail || 'Error durante la generación del modelo');
                                 }
                             } catch (parseErr) {
                                 console.warn('SSE parse warning:', parseErr.message, dataStr.substring(0, 100));
@@ -791,10 +1229,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 clearInterval(timeTrackerInterval);
                 if (loadingProgressBar) loadingProgressBar.style.width = '100%';
+                if (progressTrack) progressTrack.setAttribute('aria-valuenow', '100');
                 if (loadingPercent) loadingPercent.textContent = '100%';
                 if (loadingStatusDesc) loadingStatusDesc.textContent = `✨ ¡${productInfo.name} generado con éxito!`;
                 if (loadingStatusTitle) loadingStatusTitle.textContent = '¡Completado!';
-                await new Promise(r => setTimeout(r, 400));
+                await new Promise(r => setTimeout(r, 350));
 
                 activeMode = 'juntos';
                 setActiveModeBtn('juntos');
@@ -827,11 +1266,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
 
+                // Actualizar tarjeta de resumen de pedido
+                updateOrderSummaryCard();
+
                 if (viewerLoading) viewerLoading.classList.remove('active');
                 if (viewerResults) viewerResults.classList.add('active');
 
+                Toast.success(`¡Muestra 3D de ${productInfo.shortName} generada con éxito!`);
+
             } catch (error) {
-                alert('Atenci\u00f3n: ' + error.message + '\n\nPor favor, int\u00e9ntalo de nuevo en unos segundos.');
+                Toast.error(error.message || 'Error al conectar con el servidor 3D. Por favor, inténtalo de nuevo.', 'Error de generación');
                 if (viewerLoading) viewerLoading.classList.remove('active');
                 if (viewerInitial) viewerInitial.classList.add('active');
             } finally {
@@ -841,46 +1285,68 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ─── FAQ ACCORDION ───
+    // ─── FAQ ACCORDION (CON ACCESIBILIDAD ARIA) ───
     const faqQuestions = document.querySelectorAll('.faq-question');
-    faqQuestions.forEach(btn => {
+    faqQuestions.forEach((btn, idx) => {
+        const item = btn.parentElement;
+        const answer = item ? item.querySelector('.faq-answer') : null;
+        const ansId = `faq-ans-${idx + 1}`;
+
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-controls', ansId);
+        if (answer) {
+            answer.setAttribute('id', ansId);
+            answer.setAttribute('role', 'region');
+        }
+
         btn.addEventListener('click', () => {
-            const item = btn.parentElement;
             const isActive = item.classList.contains('active');
-            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-            if (!isActive) item.classList.add('active');
+            document.querySelectorAll('.faq-item').forEach(i => {
+                i.classList.remove('active');
+                const b = i.querySelector('.faq-question');
+                if (b) b.setAttribute('aria-expanded', 'false');
+            });
+            if (!isActive) {
+                item.classList.add('active');
+                btn.setAttribute('aria-expanded', 'true');
+            }
         });
     });
 
-    // ─── FORMULARIO DE CONTACTO ───
+    // ─── FORMULARIO DE CONTACTO & ENCARGOS ───
     const contactForm = document.getElementById('contactForm');
     const fileInput = document.getElementById('attachment');
     const fileNameDisplay = document.getElementById('fileNameDisplay');
     const formResult = document.getElementById('formResult');
     const fileLabel = document.querySelector('.file-label');
 
-    const messageTextarea = document.querySelector('textarea[name="message"]');
+    const messageTextarea = document.getElementById('contactMessage');
+    const contactMsgCounter = document.getElementById('contactMessageCounter');
     const formSubject = document.getElementById('formSubject');
 
     if (formSubject && messageTextarea) {
         formSubject.addEventListener('change', () => {
             if (formSubject.value === 'feedback') {
-                messageTextarea.placeholder = "¿Qué crees que podría mejorar en la web o en los productos? Te leo...";
+                messageTextarea.placeholder = "¿Qué crees que podría mejorar en la web o en los productos? Te leo con atención...";
             } else {
-                messageTextarea.placeholder = "Explícame tu idea o comenta el archivo que adjuntas...";
+                messageTextarea.placeholder = "Explícame tu idea, detalles del llavero o comenta el archivo que adjuntas...";
             }
         });
     }
 
     if (messageTextarea) {
-        function autoResize() {
+        function updateTextareaUX() {
             messageTextarea.style.height = 'auto';
             const newHeight = Math.max(95, messageTextarea.scrollHeight);
             messageTextarea.style.height = newHeight + 'px';
             messageTextarea.style.overflowY = (newHeight > 300) ? 'auto' : 'hidden';
+
+            if (contactMsgCounter) {
+                contactMsgCounter.textContent = `${messageTextarea.value.length}/500`;
+            }
         }
-        messageTextarea.addEventListener('input', autoResize);
-        window.addEventListener('resize', autoResize);
+        messageTextarea.addEventListener('input', updateTextareaUX);
+        window.addEventListener('resize', updateTextareaUX);
     }
 
     if (fileInput) {
@@ -898,7 +1364,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             
             const submitBtn = contactForm.querySelector('button[type="submit"]');
-            const emailInput = contactForm.querySelector('input[name="email"]');
+            const emailInput = document.getElementById('contactEmail');
             const emailVal = emailInput ? emailInput.value.trim().toLowerCase() : '';
             const hpInput = contactForm.querySelector('input[name="website_hp"]');
 
@@ -914,8 +1380,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             if (!emailRegex.test(emailVal)) {
-                formResult.textContent = '❌ Por favor, introduce un correo electrónico válido (ej: tu_nombre@gmail.com).';
+                const errText = '❌ Por favor, introduce un correo electrónico válido (ej: tu_nombre@gmail.com).';
+                formResult.textContent = errText;
                 formResult.className = 'form-result error';
+                Toast.warning('El correo introducido no tiene un formato válido.');
                 if (emailInput) emailInput.focus();
                 return;
             }
@@ -936,41 +1404,60 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }, 1000);
 
+            // Preparar FormData directamente con los datos limpios del formulario
             const formData = new FormData(contactForm);
-            
+            const userRawMessage = (formData.get('message') || '').toString().trim();
+            formData.set('message', userRawMessage);
+
             try {
                 const response = await fetch('https://latens-studio-web-backend.onrender.com/api/contact', {
                     method: 'POST',
                     body: formData
                 });
-                const json = await response.json();
+
+                // Parseo seguro de respuesta para evitar SyntaxError en errores no JSON (ej: 502/504)
+                let json = null;
+                try {
+                    json = await response.json();
+                } catch (jsonErr) {
+                    console.warn('Respuesta no JSON del servidor:', jsonErr);
+                }
                 
                 clearInterval(sendTimerInterval);
 
-                if (response.status == 200) {
-                    formResult.innerHTML = '✅ <strong>¡Mensaje entregado!</strong><br>He recibido tu solicitud y te contestaré lo antes posible a <strong>' + emailVal + '</strong>.';
+                if (response.ok && response.status === 200) {
+                    formResult.innerHTML = '✅ <strong>¡Mensaje entregado con éxito!</strong><br>He recibido tu solicitud y te contestaré lo antes posible a <strong>' + emailVal + '</strong>.';
                     formResult.className = 'form-result success';
                     contactForm.reset();
-                    if (messageTextarea) messageTextarea.style.height = 'auto';
+                    
+                    if (messageTextarea) {
+                        messageTextarea.style.height = 'auto';
+                        if (messageCounter) messageCounter.textContent = '0/500';
+                    }
                     if (fileNameDisplay) fileNameDisplay.textContent = 'Adjuntar archivo 3D o foto (Opcional)';
                     if (fileLabel) fileLabel.classList.remove('has-file');
                     
+                    Toast.success('¡Mensaje enviado con éxito! Te contactaremos pronto.');
+
                     setTimeout(() => {
                         if (formResult) {
                             formResult.textContent = '';
                             formResult.className = 'form-result';
                         }
-                    }, 5000);
+                    }, 6000);
                 } else {
-                    console.error(response);
-                    formResult.textContent = json.detail || 'Error al enviar. Asegúrate de tener el servidor encendido.';
+                    console.error('Error en respuesta de formulario:', response);
+                    const errorDetail = (json && json.detail) ? json.detail : `Error en el servidor (${response.status || 'desconocido'}). Por favor, reintenta en unos momentos.`;
+                    formResult.textContent = errorDetail;
                     formResult.className = 'form-result error';
+                    Toast.error(errorDetail, 'Error al enviar');
                 }
             } catch (error) {
                 clearInterval(sendTimerInterval);
                 console.error(error);
-                formResult.textContent = 'Error de conexión. Verifica tu internet y reintenta.';
+                formResult.textContent = 'Error de conexión. Si el servidor está arrancando, por favor reintenta en unos segundos.';
                 formResult.className = 'form-result error';
+                Toast.error('No se pudo conectar con el servidor. Revisa tu conexión o reintenta.', 'Error de red');
             } finally {
                 clearInterval(sendTimerInterval);
                 if (submitBtn) submitBtn.disabled = false;
@@ -995,33 +1482,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dots.forEach((d, i) => d.classList.toggle('active', i === currentIdx));
         }
 
-        function triggerLightbox() {
-            const allSources = Array.from(slides).map(s => s.getAttribute('src'));
-            const allTitles = Array.from(slides).map((s, i) => {
-                const alt = s.getAttribute('alt');
-                return alt ? `${alt} (${i + 1}/${slides.length})` : `Foto ${i + 1} de ${slides.length}`;
-            });
-            openCatalogLightbox(allSources, currentIdx, allTitles);
-        }
-
         let lastBoxSwipeTime = 0;
-        
-        const zoomHint = box.querySelector('.gallery-zoom-hint');
-        if (zoomHint) {
-            zoomHint.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                triggerLightbox();
-            });
-        }
-
-        box.addEventListener('click', (e) => {
-            if (Date.now() - lastBoxSwipeTime < 200) return;
-            if (e.target.closest('.card-gallery-nav button') || e.target.closest('.card-gallery-dots') || e.target.closest('.gallery-prev') || e.target.closest('.gallery-next') || e.target.closest('.gallery-dot') || e.target.closest('.gallery-zoom-hint')) {
-                return;
-            }
-            triggerLightbox();
-        });
 
         if (gPrevBtn) {
             gPrevBtn.addEventListener('click', (e) => {
@@ -1062,6 +1523,141 @@ document.addEventListener('DOMContentLoaded', () => {
                 else showSlide(currentIdx + 1);
             }
         }, { passive: true });
+    });
+
+    // ─── CONTROLADOR DEL MODAL DE DETALLES DE PRODUCTO (ESTILO AMAZON - R3) ───
+    const productModal = document.getElementById('productDetailsModal');
+    const productModalBackdrop = document.getElementById('productModalBackdrop');
+    const productModalClose = document.getElementById('productModalClose');
+    const modalMainImageWrap = document.getElementById('modalMainImageWrap');
+    const modalProductImg = document.getElementById('modalProductImg');
+    const modalProductBadge = document.getElementById('modalProductBadge');
+    const modalThumbnailsTrack = document.getElementById('modalThumbnailsTrack');
+    const modalProductTitle = document.getElementById('modalProductTitle');
+    const modalProductPrice = document.getElementById('modalProductPrice');
+    const modalProductQualifier = document.getElementById('modalProductQualifier');
+    const modalProductDesc = document.getElementById('modalProductDesc');
+    const modalSpecsList = document.getElementById('modalSpecsList');
+    const modalInstagramCta = document.getElementById('modalInstagramCta');
+    const modalPreviewActionBtn = document.getElementById('modalPreviewActionBtn');
+
+    let lastFocusedElementBeforeModal = null;
+    let activeModalImageIdx = 0;
+
+    function openProductDetailsModal(productId) {
+        const product = PRODUCT_CATALOG[productId];
+        if (!product || !productModal) return;
+
+        lastFocusedElementBeforeModal = document.activeElement;
+        activeModalImageIdx = 0;
+
+        // 1. Inyectar Textos y Metadatos
+        if (modalProductTitle) modalProductTitle.textContent = product.name;
+        if (modalProductBadge) modalProductBadge.textContent = product.badge || 'Catálogo Oficial';
+        if (modalProductPrice) modalProductPrice.textContent = product.price;
+        if (modalProductQualifier) modalProductQualifier.textContent = product.priceQualifier || '';
+        if (modalProductDesc) modalProductDesc.textContent = product.desc;
+
+        // 2. Inyectar Especificaciones Estilo Amazon
+        if (modalSpecsList) {
+            modalSpecsList.innerHTML = (product.specs || []).map(spec => `<li><span>${spec}</span></li>`).join('');
+        }
+
+        // 3. Configurar Galería y Miniaturas Interactivas
+        if (modalProductImg && product.images && product.images.length > 0) {
+            modalProductImg.src = product.images[0];
+            modalProductImg.alt = product.name;
+        }
+
+        if (modalMainImageWrap) {
+            modalMainImageWrap.onclick = () => {
+                if (product.images && product.images.length > 0) {
+                    openCatalogLightbox(product.images, activeModalImageIdx);
+                }
+            };
+        }
+
+        if (modalThumbnailsTrack) {
+            if (product.images && product.images.length > 1) {
+                modalThumbnailsTrack.style.display = 'flex';
+                modalThumbnailsTrack.innerHTML = product.images.map((imgSrc, idx) => `
+                    <button type="button" class="modal-thumb-btn ${idx === 0 ? 'active' : ''}" data-index="${idx}" aria-label="Ver imagen ${idx + 1} de ${product.name}">
+                        <img src="${imgSrc}" alt="${product.name} miniatura ${idx + 1}" loading="lazy">
+                    </button>
+                `).join('');
+
+                const thumbBtns = modalThumbnailsTrack.querySelectorAll('.modal-thumb-btn');
+                thumbBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const idx = parseInt(btn.getAttribute('data-index'), 10);
+                        activeModalImageIdx = idx;
+                        if (modalProductImg && product.images[idx]) {
+                            modalProductImg.src = product.images[idx];
+                        }
+                        thumbBtns.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                    });
+                });
+            } else {
+                modalThumbnailsTrack.style.display = 'none';
+                modalThumbnailsTrack.innerHTML = '';
+            }
+        }
+
+        // 4. Configurar Enlace Directo CTA a Instagram
+        if (modalInstagramCta) {
+            modalInstagramCta.href = 'https://www.instagram.com/latens.studio?igsh=ZmIwaXVvYmJta2lt';
+            modalInstagramCta.onclick = () => {
+                Toast.info('Abriendo Instagram (@latens.studio). ¡Escríbenos por MD para encargar tu ' + product.shortName + '!', 'Instagram DM');
+            };
+        }
+
+        // 5. Configurar Botón Secundario de Previsualización 3D
+        if (modalPreviewActionBtn) {
+            modalPreviewActionBtn.onclick = () => {
+                closeProductDetailsModal();
+                const pSelect = document.getElementById('productSelect');
+                if (pSelect) {
+                    pSelect.value = productId;
+                    renderDynamicInputs();
+                    switchTab('tab-preview');
+                    updateOrderSummaryCard();
+                    const previewTab = document.getElementById('tab-preview');
+                    if (previewTab) previewTab.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+        }
+
+        // 6. Activar Modal y Bloquear Scroll del Fondo
+        productModal.classList.add('active');
+        productModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        if (productModalClose) productModalClose.focus();
+    }
+
+    function closeProductDetailsModal() {
+        if (!productModal || !productModal.classList.contains('active')) return;
+        productModal.classList.remove('active');
+        productModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+
+        if (lastFocusedElementBeforeModal && typeof lastFocusedElementBeforeModal.focus === 'function') {
+            lastFocusedElementBeforeModal.focus();
+        }
+    }
+
+    if (productModalClose) productModalClose.addEventListener('click', closeProductDetailsModal);
+    if (productModalBackdrop) productModalBackdrop.addEventListener('click', closeProductDetailsModal);
+
+    // Conectar botones "Ver más detalles" de las tarjetas del catálogo
+    document.querySelectorAll('.btn-view-details').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const prodId = btn.getAttribute('data-product') || btn.getAttribute('data-product-id');
+            if (prodId) openProductDetailsModal(prodId);
+        });
     });
 
 }); // ─── FIN de DOMContentLoaded ───
