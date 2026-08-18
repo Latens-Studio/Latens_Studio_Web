@@ -57,7 +57,7 @@
           "@id": "https://latens-studio.github.io/Latens_Studio_Web/#business",
           "name": "Latens Studio",
           "url": "https://latens-studio.github.io/Latens_Studio_Web/",
-          "logo": "https://latens-studio.github.io/Latens_Studio_Web/LOGO%20LTSweb.png",
+          "logo": "https://latens-studio.github.io/Latens_Studio_Web/logo_latens.png",
           "image": "https://latens-studio.github.io/Latens_Studio_Web/Etiqueta.jpg",
           "description": "Estudio de diseño, modelado e impresión 3D personalizada en Alicante. Especialistas en llaveros magnéticos de pareja y llaveros de iniciales con entrega en mano en Plaza de los Luceros.",
           "priceRange": "€",
@@ -182,15 +182,16 @@
     </script>
 
     <!-- Favicon / Icono de la Pestaña del Navegador -->
-    <link rel="icon" type="image/svg+xml" href="logo.svg">
-    <link rel="alternate icon" type="image/png" href="LOGO%20LTSweb.png">
-    <link rel="apple-touch-icon" href="LOGO%20LTSweb.png">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="512x512" href="logo_latens.png">
+    <link rel="apple-touch-icon" href="logo_latens.png">
+    <link rel="manifest" href="manifest.json">
 
     <!-- Preconexión de Fuentes para Rendimiento (Elimina latencia de DNS/TLS) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=52.0">
+    <link rel="stylesheet" href="style.css?v=59.0">
 </head>
 <body>
 
@@ -202,7 +203,7 @@
         <header class="main-header">
             <div class="header-brand">
                 <div class="brand-avatar">
-                    <img src="LOGO%20LTSweb.png" alt="Latens Studio Logo" class="brand-logo-img" width="145" height="145" fetchpriority="high">
+                    <img src="logo_latens.png" alt="Latens Studio Logo" class="brand-logo-img" width="140" height="140" fetchpriority="high">
                 </div>
                 <div class="brand-text">
                     <h1 class="brand-title">Latens Studio</h1>
@@ -551,7 +552,7 @@
                     <div class="preview-panel config-panel">
                         <div class="panel-title-box">
                             <h2>Configurador 3D</h2>
-                            <p>Ingresa los nombres para generar una muestra real desde 5 perspectivas.</p>
+                            <p>Ingresa los nombres para generar una muestra orientativa desde 5 perspectivas.</p>
                         </div>
 
                         <form id="previewForm" onsubmit="return false;">
@@ -708,6 +709,12 @@
                                 <!-- Thumbs inyectados por JS -->
                             </div>
 
+                            <!-- Nota sutil orientativa -->
+                            <div class="viewer-orientative-note">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                <span>Simulación 3D digital orientativa</span>
+                            </div>
+
                             <!-- Panel de Medidas -->
                             <div class="dimensions-card">
                                 <div class="dim-header">
@@ -725,10 +732,6 @@
                                     <div class="summary-header-title">
                                         <span class="summary-badge">Configuración Lista</span>
                                         <h3>Resumen de tu Llavero Personalizado</h3>
-                                    </div>
-                                    <div class="summary-gift-tag">
-                                        <img src="chapita.png" alt="Chapita" width="28" height="28" decoding="async">
-                                        <span>+ Chapita Gratis incluida</span>
                                     </div>
                                 </div>
 
@@ -765,6 +768,11 @@
                                         </svg>
                                         <span>Copiar resumen para Instagram</span>
                                     </button>
+                                </div>
+
+                                <div class="summary-trust-footer">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    <span>Muestra 3D digital orientativa · La pieza física final se fabrica en PLA+ Premium</span>
                                 </div>
                             </div>
 
@@ -870,7 +878,7 @@
             <div class="footer-content">
                 <div class="footer-col brand-col">
                     <div class="footer-brand">
-                        <img src="LOGO%20LTSweb.png" alt="Latens Studio Logo" width="80" height="80" class="footer-logo" loading="lazy" decoding="async">
+                        <img src="logo_latens.png" alt="Latens Studio Logo" width="80" height="80" class="footer-logo" loading="lazy" decoding="async">
                         <span class="footer-brand-name">Latens Studio</span>
                     </div>
                     <p class="footer-desc">Estudio de modelado, diseño e impresión 3D personalizada en Alicante. Creaciones únicas, proyectos a medida y acabados de alta fidelidad.</p>
@@ -1020,6 +1028,6 @@
     <!-- Contenedor Flotante de Notificaciones Toast (Accesible) -->
     <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <script src="script.js?v=52.0" defer></script>
+    <script src="script.js?v=59.0" defer></script>
 </body>
 </html>

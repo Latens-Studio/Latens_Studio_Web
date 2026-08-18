@@ -201,8 +201,8 @@ body {
     left: -55px;
     top: 50%;
     transform: translateY(-50%);
-    width: 160px;
-    height: 160px;
+    width: 140px;
+    height: 140px;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -2835,25 +2835,6 @@ textarea.form-input {
     margin: 0;
 }
 
-.summary-gift-tag {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: var(--bg-subtle);
-    padding: 0.3rem 0.65rem;
-    border-radius: 20px;
-    border: 1px solid var(--border-light);
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--primary);
-}
-
-.summary-gift-tag img {
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
-}
-
 .summary-details-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -3012,6 +2993,41 @@ textarea.form-input {
     0% { transform: scale(0.98); }
     50% { transform: scale(1.02); }
     100% { transform: scale(1); }
+}
+
+.viewer-orientative-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    font-size: 0.73rem;
+    color: var(--text-muted);
+    margin-top: -0.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.viewer-orientative-note svg {
+    flex-shrink: 0;
+    color: var(--primary);
+    opacity: 0.8;
+}
+
+.summary-trust-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    margin-top: 0.85rem;
+    text-align: center;
+    line-height: 1.35;
+}
+
+.summary-trust-footer svg {
+    flex-shrink: 0;
+    color: var(--primary);
+    opacity: 0.85;
 }
 
 
@@ -3508,8 +3524,8 @@ textarea.form-input {
         left: -35px;
         top: 50%;
         transform: translateY(-50%);
-        width: 112px;
-        height: 112px;
+        width: 96px;
+        height: 96px;
         z-index: 10;
     }
 
@@ -3901,8 +3917,8 @@ textarea.form-input {
         left: -55px !important;
         top: 50% !important;
         transform: translateY(-50%) !important;
-        width: 145px !important;
-        height: 145px !important;
+        width: 120px !important;
+        height: 120px !important;
         z-index: 10 !important;
         display: flex !important;
         align-items: center !important;
