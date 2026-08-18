@@ -3539,11 +3539,9 @@ textarea.form-input {
     .brand-subtitle {
         font-size: 0.72rem;
         color: var(--text-muted);
-        line-height: 1.25;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+        line-height: 1.35;
+        white-space: normal;
+        display: block;
     }
 
     .btn-secondary-sm {
