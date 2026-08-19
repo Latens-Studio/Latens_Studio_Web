@@ -179,14 +179,14 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
-    padding: 1.5rem 2rem 1.5rem 125px;
+    padding: 1.5rem 2rem 1.5rem 7.81rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     box-shadow: var(--shadow-sm);
     position: relative;
     margin-top: 3.25rem;
-    margin-left: 55px; /* Margen de seguridad para que el logo flotante no se corte en pantallas medianas o landscape */
+    margin-left: 3.43rem; /* Margen de seguridad */
     overflow: visible;
 }
 
@@ -198,11 +198,11 @@ body {
 
 .brand-avatar {
     position: absolute;
-    left: -55px;
+    left: -3.43rem;
     top: 50%;
     transform: translateY(-50%);
-    width: 140px;
-    height: 140px;
+    width: 8.75rem;
+    height: 8.75rem;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -3501,8 +3501,8 @@ textarea.form-input {
     }
 
     .main-header {
-        margin-left: 35px;
-        padding: 0.9rem 0.85rem 0.9rem 85px;
+        margin-left: 2.18rem;
+        padding: 0.9rem 0.85rem 0.9rem 5.31rem;
         margin-top: 2rem;
         flex-direction: row;
         align-items: center;
@@ -3521,11 +3521,11 @@ textarea.form-input {
 
     .brand-avatar {
         position: absolute;
-        left: -35px;
+        left: -2.18rem;
         top: 50%;
         transform: translateY(-50%);
-        width: 96px;
-        height: 96px;
+        width: 6rem;
+        height: 6rem;
         z-index: 10;
     }
 
@@ -3897,8 +3897,8 @@ textarea.form-input {
 
     /* Cabecera con margen de seguridad a la izquierda para que el logo nunca se corte */
     .main-header {
-        margin-left: 55px !important;
-        padding: 1rem 1.5rem 1rem 120px !important;
+        margin-left: 3.43rem !important;
+        padding: 1rem 1.5rem 1rem 7.5rem !important;
         margin-top: 1.6rem !important;
         display: flex !important;
         align-items: center !important;
@@ -3912,11 +3912,11 @@ textarea.form-input {
 
     .brand-avatar {
         position: absolute !important;
-        left: -55px !important;
+        left: -3.43rem !important;
         top: 50% !important;
         transform: translateY(-50%) !important;
-        width: 120px !important;
-        height: 120px !important;
+        width: 7.5rem !important;
+        height: 7.5rem !important;
         z-index: 10 !important;
         display: flex !important;
         align-items: center !important;
