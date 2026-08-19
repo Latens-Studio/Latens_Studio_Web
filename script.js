@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             price: '15€',
             priceNum: 15,
             priceQualifier: 'Pareja completa (2 llaveros)',
-            desc: 'Dos llaveros independientes con nombres totalmente personalizados que encajan magnéticamente de forma perfecta gracias a sus imanes de neodimio integrados. Incluye tarjeta de presentación en caja con título, dedicatoria personalizada corta y soporte expositor.',
+            desc: 'Dos llaveros independientes con nombres totalmente personalizados que encajan magnéticamente de forma perfecta gracias a sus imanes de neodimio integrados. Incluye tarjeta de presentación en caja (con título y dedicatoria personalizables) y soporte expositor.',
             images: [
                 'llaverocompleto3.jpg',
                 'llaverocompleto2.jpg',
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             specs: [
                 'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
                 'Personalización de 2 nombres en relieve 3D de alta definición.',
-                'Incluye tarjeta con título y dedicatoria personalizada corta + soporte expositor.',
+                'Incluye tarjeta con título y dedicatoria personalizables + soporte expositor.',
                 'Fabricado en PLA+ ecológico de máxima resistencia y ligereza.',
                 'Incluye 2 anillas de acero reforzadas + Chapita de regalo gratis.',
                 'Entrega física rápida en Alicante el mismo día o 24h.'
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             price: '12€',
             priceNum: 12,
             priceQualifier: 'Pareja completa (2 llaveros)',
-            desc: 'Dos llaveros magnéticos con la inicial de cada persona sobre un corazón central y cruz opcional. Incluye tarjeta de presentación en caja con título, dedicatoria personalizada corta y soporte expositor.',
+            desc: 'Dos llaveros magnéticos con la inicial de cada persona sobre un corazón central y cruz opcional. Incluye tarjeta de presentación en caja (con título y dedicatoria personalizables) y soporte expositor.',
             images: [
                 'llavero3iniciales.jpg',
                 'llavero2iniciales.jpg',
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
                 '2 Iniciales personalizadas en 3D de alta definición.',
                 'Cruz opcional según tu preferencia.',
-                'Incluye tarjeta con título y dedicatoria personalizada corta + soporte expositor.',
+                'Incluye tarjeta con título y dedicatoria personalizables + soporte expositor.',
                 'Fabricado en PLA+ ecológico de máxima resistencia y ligereza.',
                 'Incluye 2 anillas de acero reforzadas + Chapita de regalo gratis.',
                 'Entrega física rápida en Alicante el mismo día o 24h.'
@@ -288,6 +288,23 @@ document.addEventListener('DOMContentLoaded', () => {
             fechaGroup.style.display = productosSoportanFecha.includes(val) ? 'block' : 'none';
         }
 
+        const addCardCb = document.getElementById('addCard');
+        const cardInputsGroup = document.getElementById('cardInputsGroup');
+        const addCardContainer = addCardCb ? addCardCb.closest('.form-field') : null;
+        
+        if (addCardCb && addCardContainer && cardInputsGroup) {
+            if (val === 'corazon' || val === 'iniciales') {
+                addCardContainer.style.display = 'block';
+                addCardCb.checked = true;
+                addCardCb.disabled = true;
+                cardInputsGroup.style.display = 'block';
+            } else {
+                addCardContainer.style.display = 'none';
+                addCardCb.checked = false;
+                cardInputsGroup.style.display = 'none';
+            }
+        }
+
         if (val === 'individual') {
             html = `
                 <div class="form-field">
@@ -443,9 +460,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const checkCruz = document.getElementById('checkCruz');
-    const checkRelieve = document.getElementById('checkRelieve');
+    
     if (checkCruz) checkCruz.addEventListener('change', updateOrderSummaryCard);
-    if (checkRelieve) checkRelieve.addEventListener('change', updateOrderSummaryCard);
+    
 
     // ─── ORDER SUMMARY & INSTAGRAM DM BRIDGE ───
     function generateOrderSpecs() {
@@ -1095,7 +1112,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const name2El = document.getElementById('name2');
             const fechaEl = document.getElementById('fecha');
             const cruzEl = document.getElementById('checkCruz');
-            const relieveEl = document.getElementById('checkRelieve');
+            
 
             const addCardEl = document.getElementById('addCard');
             const cardTitleEl = document.getElementById('cardTitle');
@@ -1105,7 +1122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const name2 = name2El ? name2El.value.trim() : '';
             const fecha = fechaEl ? fechaEl.value.trim() : '';
             const cruz = cruzEl ? cruzEl.checked : false;
-            const relieve = relieveEl ? relieveEl.checked : true;
+            
             const tarjeta = addCardEl ? addCardEl.checked : false;
             const tarjeta_titulo = cardTitleEl ? cardTitleEl.value.trim() : '';
             const tarjeta_mensaje = cardMessageEl ? cardMessageEl.value.trim() : '';
@@ -1119,6 +1136,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 Toast.warning('Por favor, introduce el nombre para el llavero.', 'Nombre requerido');
                 if (name1El) name1El.focus();
                 return;
+            }
+
+            if (type === 'corazon' || type === 'iniciales') {
+                if (!tarjeta_titulo) {
+                    Toast.warning('Por favor, escribe un título para la tarjeta (ej: Para nosotros, Feliz Aniversario...). ¡Es el toque especial!', 'Título requerido');
+                    if (cardTitleEl) cardTitleEl.focus();
+                    return;
+                }
+                if (!tarjeta_mensaje) {
+                    Toast.warning('Por favor, escribe una bonita dedicatoria para la tarjeta.', 'Mensaje requerido');
+                    if (cardMessageEl) cardMessageEl.focus();
+                    return;
+                }
             }
 
             if (viewerInitial) viewerInitial.classList.remove('active');
@@ -1165,7 +1195,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const API_URL = 'https://latens-studio-web-backend.onrender.com/api/preview';
-                const payload = { type, name1, name2, fecha, cruz, relieve, tarjeta, tarjeta_titulo, tarjeta_mensaje };
+                const payload = { type, name1, name2, fecha, cruz, tarjeta, tarjeta_titulo, tarjeta_mensaje };
 
                 const response = await fetch(API_URL, {
                     method: 'POST',

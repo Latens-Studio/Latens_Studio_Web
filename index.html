@@ -191,7 +191,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=80.0">
+    <link rel="stylesheet" href="style.css?v=86.0">
 </head>
 <body>
 
@@ -565,6 +565,20 @@
                                 </select>
                             </div>
 
+                            <div id="dynamicInputs" class="form-inputs-group">
+                                <!-- Inputs dinámicos inyectados por JS -->
+                            </div>
+
+                            <div id="opcionesIniciales" class="custom-options-box">
+                                <h3 class="custom-options-title">Opciones de Iniciales</h3>
+                                <div class="custom-options-row">
+                                    <label class="custom-option-check">
+                                        <input type="checkbox" id="checkCruz" checked>
+                                        <span>Incluir Cruz (+)</span>
+                                    </label>
+                                </div>
+                            </div>
+
                             <div id="fechaGroup" class="form-field date-picker-group">
                                 <label for="fechaNative">Fecha en el Reverso (Opcional)</label>
                                 <div class="date-picker-box" id="datePickerBox">
@@ -584,14 +598,11 @@
                             </div>
 
                             <div class="form-field" style="margin-top: 1rem; border-top: 1px solid var(--border-light); padding-top: 1.5rem;">
-                                <label class="toggle-switch" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; margin-bottom: 0.75rem;">
-                                    <input type="checkbox" id="addCard" style="width: 18px; height: 18px;">
-                                    <span style="font-weight: 600; color: var(--text-heading);">Añadir Tarjeta 3D de Regalo (Gratis)</span>
-                                </label>
+                                <input type="checkbox" id="addCard" checked style="display: none;">
                                 
                                 <div id="cardInputsGroup" class="form-inputs-group hidden fade-in" style="background: var(--bg-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-top: 0.5rem; display: none;">
                                     <div class="form-field" style="margin-bottom: 1rem;">
-                                        <label for="cardTitle" style="font-size: 0.85rem;">Título de la Tarjeta (Opcional)</label>
+                                        <label for="cardTitle" style="font-size: 0.85rem;">Título de la Tarjeta</label>
                                         <input type="text" id="cardTitle" class="form-input" maxlength="10" placeholder="Ej: Para vosotros" style="font-size: 0.9rem; padding: 0.6rem;">
                                         <small style="color:#94a3b8; font-size:11px; float: right;" id="titleCounter">0/10</small>
                                     </div>
@@ -603,23 +614,7 @@
                                 </div>
                             </div>
 
-                            <div id="opcionesIniciales" class="custom-options-box">
-                                <h3 class="custom-options-title">Opciones de Iniciales</h3>
-                                <div class="custom-options-row">
-                                    <label class="custom-option-check">
-                                        <input type="checkbox" id="checkCruz" checked>
-                                        <span>Incluir Cruz (+)</span>
-                                    </label>
-                                    <label class="custom-option-check">
-                                        <input type="checkbox" id="checkRelieve" checked>
-                                        <span>Texto en Relieve (Blanco)</span>
-                                    </label>
-                                </div>
-                            </div>
 
-                            <div id="dynamicInputs" class="form-inputs-group">
-                                <!-- Inputs dinámicos inyectados por JS -->
-                            </div>
 
                             <button id="generateBtn" class="btn-generate" type="button">
                                 <span class="btn-text">Generar Previsualización 3D</span>
