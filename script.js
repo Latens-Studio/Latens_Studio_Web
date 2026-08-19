@@ -97,12 +97,13 @@ document.addEventListener('DOMContentLoaded', () => {
             specs: [
                 'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
                 'Personalización de 2 nombres en relieve 3D de alta definición.',
+                'Colores a elegir: Negro (PLA+), Blanco (PLA+), Rojo (PLA+), Azul, Rosa, Rosa Melocotón, Violeta Interestelar o Verde Primavera.',
                 'Incluye tarjeta con título y dedicatoria personalizada corta + soporte expositor.',
-                'Fabricado en PLA+ Premium ecológico de máxima resistencia y ligereza.',
+                'Fabricado en bioplástico PLA de alta densidad resistente al uso diario.',
                 'Incluye 2 anillas de acero reforzadas + Chapita de regalo gratis.',
                 'Entrega física rápida en Alicante el mismo día o 24h.'
             ],
-            careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones con la manipulación.',
+            careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones.',
             instagramCta: 'Pídelo ya por MD'
         },
         iniciales: {
@@ -121,15 +122,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 'imagen llaveros pareja ambos(tarjeta en caja).jpg'
             ],
             specs: [
-                'Imanes de neodimio integrados para unión magnética perfecta.',
+                'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
                 '2 Iniciales personalizadas en 3D de alta definición.',
-                'Incluye tarjeta con título y dedicatoria personalizada corta + soporte expositor.',
+                'Colores a elegir: Negro (PLA+), Blanco (PLA+), Rojo (PLA+), Azul, Rosa, Rosa Melocotón, Violeta Interestelar o Verde Primavera.',
                 'Cruz opcional según tu preferencia.',
-                'Fabricado en PLA+ Premium ecológico de máxima resistencia y ligereza.',
-                'Incluye 2 anillas reforzadas + Chapita de regalo gratis.',
-                'Listo en 24h para entrega directa en mano en Alicante.'
+                'Incluye tarjeta con título y dedicatoria personalizada corta + soporte expositor.',
+                'Fabricado en bioplástico PLA de alta densidad resistente al uso diario.',
+                'Incluye 2 anillas de acero reforzadas + Chapita de regalo gratis.',
+                'Entrega física rápida en Alicante el mismo día o 24h.'
             ],
-            careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones con la manipulación.',
+            careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones.',
             instagramCta: 'Pídelo ya por MD'
         },
         individual: {
@@ -148,13 +150,13 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             specs: [
                 '1 Nombre personalizado en relieve 3D de alto contraste.',
-                'Fabricado en PLA+ Premium ecológico de máxima resistencia y ligereza.',
-                'Anilla lateral reforzada de alta resistencia al uso diario.',
-                'Diseño compacto y ergonómico que no abulta en el bolsillo.',
-                'Incluye Chapita de regalo gratis con tu encargo.',
-                'Fabricación inmediata y entrega local en Alicante.'
+                'Tipografía a elección (cualquier fuente libre de derechos/uso comercial).',
+                'Colores a elegir: Negro (PLA+), Blanco (PLA+), Rojo (PLA+), Azul, Rosa, Rosa Melocotón, Violeta Interestelar o Verde Primavera.',
+                'Fabricado en bioplástico PLA de alta densidad resistente al uso diario.',
+                'Incluye anilla de acero reforzada + Chapita de regalo gratis.',
+                'Entrega física rápida en Alicante el mismo día o 24h.'
             ],
-            careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones con la manipulación.',
+            careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones.',
             instagramCta: 'Pídelo ya por MD'
         }
     };
