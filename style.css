@@ -127,15 +127,23 @@ img, svg {
 }
 
 html {
-    font-size: 16px;
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
     scroll-behavior: smooth;
-    background-color: var(--bg-page);
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
 }
 
 body {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
@@ -3501,8 +3509,8 @@ textarea.form-input {
     }
 
     .main-header {
-        margin-left: 2.18rem;
-        padding: 0.9rem 0.85rem 0.9rem 5.31rem;
+        margin-left: 1.5rem;
+        padding: 0.9rem 0.85rem 0.9rem 4.5rem;
         margin-top: 2rem;
         flex-direction: row;
         align-items: center;
@@ -3521,11 +3529,11 @@ textarea.form-input {
 
     .brand-avatar {
         position: absolute;
-        left: -2.18rem;
+        left: -1.5rem;
         top: 50%;
         transform: translateY(-50%);
-        width: 6rem;
-        height: 6rem;
+        width: 5rem;
+        height: 5rem;
         z-index: 10;
     }
 
