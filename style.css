@@ -3992,3 +3992,9 @@ textarea.form-input {
     }
 }
 
+
+@media (max-width: 768px) {
+    html {
+        zoom: 0.75;
+    }
+}
