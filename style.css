@@ -3998,3 +3998,31 @@ textarea.form-input {
         zoom: 0.75;
     }
 }
+
+/* Ajuste específico para Firefox Móvil (que calcula el zoom ligeramente más grande por defecto) */
+@-moz-document url-prefix() {
+    @media (max-width: 768px) {
+        html {
+            zoom: 0.68; /* Un poco más pequeño que el 0.75 de Chrome/Safari para compensar */
+        }
+    }
+}
+
+/* Ajuste específico para Firefox Móvil (compensación de zoom y fallback) */
+@-moz-document url-prefix() {
+    @media (max-width: 768px) {
+        html {
+            zoom: 0.68;
+        }
+    }
+    @supports not (zoom: 0.75) {
+        @media (max-width: 768px) {
+            html {
+                width: 147vw;
+                transform: scale(0.68);
+                transform-origin: top left;
+                overflow-x: hidden;
+            }
+        }
+    }
+}
