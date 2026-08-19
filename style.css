@@ -157,6 +157,11 @@ body {
     padding: clamp(0.75rem, 2.5vw, 1.5rem) clamp(0.5rem, 2vw, 1.25rem) clamp(2rem, 4vw, 3.5rem);
 }
 
+/* Hack para desactivar el auto-escalado de fuentes (Font Boosting) en Chromium/Brave sin romper el layout */
+p, h1, h2, h3, h4, h5, h6, span, a, button, li, .brand-title, .brand-subtitle, div {
+    max-height: 999999px;
+}
+
 /* Retícula de fondo discreta */
 .bg-pattern {
     position: fixed;
@@ -187,14 +192,14 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: var(--radius-lg);
-    padding: 1.5rem 2rem 1.5rem 7.81rem;
+    padding: 1.5rem 2rem 1.5rem 125px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     box-shadow: var(--shadow-sm);
     position: relative;
     margin-top: 3.25rem;
-    margin-left: 3.43rem; /* Margen de seguridad */
+    margin-left: 55px; /* Margen de seguridad para que el logo flotante no se corte en pantallas medianas o landscape */
     overflow: visible;
 }
 
@@ -206,11 +211,11 @@ body {
 
 .brand-avatar {
     position: absolute;
-    left: -3.43rem;
+    left: -55px;
     top: 50%;
     transform: translateY(-50%);
-    width: 8.75rem;
-    height: 8.75rem;
+    width: 140px;
+    height: 140px;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -3509,8 +3514,8 @@ textarea.form-input {
     }
 
     .main-header {
-        margin-left: 1.5rem;
-        padding: 0.9rem 0.85rem 0.9rem 4.5rem;
+        margin-left: 35px;
+        padding: 0.9rem 0.85rem 0.9rem 85px;
         margin-top: 2rem;
         flex-direction: row;
         align-items: center;
@@ -3529,11 +3534,11 @@ textarea.form-input {
 
     .brand-avatar {
         position: absolute;
-        left: -1.5rem;
+        left: -35px;
         top: 50%;
         transform: translateY(-50%);
-        width: 5rem;
-        height: 5rem;
+        width: 96px;
+        height: 96px;
         z-index: 10;
     }
 
@@ -3905,8 +3910,8 @@ textarea.form-input {
 
     /* Cabecera con margen de seguridad a la izquierda para que el logo nunca se corte */
     .main-header {
-        margin-left: 3.43rem !important;
-        padding: 1rem 1.5rem 1rem 7.5rem !important;
+        margin-left: 55px !important;
+        padding: 1rem 1.5rem 1rem 120px !important;
         margin-top: 1.6rem !important;
         display: flex !important;
         align-items: center !important;
@@ -3920,11 +3925,11 @@ textarea.form-input {
 
     .brand-avatar {
         position: absolute !important;
-        left: -3.43rem !important;
+        left: -55px !important;
         top: 50% !important;
         transform: translateY(-50%) !important;
-        width: 7.5rem !important;
-        height: 7.5rem !important;
+        width: 120px !important;
+        height: 120px !important;
         z-index: 10 !important;
         display: flex !important;
         align-items: center !important;
