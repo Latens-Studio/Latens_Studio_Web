@@ -97,9 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
             specs: [
                 'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
                 'Personalización de 2 nombres en relieve 3D de alta definición.',
-                'Colores a elegir: Negro (PLA+), Blanco (PLA+), Rojo (PLA+), Azul, Rosa, Rosa Melocotón, Violeta Interestelar o Verde Primavera.',
                 'Incluye tarjeta con título y dedicatoria personalizada corta + soporte expositor.',
-                'Fabricado en bioplástico PLA de alta densidad resistente al uso diario.',
+                'Fabricado en PLA+ ecológico de máxima resistencia y ligereza.',
                 'Incluye 2 anillas de acero reforzadas + Chapita de regalo gratis.',
                 'Entrega física rápida en Alicante el mismo día o 24h.'
             ],
@@ -124,10 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
             specs: [
                 'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
                 '2 Iniciales personalizadas en 3D de alta definición.',
-                'Colores a elegir: Negro (PLA+), Blanco (PLA+), Rojo (PLA+), Azul, Rosa, Rosa Melocotón, Violeta Interestelar o Verde Primavera.',
                 'Cruz opcional según tu preferencia.',
                 'Incluye tarjeta con título y dedicatoria personalizada corta + soporte expositor.',
-                'Fabricado en bioplástico PLA de alta densidad resistente al uso diario.',
+                'Fabricado en PLA+ ecológico de máxima resistencia y ligereza.',
                 'Incluye 2 anillas de acero reforzadas + Chapita de regalo gratis.',
                 'Entrega física rápida en Alicante el mismo día o 24h.'
             ],
@@ -152,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 '1 Nombre personalizado en relieve 3D de alto contraste.',
                 'Tipografía a elección (cualquier fuente libre de derechos/uso comercial).',
                 'Colores a elegir: Negro (PLA+), Blanco (PLA+), Rojo (PLA+), Azul, Rosa, Rosa Melocotón, Violeta Interestelar o Verde Primavera.',
-                'Fabricado en bioplástico PLA de alta densidad resistente al uso diario.',
+                'Fabricado en PLA o PLA+ ecológico de máxima resistencia y ligereza.',
                 'Incluye anilla de acero reforzada + Chapita de regalo gratis.',
                 'Entrega física rápida en Alicante el mismo día o 24h.'
             ],
