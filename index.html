@@ -191,7 +191,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=66.0">
+    <link rel="stylesheet" href="style.css?v=67.0">
+    <script>
+        // Fix especifico para navegador Brave en Moviles: Reducir letra al 75% (12px base)
+        (async function() {
+            try {
+                if (navigator.brave && await navigator.brave.isBrave()) {
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                        document.documentElement.style.setProperty('font-size', '12px', 'important');
+                    }
+                }
+            } catch (e) {}
+        })();
+    </script>
 </head>
 <body>
 
