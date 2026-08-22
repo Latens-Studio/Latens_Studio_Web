@@ -860,25 +860,57 @@ document.addEventListener('DOMContentLoaded', () => {
     let catalogLightboxImages = [];
     let catalogSlideIndex = 0;
 
-    function applyZoomTransform() {
+    function applyZoomTransform(animate = false) {
         if (!lightboxImg) return;
-        lightboxImg.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+        if (animate) {
+            lightboxImg.style.transition = 'transform 0.25s cubic-bezier(0.2, 0, 0, 1)';
+        } else {
+            lightboxImg.style.transition = 'none';
+        }
+        lightboxImg.style.transform = `translate3d(${panX}px, ${panY}px, 0) scale(${zoomLevel})`;
     }
 
-    function resetZoom() {
+    function clampPan() {
+        if (zoomLevel <= 1.02) {
+            panX = 0;
+            panY = 0;
+            return;
+        }
+        if (!lightboxImg) return;
+        const rect = lightboxImg.getBoundingClientRect();
+        const maxPanX = Math.max(0, (rect.width * (zoomLevel - 1)) / (2 * zoomLevel) + 60);
+        const maxPanY = Math.max(0, (rect.height * (zoomLevel - 1)) / (2 * zoomLevel) + 60);
+        panX = Math.max(-maxPanX, Math.min(maxPanX, panX));
+        panY = Math.max(-maxPanY, Math.min(maxPanY, panY));
+    }
+
+    function resetZoom(animate = true) {
         zoomLevel = 1;
         panX = 0;
         panY = 0;
-        applyZoomTransform();
+        applyZoomTransform(animate);
     }
 
-    function setZoom(newZoom) {
-        zoomLevel = Math.max(0.8, Math.min(4.0, newZoom));
-        if (zoomLevel <= 1.05) {
+    function setZoom(newZoom, centerX = null, centerY = null, animate = false) {
+        const oldZoom = zoomLevel;
+        zoomLevel = Math.max(1.0, Math.min(4.0, newZoom));
+        
+        if (centerX !== null && centerY !== null && lightboxViewport && oldZoom !== zoomLevel) {
+            const rect = lightboxViewport.getBoundingClientRect();
+            const midX = centerX - (rect.left + rect.width / 2);
+            const midY = centerY - (rect.top + rect.height / 2);
+            const ratio = zoomLevel / oldZoom;
+            panX = panX * ratio + midX * (1 - ratio);
+            panY = panY * ratio + midY * (1 - ratio);
+        }
+        
+        if (zoomLevel <= 1.02) {
             panX = 0;
             panY = 0;
+        } else {
+            clampPan();
         }
-        applyZoomTransform();
+        applyZoomTransform(animate);
     }
 
     function updateLightboxContent() {
@@ -898,7 +930,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (lightboxCounter) {
                 if (hasMultiple) {
                     const pLabel = currentPerspectives[currentSlide] || `Vista ${currentSlide + 1}`;
-                    lightboxCounter.textContent = `${pLabel} · ${currentSlide + 1} / ${imgList.length}`;
+                    lightboxCounter.textContent = `${pLabel} ? ${currentSlide + 1} / ${imgList.length}`;
                     lightboxCounter.style.display = 'block';
                 } else {
                     lightboxCounter.style.display = 'none';
@@ -921,7 +953,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-        resetZoom();
+        resetZoom(false);
     }
 
     function openLightbox(slideIndex = 0) {
@@ -955,7 +987,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 document.body.style.overflow = '';
             }
-            resetZoom();
+            resetZoom(false);
         }
     }
 
@@ -1022,33 +1054,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateLightboxContent();
             }
         }
-        if (e.key === '+' || e.key === '=') setZoom(zoomLevel + 0.25);
-        if (e.key === '-') setZoom(zoomLevel - 0.25);
-        if (e.key === '0') resetZoom();
+        if (e.key === '+' || e.key === '=') setZoom(zoomLevel + 0.25, null, null, true);
+        if (e.key === '-') setZoom(zoomLevel - 0.25, null, null, true);
+        if (e.key === '0') resetZoom(true);
     });
 
     if (lightboxViewport) {
+        // Doble click en PC (zoom centrado en el puntero)
         lightboxViewport.addEventListener('dblclick', (e) => {
             e.preventDefault();
-            if (zoomLevel > 1.1) {
-                resetZoom();
+            if (zoomLevel > 1.2) {
+                resetZoom(true);
             } else {
-                setZoom(2.2);
+                setZoom(2.5, e.clientX, e.clientY, true);
             }
         });
 
+        // Rueda de rat?n en PC
         lightboxViewport.addEventListener('wheel', (e) => {
             e.preventDefault();
-            const delta = (e.deltaY < 0) ? 0.2 : -0.2;
-            setZoom(zoomLevel + delta);
+            const delta = (e.deltaY < 0) ? 0.25 : -0.25;
+            setZoom(zoomLevel + delta, e.clientX, e.clientY, false);
         }, { passive: false });
 
+        // Arrastre con rat?n en PC
         lightboxViewport.addEventListener('mousedown', (e) => {
             if (e.target === lightboxPrev || e.target === lightboxNext || e.target.closest('.lightbox-nav-btn')) return;
-            if (zoomLevel > 1) {
+            if (zoomLevel > 1.02) {
                 isDragging = true;
                 startX = e.clientX - panX;
                 startY = e.clientY - panY;
+                applyZoomTransform(false);
             }
         });
 
@@ -1056,55 +1092,107 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isDragging) return;
             panX = e.clientX - startX;
             panY = e.clientY - startY;
-            applyZoomTransform();
+            clampPan();
+            applyZoomTransform(false);
         });
 
         window.addEventListener('mouseup', () => {
             isDragging = false;
         });
 
+        // ??? T?CTIL M?VIL AVANZADO (Pinch Zoom + Arrastre + Doble Toque Preciso) ???
         let touchDistStart = 0;
         let initialZoom = 1;
         let lastTouchX = 0;
         let lastTouchY = 0;
+        let lastTapTime = 0;
+        let lastTapX = 0;
+        let lastTapY = 0;
+        let isPinching = false;
 
         lightboxViewport.addEventListener('touchstart', (e) => {
             if (e.touches.length === 2) {
+                e.preventDefault(); // Impide el zoom nativo del navegador sobre la p?gina
+                isPinching = true;
+                isDragging = false;
                 touchDistStart = Math.hypot(
                     e.touches[0].clientX - e.touches[1].clientX,
                     e.touches[0].clientY - e.touches[1].clientY
                 );
                 initialZoom = zoomLevel;
+                applyZoomTransform(false);
             } else if (e.touches.length === 1) {
-                isDragging = true;
+                isPinching = false;
+                isDragging = (zoomLevel > 1.02);
                 lastTouchX = e.touches[0].clientX;
                 lastTouchY = e.touches[0].clientY;
+                applyZoomTransform(false);
             }
-        }, { passive: true });
+        }, { passive: false });
 
         lightboxViewport.addEventListener('touchmove', (e) => {
+            // Detener el scroll y el zoom de la p?gina entera en todo momento
+            e.preventDefault();
+
             if (e.touches.length === 2 && touchDistStart > 0) {
-                const dist = Math.hypot(
+                const currentDist = Math.hypot(
                     e.touches[0].clientX - e.touches[1].clientX,
                     e.touches[0].clientY - e.touches[1].clientY
                 );
                 if (touchDistStart > 0) {
-                    const factor = dist / touchDistStart;
-                    setZoom(initialZoom * factor);
+                    const factor = currentDist / touchDistStart;
+                    const targetZoom = initialZoom * factor;
+                    const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                    const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+                    setZoom(targetZoom, midX, midY, false);
                 }
-            } else if (e.touches.length === 1 && isDragging) {
+            } else if (e.touches.length === 1 && isDragging && zoomLevel > 1.02) {
                 const deltaX = e.touches[0].clientX - lastTouchX;
                 const deltaY = e.touches[0].clientY - lastTouchY;
                 lastTouchX = e.touches[0].clientX;
                 lastTouchY = e.touches[0].clientY;
                 
-                if (zoomLevel > 1) {
-                    panX += deltaX;
-                    panY += deltaY;
-                    applyZoomTransform();
-                }
+                panX += deltaX;
+                panY += deltaY;
+                clampPan();
+                applyZoomTransform(false);
             }
         }, { passive: false });
+
+        lightboxViewport.addEventListener('touchend', (e) => {
+            if (e.touches.length === 0) {
+                isPinching = false;
+                isDragging = false;
+                
+                // Detecci?n de doble toque (Double-Tap) nativo t?ctil
+                if (e.changedTouches.length === 1) {
+                    const touch = e.changedTouches[0];
+                    const now = Date.now();
+                    const timeDiff = now - lastTapTime;
+                    const dist = Math.hypot(touch.clientX - lastTapX, touch.clientY - lastTapY);
+                    
+                    if (timeDiff > 0 && timeDiff < 320 && dist < 30) {
+                        e.preventDefault();
+                        if (zoomLevel > 1.2) {
+                            resetZoom(true);
+                        } else {
+                            // Hace zoom exactamente al punto donde el usuario ha tocado la pantalla
+                            setZoom(2.5, touch.clientX, touch.clientY, true);
+                        }
+                        lastTapTime = 0;
+                    } else {
+                        lastTapTime = now;
+                        lastTapX = touch.clientX;
+                        lastTapY = touch.clientY;
+                    }
+                }
+            } else if (e.touches.length === 1) {
+                isPinching = false;
+                isDragging = (zoomLevel > 1.02);
+                lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
+            }
+        });
     }
 
     // ─── GENERATE BUTTON CLICK (CON INTEGRACIÓN DE TOASTS & OPTIMIZACIÓN) ───
