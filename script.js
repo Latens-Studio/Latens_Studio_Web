@@ -1697,3 +1697,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 }); // ─── FIN de DOMContentLoaded ───
+
+    // ==========================================
+    // GOATCOUNTER EVENTOS PERSONALIZADOS
+    // ==========================================
+    document.addEventListener('click', (e) => {
+        const target = e.target.closest('[data-gc-event]');
+        if (target && window.goatcounter && window.goatcounter.count) {
+            let eventName = target.getAttribute('data-gc-event');
+            let product = target.getAttribute('data-product');
+            
+            // Inteligencia: detectar producto activo en el Visor 3D
+            if (['Generar_3D', 'Pedir_IG_Visor', 'Copiar_Texto_IG'].includes(eventName)) {
+                const pSelect = document.getElementById('productSelect');
+                if (pSelect) product = pSelect.value;
+            }
+            
+            // Inteligencia: detectar producto activo en el Modal de Detalles
+            if (['Pedir_IG_Detalles', 'Personalizar_Desde_Detalles'].includes(eventName)) {
+                const title = document.getElementById('modalProductTitle');
+                if (title && title.textContent) {
+                    const t = title.textContent.toLowerCase();
+                    if (t.includes('coraz')) product = 'corazon';
+                    else if (t.includes('inicial')) product = 'iniciales';
+                    else product = 'individual';
+                }
+            }
+
+            if (product) {
+                eventName += '_' + product.charAt(0).toUpperCase() + product.slice(1);
+            }
+            
+            window.goatcounter.count({
+                path: eventName,
+                title: eventName.replace(/_/g, ' '),
+                event: true
+            });
+        }
+    });
