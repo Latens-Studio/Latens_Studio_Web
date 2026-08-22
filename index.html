@@ -128,6 +128,7 @@
               "position": 3,
               "name": "Llavero Individual con Nombre",
               "description": "Tu nombre en relieve blanco sobre base oscura resistente con anilla reforzada y diseño orgánico compacto.",
+              "image": "https://latens-studio.github.io/Latens_Studio_Web/llavero1iniciales.jpg",
               "brand": { "@type": "Brand", "name": "Latens Studio" },
               "offers": {
                 "@type": "Offer",
@@ -145,38 +146,70 @@
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "¿Dónde se realizan las entregas en mano?",
+              "name": "?C?mo hago un encargo y c?mo se paga?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Las entregas en mano las realizo exclusivamente en la Plaza de los Luceros (Alicante), justo en la fuente que hay en la rotonda. Es un punto céntrico y accesible."
+                "text": "Todos los encargos se realizan de forma c?moda a trav?s de esta web o por Mensaje Directo en Instagram (@latens.studio). Una vez confirmado el dise?o contigo, el pago se realiza c?modamente mediante Bizum."
               }
             },
             {
               "@type": "Question",
-              "name": "¿Cómo hago un encargo y cómo se paga?",
+              "name": "?De qu? material est?n fabricados?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Todos los encargos se realizan a través de Mensaje Directo en Instagram (@latens.studio) o mediante esta web. El pago se efectúa mediante Bizum (50% por adelantado y 50% restante en mano al recibir el pedido)."
+                "text": "Est?n impresos en biopl?stico PLA y PLA+ de alta calidad, pol?meros termopl?sticos ligeros y muy resistentes derivados de recursos org?nicos renovables como el almid?n de ma?z."
               }
             },
             {
               "@type": "Question",
-              "name": "¿De qué material están fabricados?",
+              "name": "?Resisten bien el calor y el sol?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Están impresos en bioplástico PLA y PLA+ de alta calidad, polímeros ligeros y resistentes derivados de recursos renovables como el maíz."
+                "text": "El PLA+ es muy duradero para el uso diario. Como todo termopl?stico, se aconseja no dejarlo expuesto al sol directo de forma prolongada ni a temperaturas superiores a 55-60?C."
               }
             },
             {
               "@type": "Question",
-              "name": "¿Cuánto tardas en preparar un encargo?",
+              "name": "?Puedo pedirte alg?n dise?o fuera de tu cat?logo?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Lo habitual es tener tu llavero listo para entrega el mismo día del encargo gracias a nuestro proceso optimizado."
+                "text": "?S?! Si tienes en mente una idea propia, un boceto o un archivo 3D listo (.STL / .OBJ / .STEP), cu?ntamelo por Instagram o mediante el formulario de contacto."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "?Cu?nto tardas en preparar un encargo?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Para piezas peque?as y modelos del cat?logo, lo habitual es tener tu pedido listo el mismo d?a o en un plazo de 24 horas."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "?D?nde se realizan las entregas en mano?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Las entregas presenciales gratuitas se realizan en la Plaza de los Luceros (Alicante), junto a la fuente central."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "?Qu? ocurre si no puedo acudir en el horario acordado a Luceros?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Si te surge cualquier imprevisto, solo av?same con antelaci?n por Mensaje Directo en Instagram para reagendar el horario u organizar para que otra persona de tu confianza pueda recogerlo."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "?Se pueden cancelar o devolver los pedidos?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "En modelos no personalizados dispones de 7 d?as naturales desde la entrega para devoluciones. En piezas personalizadas con nombres o fechas a medida, no es posible admitir devoluciones una vez iniciada la impresi?n."
               }
             }
           ]
-        }
+        }        }
       ]
     }
     </script>
@@ -221,19 +254,19 @@
 
         <!-- BARRA DE NAVEGACIÓN ESTRUCTURADA POR SECCIONES (TABS CON WAI-ARIA) -->
         <nav class="nav-tabs" role="tablist" aria-label="Secciones del sitio">
-            <button class="nav-tab-btn active" data-target="tab-profile" id="tab-btn-profile" role="tab" aria-selected="true" aria-controls="tab-profile" tabindex="0">
+            <button class="nav-tab-btn active" data-target="tab-profile" id="tab-btn-profile" data-gc-event="Tab_Perfil" role="tab" aria-selected="true" aria-controls="tab-profile" tabindex="0">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 <span>Sobre Mí & Redes</span>
             </button>
-            <button class="nav-tab-btn" data-target="tab-gallery" id="tab-btn-gallery" role="tab" aria-selected="false" aria-controls="tab-gallery" tabindex="-1">
+            <button class="nav-tab-btn" data-target="tab-gallery" id="tab-btn-gallery" data-gc-event="Tab_Catalogo" role="tab" aria-selected="false" aria-controls="tab-gallery" tabindex="-1">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                 <span>Catálogo de Modelos</span>
             </button>
-            <button class="nav-tab-btn highlight" data-target="tab-preview" id="tab-btn-preview" role="tab" aria-selected="false" aria-controls="tab-preview" tabindex="-1">
+            <button class="nav-tab-btn highlight" data-target="tab-preview" id="tab-btn-preview" data-gc-event="Tab_Previsualizador" role="tab" aria-selected="false" aria-controls="tab-preview" tabindex="-1">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                 <span>Previsualizador 3D</span>
             </button>
-            <button class="nav-tab-btn" data-target="tab-faq" id="tab-btn-faq" role="tab" aria-selected="false" aria-controls="tab-faq" tabindex="-1">
+            <button class="nav-tab-btn" data-target="tab-faq" id="tab-btn-faq" data-gc-event="Tab_FAQ" role="tab" aria-selected="false" aria-controls="tab-faq" tabindex="-1">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
                 <span>Preguntas (FAQ)</span>
             </button>
@@ -673,13 +706,13 @@
                             
                             <!-- Selector de Modo de Vista (Juntos vs Separados) -->
                             <div class="view-mode-selector" id="viewModeSelector">
-                                <button class="view-mode-btn active" id="modeJuntosBtn">
+                                <button class="view-mode-btn active" id="modeJuntosBtn" data-gc-event="Modo_Juntos">
                                     <span>❤️ Juntos (Ensamblados)</span>
                                 </button>
-                                <button class="view-mode-btn" id="modeSeparadosBtn">
+                                <button class="view-mode-btn" id="modeSeparadosBtn" data-gc-event="Modo_Separados">
                                     <span>🧩 Separados (Individuales)</span>
                                 </button>
-                                <button class="view-mode-btn" id="modeTarjetaBtn" style="display: none;">
+                                <button class="view-mode-btn" id="modeTarjetaBtn" data-gc-event="Modo_Tarjeta" style="display: none;">
                                     <span>✉️ Tarjeta 3D</span>
                                 </button>
                             </div>
@@ -789,7 +822,7 @@
                         </div>
                         <div class="faq-list">
                             <div class="faq-item">
-                                <button class="faq-question" type="button">
+                                <button class="faq-question" type="button" data-gc-event="FAQ_1_Que_Son">
                                     <span>¿Cómo hago un encargo y cómo se paga?</span>
                                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
@@ -798,7 +831,7 @@
                                 </div>
                             </div>
                             <div class="faq-item">
-                                <button class="faq-question" type="button">
+                                <button class="faq-question" type="button" data-gc-event="FAQ_2_Como_Funciona">
                                     <span>¿De qué material están fabricados?</span>
                                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
@@ -807,7 +840,7 @@
                                 </div>
                             </div>
                             <div class="faq-item">
-                                <button class="faq-question" type="button">
+                                <button class="faq-question" type="button" data-gc-event="FAQ_3_Personalizacion">
                                     <span>¿Resisten bien el calor y el sol?</span>
                                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
@@ -816,7 +849,7 @@
                                 </div>
                             </div>
                             <div class="faq-item">
-                                <button class="faq-question" type="button">
+                                <button class="faq-question" type="button" data-gc-event="FAQ_4_Envios">
                                     <span>¿Puedo pedirte algún diseño fuera de tu catálogo?</span>
                                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
@@ -825,7 +858,7 @@
                                 </div>
                             </div>
                             <div class="faq-item">
-                                <button class="faq-question" type="button">
+                                <button class="faq-question" type="button" data-gc-event="FAQ_5_Tiempos">
                                     <span>¿Cuánto tardas en preparar un encargo?</span>
                                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
@@ -834,7 +867,7 @@
                                 </div>
                             </div>
                             <div class="faq-item">
-                                <button class="faq-question" type="button">
+                                <button class="faq-question" type="button" data-gc-event="FAQ_6_Materiales">
                                     <span>¿Dónde se realizan las entregas en mano?</span>
                                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
@@ -843,7 +876,7 @@
                                 </div>
                             </div>
                             <div class="faq-item">
-                                <button class="faq-question" type="button">
+                                <button class="faq-question" type="button" data-gc-event="FAQ_7_Precios">
                                     <span>¿Qué ocurre si no puedo acudir en el horario acordado a Luceros?</span>
                                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
@@ -852,7 +885,7 @@
                                 </div>
                             </div>
                             <div class="faq-item">
-                                <button class="faq-question" type="button">
+                                <button class="faq-question" type="button" data-gc-event="FAQ_8_Devoluciones">
                                     <span>¿Se pueden cancelar o devolver los pedidos?</span>
                                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
@@ -934,7 +967,7 @@
                     <div class="modal-main-image-wrap" id="modalMainImageWrap" title="Haz clic para ampliar la imagen">
                         <span class="modal-badge-tag" id="modalProductBadge">Más Vendido ⭐</span>
                         <span class="gallery-zoom-hint modal-zoom-hint">🔍 Ampliar</span>
-                        <img id="modalProductImg" src="" alt="Detalle del Producto" loading="eager">
+                        <img id="modalProductImg" alt="Detalle del Producto" loading="eager">
                     </div>
                     <!-- Tira de Miniaturas -->
                     <div class="modal-thumbnails-track" id="modalThumbnailsTrack"></div>
@@ -1007,7 +1040,7 @@
             </button>
 
             <div class="lightbox-viewport" id="lightboxViewport">
-                <img id="lightboxImg" src="" alt="Vista ampliada del producto" draggable="false">
+                <img id="lightboxImg" alt="Vista ampliada del producto" draggable="false">
             </div>
 
             <button class="lightbox-nav-btn prev" id="lightboxPrev" aria-label="Foto anterior">

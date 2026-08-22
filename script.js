@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             images: [
                 'llaverocompleto1.jpg',
                 'chapita.png',
-                'LOGO LTSweb.png'
+                'logo_latens.png'
             ],
             specs: [
                 '1 Nombre personalizado en relieve 3D de alto contraste.',
@@ -490,6 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateOrderSummaryCard() {
+        const esc = (s) => (s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '');
         const specs = generateOrderSpecs();
         const container = document.getElementById('summaryDetailsList');
         if (!container) return;
@@ -497,21 +498,21 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = `
             <div class="summary-item">
                 <span class="summary-item-label">Modelo & Precio</span>
-                <span class="summary-item-val">🏷️ ${specs.productName} <strong>(${specs.price})</strong></span>
+                <span class="summary-item-val">🏷️ ${esc(specs.productName)} <strong>(${esc(specs.price)})</strong></span>
             </div>
             <div class="summary-item">
                 <span class="summary-item-label">Nombres / Iniciales</span>
-                <span class="summary-item-val">✍️ ${specs.names}</span>
+                <span class="summary-item-val">✍️ ${esc(specs.names)}</span>
             </div>
             ${specs.fecha !== 'No grabada' ? `
             <div class="summary-item">
                 <span class="summary-item-label">Fecha Reverso</span>
-                <span class="summary-item-val">📅 ${specs.fecha}</span>
+                <span class="summary-item-val">📅 ${esc(specs.fecha)}</span>
             </div>` : ''}
             ${specs.hasCard ? `
             <div class="summary-item">
                 <span class="summary-item-label">Tarjeta 3D Regalo</span>
-                <span class="summary-item-val">💌 "${specs.cardTitle}": ${specs.cardMessage}</span>
+                <span class="summary-item-val">💌 "${esc(specs.cardTitle)}": ${esc(specs.cardMessage)}</span>
             </div>` : ''}
         `;
     }
@@ -612,8 +613,8 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const input1 = document.getElementById('name1');
                 const input2 = document.getElementById('name2');
-                if (input1 && n1) input1.value = decodeURIComponent(n1);
-                if (input2 && n2) input2.value = decodeURIComponent(n2);
+                if (input1 && n1) input1.value = n1;
+                if (input2 && n2) input2.value = n2;
                 updateOrderSummaryCard();
             }, 80);
             if (!targetTab) targetTab = 'tab-preview';
@@ -1087,8 +1088,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.touches[0].clientX - e.touches[1].clientX,
                     e.touches[0].clientY - e.touches[1].clientY
                 );
-                const factor = dist / touchDistStart;
-                setZoom(initialZoom * factor);
+                if (touchDistStart > 0) {
+                    const factor = dist / touchDistStart;
+                    setZoom(initialZoom * factor);
+                }
             } else if (e.touches.length === 1 && isDragging) {
                 const deltaX = e.touches[0].clientX - lastTouchX;
                 const deltaY = e.touches[0].clientY - lastTouchY;
@@ -1466,7 +1469,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (messageTextarea) {
                         messageTextarea.style.height = 'auto';
-                        if (messageCounter) messageCounter.textContent = '0/500';
+                        if (contactMsgCounter) contactMsgCounter.textContent = '0/500';
                     }
                     if (fileNameDisplay) fileNameDisplay.textContent = 'Adjuntar archivo 3D o foto (Opcional)';
                     if (fileLabel) fileLabel.classList.remove('has-file');
