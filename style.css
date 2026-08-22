@@ -136,10 +136,10 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Escala compacta y limpia al 75% para dispositivos m?viles sin alterar coordenadas t?ctiles */
+/* Escala compacta al 75% para el contenido de la web en m?viles sin afectar a los modales ni a las coordenadas del lightbox */
 @media (max-width: 768px) {
-    html {
-        font-size: 12px;
+    .site-wrapper {
+        zoom: 0.75;
     }
 }
 
