@@ -446,26 +446,20 @@ p, h1, h2, h3, h4, h5, h6, span, a, button, li, .brand-title, .brand-subtitle, d
     color: var(--text-muted);
 }
 
-/* Social Hero & Secondary Grid */
+/* Social Hero & Secondary Grid (Consistencia total en Modo Claro y Modo Oscuro) */
 .social-primary-box {
     margin-bottom: 0.75rem;
 }
 
 .social-tile-secondary.instagram-primary {
-    background: linear-gradient(135deg, rgba(225, 48, 108, 0.06) 0%, rgba(131, 58, 180, 0.04) 100%);
-    border-color: rgba(225, 48, 108, 0.3);
+    background: linear-gradient(135deg, rgba(225, 48, 108, 0.09) 0%, rgba(131, 58, 180, 0.07) 100%);
+    border: 1.5px solid rgba(225, 48, 108, 0.38);
 }
 
 .social-tile-secondary.instagram-primary:hover {
     border-color: var(--insta-pink);
-    box-shadow: 0 4px 14px rgba(225, 48, 108, 0.15);
-}
-
-@media (prefers-color-scheme: dark) {
-    .social-tile-secondary.instagram-primary {
-        background: linear-gradient(135deg, rgba(225, 48, 108, 0.1) 0%, rgba(131, 58, 180, 0.08) 100%);
-        border-color: rgba(225, 48, 108, 0.4);
-    }
+    box-shadow: 0 4px 16px rgba(225, 48, 108, 0.25);
+    transform: translateY(-1px);
 }
 
 /* Secondary Social Networks */
@@ -548,9 +542,17 @@ p, h1, h2, h3, h4, h5, h6, span, a, button, li, .brand-title, .brand-subtitle, d
     height: 18px;
 }
 
-.social-tile-secondary.tiktok .sec-icon { color: var(--text-heading); }
-.social-tile-secondary.facebook .sec-icon { color: #1877f2; }
-.social-tile-secondary.youtube .sec-icon { color: #ff0000; }
+.social-tile-secondary.tiktok .sec-icon { 
+    color: var(--text-heading); 
+}
+.social-tile-secondary.facebook .sec-icon { 
+    color: #1877f2; 
+    background: rgba(24, 119, 242, 0.1);
+}
+.social-tile-secondary.youtube .sec-icon { 
+    color: #ff0000; 
+    background: rgba(255, 0, 0, 0.1);
+}
 
 .social-tile-secondary .sec-info {
     display: flex;
