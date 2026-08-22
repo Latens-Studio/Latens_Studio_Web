@@ -1790,11 +1790,29 @@ document.addEventListener('DOMContentLoaded', () => {
 }); // ─── FIN de DOMContentLoaded ───
 
     // ==========================================
-    // GOATCOUNTER EVENTOS PERSONALIZADOS
+    // GOATCOUNTER EVENTOS PERSONALIZADOS (CON BUFFER ANTIP?RDIDAS)
     // ==========================================
+    const gcQueue = [];
+    function flushGcQueue() {
+        if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+            while (gcQueue.length > 0) {
+                const item = gcQueue.shift();
+                window.goatcounter.count(item);
+            }
+        }
+    }
+
+    // Intervalo de reintento autom?tico por si count.js tarda en cargar
+    const gcCheckInterval = setInterval(() => {
+        if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+            flushGcQueue();
+            if (gcQueue.length === 0) clearInterval(gcCheckInterval);
+        }
+    }, 300);
+
     document.addEventListener('click', (e) => {
         const target = e.target.closest('[data-gc-event]');
-        if (target && window.goatcounter && window.goatcounter.count) {
+        if (target) {
             let eventName = target.getAttribute('data-gc-event');
             let product = target.getAttribute('data-product');
             
@@ -1819,10 +1837,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 eventName += '_' + product.charAt(0).toUpperCase() + product.slice(1);
             }
             
-            window.goatcounter.count({
+            const eventPayload = {
                 path: eventName,
                 title: eventName.replace(/_/g, ' '),
                 event: true
-            });
+            };
+
+            if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+                window.goatcounter.count(eventPayload);
+            } else {
+                // Si el script de GoatCounter a?n no ha terminado de descargarse, encolar el evento
+                gcQueue.push(eventPayload);
+            }
         }
     });
