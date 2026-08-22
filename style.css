@@ -26,13 +26,13 @@
     --accent-rose: #e11d48;
     --accent-emerald: #10b981;
     
-    /* Instagram Brand Tokens */
-    --insta-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-    --insta-gradient-hover: linear-gradient(45deg, #f39c12 0%, #e74c3c 25%, #e91e63 50%, #d81b60 75%, #8e44ad 100%);
+    /* Instagram Brand Tokens (Vibrant Official Spectrum: Violet -> Magenta -> Pink -> Orange -> Yellow) */
+    --insta-gradient: linear-gradient(135deg, #833ab4 0%, #c13584 30%, #e1306c 55%, #fd1d1d 75%, #f77737 90%, #fcaf45 100%);
+    --insta-gradient-hover: linear-gradient(135deg, #9b59b6 0%, #d81b60 30%, #e91e63 55%, #ff5722 75%, #ff9800 90%, #ffc107 100%);
     --insta-pink: #e1306c;
     --insta-purple: #833ab4;
-    --insta-glow: 0 4px 16px rgba(220, 39, 67, 0.28);
-    --insta-glow-hover: 0 8px 24px rgba(220, 39, 67, 0.42);
+    --insta-glow: 0 4px 20px rgba(225, 48, 108, 0.4);
+    --insta-glow-hover: 0 8px 28px rgba(225, 48, 108, 0.6);
     
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
@@ -452,13 +452,13 @@ p, h1, h2, h3, h4, h5, h6, span, a, button, li, .brand-title, .brand-subtitle, d
 }
 
 .social-tile-secondary.instagram-primary {
-    background: linear-gradient(135deg, rgba(225, 48, 108, 0.09) 0%, rgba(131, 58, 180, 0.07) 100%);
-    border: 1.5px solid rgba(225, 48, 108, 0.38);
+    background: var(--bg-card);
+    border: 1.5px solid rgba(225, 48, 108, 0.45);
 }
 
 .social-tile-secondary.instagram-primary:hover {
     border-color: var(--insta-pink);
-    box-shadow: 0 4px 16px rgba(225, 48, 108, 0.25);
+    box-shadow: 0 4px 20px rgba(225, 48, 108, 0.35);
     transform: translateY(-1px);
 }
 
