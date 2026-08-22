@@ -1,19 +1,31 @@
 {
   "name": "Latens Studio",
-  "short_name": "Latens",
+  "short_name": "Latens Studio",
+  "description": "Estudio de dise?o, modelado e impresi?n 3D personalizada en Alicante.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
   "icons": [
     {
       "src": "logo_latens.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "logo_latens.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "logo_latens.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
     }
-  ],
-  "theme_color": "#000000",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  ]
 }
