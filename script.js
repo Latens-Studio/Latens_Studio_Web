@@ -89,10 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
             priceQualifier: 'Pareja completa (2 llaveros)',
             desc: 'Dos llaveros independientes con nombres totalmente personalizados que encajan magnéticamente de forma perfecta gracias a sus imanes de neodimio integrados. Incluye tarjeta de presentación en caja (con título y dedicatoria personalizables) y soporte expositor.',
             images: [
-                'llaverocompleto3.jpg',
-                'llaverocompleto2.jpg',
-                'llaverocompleto1.jpg',
-                'imagen llaveros pareja ambos(tarjeta en caja).jpg'
+                'llaverocompleto3.webp',
+                'llaverocompleto1.webp',
+                'llaverocompleto2.webp',
+                'imagen llaveros pareja ambos(tarjeta en caja).webp'
             ],
             specs: [
                 'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
@@ -115,10 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
             priceQualifier: 'Pareja completa (2 llaveros)',
             desc: 'Dos llaveros magnéticos con la inicial de cada persona sobre un corazón central y cruz opcional. Incluye tarjeta de presentación en caja (con título y dedicatoria personalizables) y soporte expositor.',
             images: [
-                'llavero3iniciales.jpg',
-                'llavero2iniciales.jpg',
-                'llavero1iniciales.jpg',
-                'imagen llaveros pareja ambos(tarjeta en caja).jpg'
+                'llavero3iniciales.webp',
+                'llavero1iniciales.webp',
+                'llavero2iniciales.webp',
+                'imagen llaveros pareja ambos(tarjeta en caja).webp'
             ],
             specs: [
                 'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             priceQualifier: 'Por unidad (1 llavero)',
             desc: 'Tu nombre personalizado en relieve blanco sobre una base orgánica oscura y resistente. Compacto, duradero e ideal para llaves de coche, mochilas o regalo.',
             images: [
-                'llaverocompleto1.jpg',
+                'llaverocompleto1.webp',
                 'chapita.png',
                 'logo_latens.png'
             ],
