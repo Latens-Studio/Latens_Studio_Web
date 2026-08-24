@@ -229,7 +229,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=107.0">
+    <link rel="stylesheet" href="style.css?v=124.0">
 </head>
 <body>
 
@@ -293,7 +293,7 @@
                             <h2>Quién soy y qué hago</h2>
                         </div>
                         <p class="bio-text">
-                            ¡Hola! Soy <strong>León</strong>, la persona detrás de <strong>Latens Studio</strong>. Soy un apasionado del modelado y la impresión 3D en Alicante, enfocado en crear piezas únicas con el máximo cuidado por el detalle y entrega local en mano.
+                            ¡Hola! Soy <strong>León</strong>, la persona detrás de <strong>Latens Studio</strong>. Soy un apasionado del modelado y la impresión 3D en Alicante, enfocado en crear piezas únicas con el máximo cuidado por el detalle, con recogida en mano en Alicante y envíos a toda España.
                             <br><br>
                             Mi trabajo se divide en dos enfoques: por un lado, ofrezco un catálogo de productos personalizables, donde el diseño base está optimizado pero tú eliges los detalles. Por otro lado, me encanta aceptar el reto de convertir tus ideas fuera del catálogo en objetos reales y tangibles. Como sigo aprendiendo día a día en este mundo, trabajo siempre con total honestidad sobre lo que está dentro de mis posibilidades actuales.
                             <br><br>
@@ -303,8 +303,8 @@
                             <div class="feature-item">
                                 <span class="feature-icon">📍</span>
                                 <div>
-                                    <strong>Entrega Local en Alicante</strong>
-                                    <p>Punto de encuentro céntrico en <a href="https://maps.google.com/?q=Plaza+de+los+Luceros,+03003+Alicante" target="_blank" rel="noopener noreferrer" class="faq-map-link">Plaza de los Luceros</a> con recogida gratuita el mismo día.</p>
+                                    <strong>Entrega Local y Envíos a Domicilio</strong>
+                                    <p>Recogida gratuita en mano en <a href="https://maps.google.com/?q=Plaza+de+los+Luceros,+03003+Alicante" target="_blank" rel="noopener noreferrer" class="faq-map-link">Plaza de los Luceros</a> (Alicante) y envíos rápidos 24/48h a toda España peninsular.</p>
                                 </div>
                             </div>
                             <div class="feature-item">
@@ -406,7 +406,8 @@
 
                                 <div class="form-group">
                                     <label for="contactEmail" class="sr-only">Tu Correo Electrónico</label>
-                                    <input type="email" id="contactEmail" name="email" placeholder="Tu Correo Electrónico" required class="form-input" autocomplete="email">
+                                    <input type="email" id="contactEmail" name="email" placeholder="Tu Correo Electrónico" required class="form-input" autocomplete="email" aria-describedby="contactEmailSuggestion">
+                                    <div id="contactEmailSuggestion" class="email-suggestion-box" style="display: none;" role="status" aria-live="polite"></div>
                                 </div>
 
                                 <div class="form-group" style="position: relative;">
@@ -612,51 +613,60 @@
                                 </select>
                             </div>
 
-                            <div id="dynamicInputs" class="form-inputs-group">
-                                <!-- Inputs dinámicos inyectados por JS -->
-                            </div>
-
-                            <div id="opcionesIniciales" class="custom-options-box">
-                                <h3 class="custom-options-title">Opciones de Iniciales</h3>
-                                <div class="custom-options-row">
-                                    <label class="custom-option-check">
-                                        <input type="checkbox" id="checkCruz" checked>
-                                        <span>Incluir Cruz (+)</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div id="fechaGroup" class="form-field date-picker-group">
-                                <label for="fechaNative">Fecha en el Reverso (Opcional)</label>
-                                <div class="date-picker-box" id="datePickerBox">
-                                    <input type="date" id="fechaNative" class="form-input date-native-field" inputmode="none" onkeydown="return false;" aria-label="Seleccionar fecha en el calendario">
-                                    <input type="hidden" id="fecha" value="">
-                                    <button type="button" id="btnDateClear" class="btn-date-clear" title="Quitar fecha" aria-label="Quitar fecha" style="display: none;">✕</button>
-                                </div>
-                                <div class="date-quick-presets">
-                                    <button type="button" class="date-preset-pill" data-gc-event="Preset_Fecha_Hoy" data-preset="today">📅 Hoy</button>
-                                    <button type="button" class="date-preset-pill" data-preset="valentine">❤️ 14 Feb</button>
-                                </div>
-                                <div class="date-preview-badge" id="datePreviewBadge" style="display: none;">
-                                    <span class="date-preview-label">Grabado en reverso:</span>
-                                    <strong id="datePreviewFormatted" class="date-preview-code">--.--.--</strong>
-                                </div>
-                                <small class="date-field-help">Toca el campo para elegir fecha en el calendario y grabarla en la base.</small>
-                            </div>
-
-                            <div class="form-field" style="margin-top: 1rem; border-top: 1px solid var(--border-light); padding-top: 1.5rem;">
-                                <input type="checkbox" id="addCard" checked style="display: none;">
-                                
-                                <div id="cardInputsGroup" class="form-inputs-group hidden fade-in" style="background: var(--bg-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-top: 0.5rem; display: none;">
-                                    <div class="form-field" style="margin-bottom: 1rem;">
-                                        <label for="cardTitle" style="font-size: 0.85rem;">Título de la Tarjeta</label>
-                                        <input type="text" id="cardTitle" class="form-input" maxlength="20" placeholder="Ej: Te quiero mucho" style="font-size: 0.9rem; padding: 0.6rem;">
-                                        <small style="color:#94a3b8; font-size:11px; float: right;" id="titleCounter">0/20</small>
+                            <!-- Contenedor Principal de Personalización (Vertical en PC, 2 Columnas en Móvil) -->
+                            <div class="config-customization-layout">
+                                <!-- Columna Izquierda: Nombres y Fecha -->
+                                <div class="config-names-date-col">
+                                    <div id="dynamicInputs" class="form-inputs-group">
+                                        <!-- Inputs dinámicos inyectados por JS -->
                                     </div>
-                                    <div class="form-field" style="margin-bottom: 0;">
-                                        <label for="cardMessage" style="font-size: 0.85rem;">Mensaje</label>
-                                        <textarea id="cardMessage" class="form-input" maxlength="60" rows="3" placeholder="Que este detalle te recuerde lo especial que eres para mí..." style="resize: none; font-size: 0.9rem; padding: 0.6rem;"></textarea>
-                                        <small style="color:#94a3b8; font-size:11px; float: right;" id="messageCounter">0/60</small>
+
+                                    <div id="opcionesIniciales" class="custom-options-box">
+                                        <h3 class="custom-options-title">Opciones de Iniciales</h3>
+                                        <div class="custom-options-row">
+                                            <label class="custom-option-check">
+                                                <input type="checkbox" id="checkCruz" checked>
+                                                <span>Incluir Cruz (+)</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div id="fechaGroup" class="form-field date-picker-group">
+                                        <label for="fechaNative">Fecha Reverso (Opcional)</label>
+                                        <div class="date-picker-box" id="datePickerBox">
+                                            <input type="date" id="fechaNative" class="form-input date-native-field" inputmode="none" onkeydown="return false;" aria-label="Seleccionar fecha en el calendario">
+                                            <input type="hidden" id="fecha" value="">
+                                            <button type="button" id="btnDateClear" class="btn-date-clear" title="Quitar fecha" aria-label="Quitar fecha" style="display: none;">✕</button>
+                                        </div>
+                                        <div class="date-quick-presets">
+                                            <button type="button" class="date-preset-pill" data-gc-event="Preset_Fecha_Hoy" data-preset="today">📅 Hoy</button>
+                                            <button type="button" class="date-preset-pill" data-preset="valentine">❤️ 14 Feb</button>
+                                        </div>
+                                        <div class="date-preview-badge" id="datePreviewBadge" style="display: none;">
+                                            <span class="date-preview-label">Grabado:</span>
+                                            <strong id="datePreviewFormatted" class="date-preview-code">--.--.--</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Columna Derecha: Tarjeta 3D de Regalo -->
+                                <div class="config-card-col">
+                                    <input type="checkbox" id="addCard" checked style="display: none;">
+                                    <div id="cardInputsGroup" class="card-inputs-panel fade-in">
+                                        <div class="card-inputs-header">
+                                            <span>💌</span>
+                                            <strong>Tarjeta en Caja</strong>
+                                        </div>
+                                        <div class="form-field" style="margin-bottom: 0.45rem;">
+                                            <label for="cardTitle" style="font-size: 0.78rem;">Título</label>
+                                            <input type="text" id="cardTitle" class="form-input" maxlength="20" placeholder="Ej: Te quiero mucho" style="font-size: 0.85rem; padding: 0.45rem 0.6rem;">
+                                            <small style="color:#94a3b8; font-size:10px; float: right;" id="titleCounter">0/20</small>
+                                        </div>
+                                        <div class="form-field card-message-field" style="margin-bottom: 0; display: flex; flex-direction: column; flex: 1;">
+                                            <label for="cardMessage" style="font-size: 0.78rem;">Mensaje</label>
+                                            <textarea id="cardMessage" class="form-input" maxlength="60" placeholder="Que este detalle os recuerde lo especiales que sois..." style="resize: none; font-size: 0.84rem; padding: 0.5rem 0.6rem; flex: 1; min-height: 95px;"></textarea>
+                                            <small style="color:#94a3b8; font-size:10px; float: right; margin-top: 2px;" id="messageCounter">0/60</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -670,6 +680,39 @@
                                     <option value="recogida" selected>📍 Alicante (Luceros) — Recogida Gratis</option>
                                     <option value="envio">📦 Toda España (Península) — Envío 24/48h (+4,99€)</option>
                                 </select>
+
+                                <!-- Formulario Desplegable de Datos de Envío (Aparece si elige envío) -->
+                                <div id="shippingFieldsGroup" class="shipping-fields-box fade-in" style="display: none;">
+                                    <div class="shipping-box-header">
+                                        <span style="font-size: 1.05rem;">📦</span>
+                                        <strong>Datos para el Envío a Domicilio</strong>
+                                    </div>
+                                    <div class="form-field shipping-field">
+                                        <label for="shipName">Nombre Completo</label>
+                                        <input type="text" id="shipName" class="form-input" placeholder="Ej: María García López">
+                                    </div>
+                                    <div class="form-field shipping-field">
+                                        <label for="shipAddress">Dirección (Calle, Nº, Piso/Puerta)</label>
+                                        <input type="text" id="shipAddress" class="form-input" placeholder="Ej: Calle Mayor 18, Bajo A">
+                                    </div>
+                                    <div class="shipping-grid-row">
+                                        <div class="form-field shipping-field">
+                                            <label for="shipCP">Código Postal</label>
+                                            <input type="text" id="shipCP" class="form-input" placeholder="Ej: 03001" maxlength="5" autocomplete="postal-code" inputmode="numeric" aria-describedby="shipCPBadge">
+                                            <div id="shipCPBadge" class="cp-locality-badge" style="display: none;" role="status" aria-live="polite"></div>
+                                        </div>
+                                        <div class="form-field shipping-field">
+                                            <label for="shipPhone">Teléfono</label>
+                                            <input type="tel" id="shipPhone" class="form-input" placeholder="Ej: 612 345 678" autocomplete="tel" aria-describedby="shipPhoneBadge">
+                                            <div id="shipPhoneBadge" class="field-feedback-badge" style="display: none;" role="status" aria-live="polite"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-field shipping-field" style="margin-bottom: 0;">
+                                        <label for="shipEmail">Correo Electrónico</label>
+                                        <input type="email" id="shipEmail" class="form-input" placeholder="tu@email.com" autocomplete="email" aria-describedby="shipEmailSuggestion">
+                                        <div id="shipEmailSuggestion" class="email-suggestion-box" style="display: none;" role="status" aria-live="polite"></div>
+                                    </div>
+                                </div>
                             </div>
 
                             <button id="generateBtn" class="btn-generate" type="button" data-gc-event="Generar_3D">
@@ -693,140 +736,162 @@
                         </div>
                     </div>
 
-                    <!-- Columna de Resultados (Visor) -->
-                    <div class="preview-panel viewer-panel" style="position: relative;">
+                    <!-- Columna Derecha (Visor y Contenedor de Configuración) -->
+                    <div class="preview-right-col">
                         
-                        <!-- Estado Inicial -->
-                        <div id="viewerInitial" class="viewer-state active">
-                            <div class="state-illustration">
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                            </div>
-                            <h3>Visor de Renders 3D</h3>
-                            <p>Rellena los nombres en el panel izquierdo y pulsa "Generar" para obtener las capturas tridimensionales y medidas exactas.</p>
-                        </div>
-
-                        <!-- Estado 2: Cargando con Barra de Progreso y Fases -->
-                        <div id="viewerLoading" class="viewer-state">
-                            <div class="loader-visual-container">
-                                <div class="custom-loader"></div>
-                                <span id="loadingPercent" class="loading-percent-badge">0%</span>
-                            </div>
+                        <!-- 1. Visor 3D (Tarjeta Superior) -->
+                        <div class="preview-panel viewer-panel" style="position: relative;">
                             
-                            <h3 id="loadingStatusTitle">Generando modelo 3D...</h3>
-                            <p id="loadingStatusDesc" class="loading-status-text">📐 Calculando geometría tipográfica y curvas...</p>
-                            
-                            <div class="progress-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                <div id="loadingProgressBar" class="progress-bar-fill"></div>
-                            </div>
-
-                            <div class="loading-timer-badge">
-                                <span id="loadingTimeText">⏱️ Tiempo estimado: ~8-10 seg</span>
-                            </div>
-                        </div>
-
-                        <!-- Estado 3: Resultados (Imágenes & Medidas) -->
-                        <div id="viewerResults" class="viewer-state results-state">
-                            
-                            <!-- Selector de Modo de Vista (Juntos vs Separados) -->
-                            <div class="view-mode-selector" id="viewModeSelector">
-                                <button class="view-mode-btn active" id="modeJuntosBtn" data-gc-event="Modo_Juntos">
-                                    <span>❤️ Juntos (Ensamblados)</span>
-                                </button>
-                                <button class="view-mode-btn" id="modeSeparadosBtn" data-gc-event="Modo_Separados">
-                                    <span>🧩 Separados (Individuales)</span>
-                                </button>
-                                <button class="view-mode-btn" id="modeTarjetaBtn" data-gc-event="Modo_Tarjeta" style="display: none;">
-                                    <span>✉️ Tarjeta 3D</span>
-                                </button>
-                            </div>
-
-                            <div class="carousel-wrapper">
-                                <div class="carousel-viewport">
-                                    <div class="carousel-slides" id="carouselTrack">
-                                        <!-- Renders inyectados -->
-                                    </div>
+                            <!-- Estado Inicial -->
+                            <div id="viewerInitial" class="viewer-state active">
+                                <div class="state-illustration">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                                 </div>
-                                <button class="carousel-btn prev" id="carouselPrev" aria-label="Foto anterior">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                                </button>
-                                <button class="carousel-btn next" id="carouselNext" aria-label="Siguiente foto">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                                </button>
-                                <div class="perspective-badge" id="perspectiveLabel">Vista Frontal</div>
+                                <h3>Visor de Renders 3D</h3>
+                                <p>Rellena los nombres en el panel izquierdo y pulsa "Generar" para obtener las capturas tridimensionales y medidas exactas.</p>
                             </div>
 
-                            <!-- Selector de Perspectivas (Thumbnails) -->
-                            <div class="perspective-thumbnails" id="perspectiveThumbs">
-                                <!-- Thumbs inyectados por JS -->
-                            </div>
-
-                            <!-- Nota sutil orientativa -->
-                            <div class="viewer-orientative-note">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                                <span>Simulación 3D digital orientativa</span>
-                            </div>
-
-                            <!-- Panel de Medidas -->
-                            <div class="dimensions-card">
-                                <div class="dim-header">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12h20M2 12l5-5M2 12l5 5M22 12l-5-5M22 12l5 5"></path></svg>
-                                    <h4>Dimensiones de Impresión Calculadas</h4>
+                            <!-- Estado 2: Cargando con Barra de Progreso y Fases -->
+                            <div id="viewerLoading" class="viewer-state">
+                                <div class="loader-visual-container">
+                                    <div class="custom-loader"></div>
+                                    <span id="loadingPercent" class="loading-percent-badge">0%</span>
                                 </div>
-                                <div id="dimensionsContent" class="dim-list">
-                                    <!-- Medidas inyectadas dinámicamente -->
+                                
+                                <h3 id="loadingStatusTitle">Generando modelo 3D...</h3>
+                                <p id="loadingStatusDesc" class="loading-status-text">📐 Calculando geometría tipográfica y curvas...</p>
+                                
+                                <div class="progress-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                    <div id="loadingProgressBar" class="progress-bar-fill"></div>
+                                </div>
+
+                                <div class="loading-timer-badge">
+                                    <span id="loadingTimeText">⏱️ Tiempo estimado: ~8-10 seg</span>
                                 </div>
                             </div>
 
-                            <!-- Tarjeta de Resumen y Conversión a Pedido -->
-                            <div class="order-summary-card fade-in" id="orderSummaryCard">
-                                <div class="summary-card-header">
-                                    <div class="summary-header-title">
-                                        <span class="summary-badge">Configuración Lista</span>
-                                        <h3>Resumen de tu Llavero Personalizado</h3>
-                                    </div>
-                                </div>
-
-                                <div class="summary-details-grid" id="summaryDetailsList">
-                                    <!-- Inyectado dinámicamente: Modelo, Nombres, Fecha, Tarjeta 3D, Entrega -->
-                                </div>
-
-                                <div class="summary-swatches-box">
-                                    <span class="swatches-label">Acabado y Materiales:</span>
-                                    <div class="swatch-chips-list">
-                                        <span class="swatch-chip"><span class="swatch-dot" style="background:#1e1e1e;"></span> Base: Negro Sombra</span>
-                                        <span class="swatch-chip"><span class="swatch-dot" style="background:#ffffff; border:1px solid #cbd5e1;"></span> Letras: Blanco Nieve</span>
-                                        <span class="swatch-chip"><span class="swatch-dot" style="background:#e11d48;"></span> Detalle: Rojo Pasión</span>
-                                        <span class="swatch-chip eco"><span class="swatch-dot" style="background:#10b981;"></span> PLA+ Alta Resistencia</span>
-                                    </div>
-                                </div>
-
-                                <div class="summary-actions-group">
-                                    <!-- R5: Botón Directo a Instagram DM -->
-                                    <a id="btnOpenInstagram" data-gc-event="Pedir_IG_Visor" href="https://www.instagram.com/latens.studio?igsh=ZmIwaXVvYmJta2lt" target="_blank" rel="noopener noreferrer" class="btn-instagram-order" title="Pedir este llavero directamente por Instagram DM">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                                        </svg>
-                                        <span>Pedir este Llavero por Instagram</span>
-                                    </a>
-
-                                    <!-- R2: Copiar Resumen optimizado para Instagram DM -->
-                                    <button type="button" id="btnCopySummary" data-gc-event="Copiar_Texto_IG" class="btn-copy-instagram" title="Copiar resumen optimizado para pegar en Instagram DM">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                        </svg>
-                                        <span>Copiar resumen para Instagram</span>
+                            <!-- Estado 3: Resultados (Imágenes & Medidas) -->
+                            <div id="viewerResults" class="viewer-state results-state">
+                                
+                                <!-- Selector de Modo de Vista (Juntos vs Separados) -->
+                                <div class="view-mode-selector" id="viewModeSelector">
+                                    <button class="view-mode-btn active" id="modeJuntosBtn" data-gc-event="Modo_Juntos">
+                                        <span>❤️ Juntos (Ensamblados)</span>
+                                    </button>
+                                    <button class="view-mode-btn" id="modeSeparadosBtn" data-gc-event="Modo_Separados">
+                                        <span>🧩 Separados (Individuales)</span>
+                                    </button>
+                                    <button class="view-mode-btn" id="modeTarjetaBtn" data-gc-event="Modo_Tarjeta" style="display: none;">
+                                        <span>✉️ Tarjeta 3D</span>
                                     </button>
                                 </div>
 
-                                <div class="summary-trust-footer">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                                    <span>Muestra 3D digital orientativa · La pieza física final se fabrica en PLA+ Premium</span>
+                                <div class="carousel-wrapper">
+                                    <div class="carousel-viewport">
+                                        <div class="carousel-slides" id="carouselTrack">
+                                            <!-- Renders inyectados -->
+                                        </div>
+                                    </div>
+                                    <button class="carousel-btn prev" id="carouselPrev" aria-label="Foto anterior">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                    </button>
+                                    <button class="carousel-btn next" id="carouselNext" aria-label="Siguiente foto">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </button>
+                                    <div class="perspective-badge" id="perspectiveLabel">Vista Frontal</div>
                                 </div>
+
+                                <!-- Selector de Perspectivas (Thumbnails) -->
+                                <div class="perspective-thumbnails" id="perspectiveThumbs">
+                                    <!-- Thumbs inyectados por JS -->
+                                </div>
+
+                                <!-- Nota sutil orientativa -->
+                                <div class="viewer-orientative-note">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    <span>Simulación 3D digital orientativa</span>
+                                </div>
+
+                                <!-- Panel de Medidas -->
+                                <div class="dimensions-card">
+                                    <div class="dim-header">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12h20M2 12l5-5M2 12l5 5M22 12l-5-5M22 12l5 5"></path></svg>
+                                        <h4>Dimensiones de Impresión Calculadas</h4>
+                                    </div>
+                                    <div id="dimensionsContent" class="dim-list">
+                                        <!-- Medidas inyectadas dinámicamente -->
+                                    </div>
+                                </div>
+
+                                <!-- Tarjeta de Resumen y Conversión a Pedido -->
+                                <div class="order-summary-card fade-in" id="orderSummaryCard">
+                                    <div class="summary-card-header">
+                                        <div class="summary-header-title">
+                                            <span class="summary-badge">Configuración Lista</span>
+                                            <h3>Resumen de tu Llavero Personalizado</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="summary-details-grid" id="summaryDetailsList">
+                                        <!-- Inyectado dinámicamente: Modelo, Nombres, Fecha, Tarjeta 3D, Entrega -->
+                                    </div>
+
+                                    <div class="summary-swatches-box">
+                                        <span class="swatches-label">Acabado y Materiales:</span>
+                                        <div class="swatch-chips-list">
+                                            <span class="swatch-chip"><span class="swatch-dot" style="background:#1e1e1e;"></span> Base: Negro Sombra</span>
+                                            <span class="swatch-chip"><span class="swatch-dot" style="background:#ffffff; border:1px solid #cbd5e1;"></span> Letras: Blanco Nieve</span>
+                                            <span class="swatch-chip"><span class="swatch-dot" style="background:#e11d48;"></span> Detalle: Rojo Pasión</span>
+                                            <span class="swatch-chip eco"><span class="swatch-dot" style="background:#10b981;"></span> PLA+ Alta Resistencia</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="summary-actions-group">
+                                        <!-- R5: Botón Directo a Instagram DM -->
+                                        <a id="btnOpenInstagram" data-gc-event="Pedir_IG_Visor" href="https://www.instagram.com/latens.studio?igsh=ZmIwaXVvYmJta2lt" target="_blank" rel="noopener noreferrer" class="btn-instagram-order" title="Pedir este llavero directamente por Instagram DM">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                            </svg>
+                                            <span>Pedir este Llavero por Instagram</span>
+                                        </a>
+
+                                        <!-- R2: Copiar Resumen optimizado para Instagram DM -->
+                                        <button type="button" id="btnCopySummary" data-gc-event="Copiar_Texto_IG" class="btn-copy-instagram" title="Copiar resumen optimizado para pegar en Instagram DM">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                            </svg>
+                                            <span>Copiar resumen para Instagram</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="summary-trust-footer">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                        <span>Muestra 3D digital orientativa · La pieza física final se fabrica en PLA+ Premium</span>
+                                    </div>
+                                </div>
+
                             </div>
 
+                        </div>
+                        <!-- Fin del Visor 3D -->
+
+                        <!-- 2. Contenedor de Configuración (Debajo del Visor, Líneas Discontinuas, Sin Fondo) -->
+                        <div id="configPlaceholderContainer" class="config-placeholder-box fade-in">
+                            <div class="placeholder-content">
+                                <div class="placeholder-icon">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                        <path d="M9 12h6"></path>
+                                        <path d="M9 16h6"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="placeholder-title">Aquí aparecerá tu configuración</h3>
+                                <p class="placeholder-desc">Una vez generes tu modelo 3D, verás aquí el resumen completo de tu pedido listo para enviar por MD en Instagram.</p>
+                            </div>
                         </div>
 
                     </div>
@@ -850,7 +915,9 @@
                                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
                                 <div class="faq-answer">
-                                    <p>Todos los encargos se realizan de forma cómoda a través de esta web o por Mensaje Directo en <strong>Instagram (@latens.studio)</strong>. Una vez confirmado el diseño contigo, el pago se realiza cómodamente mediante <strong>Bizum</strong> para iniciar la fabricación y coordinar la entrega física en Alicante.</p>
+                                    <p>Los modelos del catálogo se encargan <strong>exclusivamente por Mensaje Directo en Instagram (<a href="https://www.instagram.com/latens.studio?igsh=ZmIwaXVvYmJta2lt" target="_blank" rel="noopener noreferrer">@latens.studio</a>)</strong>. Esta página web es meramente informativa, de contacto y de previsualización 3D.</p>
+                                    <p>Puedes encargarme tu pedido hablándome directamente por Instagram o, si utilizas el <strong>Previsualizador 3D</strong>, pulsando en <strong>"Copiar resumen para Instagram"</strong> y pegando la configuración generada directamente en nuestro chat de MD. Una vez confirmado el diseño, el pago se realiza mediante <strong>Bizum</strong> para iniciar la fabricación y coordinar la recogida en Alicante o el envío a domicilio.</p>
+                                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);"><em>Nota: El formulario de la web se utiliza únicamente para contactar sobre ideas personalizadas fuera de catálogo, propuestas o feedback.</em></p>
                                 </div>
                             </div>
                             <div class="faq-item">
@@ -891,11 +958,11 @@
                             </div>
                             <div class="faq-item">
                                 <button class="faq-question" type="button" data-gc-event="FAQ_6_Materiales">
-                                    <span>¿Dónde se realizan las entregas en mano?</span>
+                                    <span>¿Dónde se realizan las entregas y cómo funcionan los envíos?</span>
                                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
                                 <div class="faq-answer">
-                                    <p>Las entregas presenciales gratuitas se realizan en la <a href="https://maps.google.com/?q=Plaza+de+los+Luceros,+03003+Alicante" target="_blank" rel="noopener noreferrer" class="faq-map-link"><strong>Plaza de los Luceros (Alicante)</strong></a>, junto a la fuente central. Es un punto accesible comunicado directamente con TRAM y autobús.</p>
+                                    <p>Las <strong>entregas presenciales gratuitas</strong> se realizan en mano en la <a href="https://maps.google.com/?q=Plaza+de+los+Luceros,+03003+Alicante" target="_blank" rel="noopener noreferrer" class="faq-map-link"><strong>Plaza de los Luceros (Alicante)</strong></a>, junto a la fuente central. Si resides fuera de Alicante o prefieres recibirlo en tu puerta, disponemos de <strong>envíos a toda España peninsular en 24/48h (+4,99€)</strong> con número de seguimiento.</p>
                                 </div>
                             </div>
                             <div class="faq-item">
@@ -948,7 +1015,8 @@
                         </a>
                         <span class="footer-local-address">03003 Alicante, España</span>
                         <div class="footer-local-info">
-                            <span class="footer-info-line">🚇 Punto accesible con TRAM y Bus</span>
+                            <span class="footer-info-line">📍 Recogida en mano en Luceros (Alicante)</span>
+                            <span class="footer-info-line">📦 Envíos 24/48h a toda España (+4,99€)</span>
                             <span class="footer-info-line">📲 Pagos rápidos y seguros mediante Bizum</span>
                         </div>
                     </div>
@@ -1090,7 +1158,7 @@
     <!-- Contenedor Flotante de Notificaciones Toast (Accesible) -->
     <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <script src="script.js?v=82.0" defer></script>
+    <script src="script.js?v=103.0" defer></script>
     <script data-goatcounter="https://lts.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

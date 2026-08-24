@@ -460,9 +460,642 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const checkCruz = document.getElementById('checkCruz');
-    
     if (checkCruz) checkCruz.addEventListener('change', updateOrderSummaryCard);
-    
+
+    // Control del Selector de Entrega / Envío y Formulario Desplegable
+    const deliverySelectEl = document.getElementById('deliverySelect');
+    const shippingFieldsGroup = document.getElementById('shippingFieldsGroup');
+
+    if (deliverySelectEl) {
+        deliverySelectEl.addEventListener('change', () => {
+            const isEnvio = deliverySelectEl.value === 'envio';
+            if (shippingFieldsGroup) {
+                shippingFieldsGroup.style.display = isEnvio ? 'block' : 'none';
+            }
+            updateOrderSummaryCard();
+        });
+    }
+
+    // ─── POSTAL CODE & PROVINCE DETECTION (GENEI STYLE) ───
+    const ES_PROVINCES = {
+        '01': { name: 'Álava', region: 'País Vasco' },
+        '02': { name: 'Albacete', region: 'Castilla-La Mancha' },
+        '03': { name: 'Alicante', region: 'Com. Valenciana' },
+        '04': { name: 'Almería', region: 'Andalucía' },
+        '05': { name: 'Ávila', region: 'Castilla y León' },
+        '06': { name: 'Badajoz', region: 'Extremadura' },
+        '07': { name: 'Baleares', region: 'Islas Baleares' },
+        '08': { name: 'Barcelona', region: 'Cataluña' },
+        '09': { name: 'Burgos', region: 'Castilla y León' },
+        '10': { name: 'Cáceres', region: 'Extremadura' },
+        '11': { name: 'Cádiz', region: 'Andalucía' },
+        '12': { name: 'Castellón', region: 'Com. Valenciana' },
+        '13': { name: 'Ciudad Real', region: 'Castilla-La Mancha' },
+        '14': { name: 'Córdoba', region: 'Andalucía' },
+        '15': { name: 'A Coruña', region: 'Galicia' },
+        '16': { name: 'Cuenca', region: 'Castilla-La Mancha' },
+        '17': { name: 'Girona', region: 'Cataluña' },
+        '18': { name: 'Granada', region: 'Andalucía' },
+        '19': { name: 'Guadalajara', region: 'Castilla-La Mancha' },
+        '20': { name: 'Guipúzcoa', region: 'País Vasco' },
+        '21': { name: 'Huelva', region: 'Andalucía' },
+        '22': { name: 'Huesca', region: 'Aragón' },
+        '23': { name: 'Jaén', region: 'Andalucía' },
+        '24': { name: 'León', region: 'Castilla y León' },
+        '25': { name: 'Lleida', region: 'Cataluña' },
+        '26': { name: 'La Rioja', region: 'La Rioja' },
+        '27': { name: 'Lugo', region: 'Galicia' },
+        '28': { name: 'Madrid', region: 'Com. de Madrid' },
+        '29': { name: 'Málaga', region: 'Andalucía' },
+        '30': { name: 'Murcia', region: 'Región de Murcia' },
+        '31': { name: 'Navarra', region: 'Navarra' },
+        '32': { name: 'Ourense', region: 'Galicia' },
+        '33': { name: 'Asturias', region: 'Asturias' },
+        '34': { name: 'Palencia', region: 'Castilla y León' },
+        '35': { name: 'Las Palmas', region: 'Canarias' },
+        '36': { name: 'Pontevedra', region: 'Galicia' },
+        '37': { name: 'Salamanca', region: 'Castilla y León' },
+        '38': { name: 'Santa Cruz de Tenerife', region: 'Canarias' },
+        '39': { name: 'Cantabria', region: 'Cantabria' },
+        '40': { name: 'Segovia', region: 'Castilla y León' },
+        '41': { name: 'Sevilla', region: 'Andalucía' },
+        '42': { name: 'Soria', region: 'Castilla y León' },
+        '43': { name: 'Tarragona', region: 'Cataluña' },
+        '44': { name: 'Teruel', region: 'Aragón' },
+        '45': { name: 'Toledo', region: 'Castilla-La Mancha' },
+        '46': { name: 'Valencia', region: 'Com. Valenciana' },
+        '47': { name: 'Valladolid', region: 'Castilla y León' },
+        '48': { name: 'Vizcaya', region: 'País Vasco' },
+        '49': { name: 'Zamora', region: 'Castilla y León' },
+        '50': { name: 'Zaragoza', region: 'Aragón' },
+        '51': { name: 'Ceuta', region: 'Ceuta' },
+        '52': { name: 'Melilla', region: 'Melilla' }
+    };
+
+    const ES_KNOWN_LOCALITIES = {
+        // Alicante
+        '03001': 'Alicante', '03002': 'Alicante', '03003': 'Alicante', '03004': 'Alicante',
+        '03005': 'Alicante', '03006': 'Alicante', '03007': 'Alicante', '03008': 'Alicante',
+        '03009': 'Alicante', '03010': 'Alicante', '03011': 'Alicante', '03012': 'Alicante',
+        '03013': 'Alicante', '03014': 'Alicante', '03015': 'Alicante', '03016': 'Alicante',
+        '03201': 'Elche', '03202': 'Elche', '03203': 'Elche', '03204': 'Elche', '03205': 'Elche',
+        '03501': 'Benidorm', '03502': 'Benidorm', '03503': 'Benidorm',
+        '03690': 'San Vicente del Raspeig', '03550': 'Sant Joan d\'Alacant', '03560': 'El Campello',
+        '03600': 'Elda', '03610': 'Petrer', '03801': 'Alcoy', '03802': 'Alcoy', '03803': 'Alcoy',
+        '03181': 'Torrevieja', '03182': 'Torrevieja', '03183': 'Torrevieja',
+        '03700': 'Dénia', '03710': 'Calp', '03730': 'Jávea', '03570': 'Villajoyosa',
+        '03130': 'Santa Pola', '03590': 'Altea', '03660': 'Novelda', '03400': 'Villena',
+        '03300': 'Orihuela', '03540': 'Playa San Juan (Alicante)',
+
+        // Madrid
+        '28001': 'Madrid', '28002': 'Madrid', '28003': 'Madrid', '28004': 'Madrid', '28005': 'Madrid',
+        '28006': 'Madrid', '28007': 'Madrid', '28008': 'Madrid', '28009': 'Madrid', '28010': 'Madrid',
+        '28011': 'Madrid', '28012': 'Madrid', '28013': 'Madrid', '28014': 'Madrid', '28015': 'Madrid',
+        '28016': 'Madrid', '28017': 'Madrid', '28018': 'Madrid', '28019': 'Madrid', '28020': 'Madrid',
+        '28021': 'Madrid', '28022': 'Madrid', '28023': 'Madrid', '28024': 'Madrid', '28025': 'Madrid',
+        '28026': 'Madrid', '28027': 'Madrid', '28028': 'Madrid', '28029': 'Madrid', '28030': 'Madrid',
+        '28031': 'Madrid', '28032': 'Madrid', '28033': 'Madrid', '28034': 'Madrid', '28035': 'Madrid',
+        '28036': 'Madrid', '28037': 'Madrid', '28038': 'Madrid', '28039': 'Madrid', '28040': 'Madrid',
+        '28045': 'Madrid', '28050': 'Madrid', '28053': 'Madrid', '28054': 'Madrid', '28055': 'Madrid',
+        '28901': 'Getafe', '28902': 'Getafe', '28903': 'Getafe', '28904': 'Getafe', '28905': 'Getafe',
+        '28911': 'Leganés', '28912': 'Leganés', '28913': 'Leganés', '28914': 'Leganés',
+        '28921': 'Alcorcón', '28922': 'Alcorcón', '28923': 'Alcorcón', '28924': 'Alcorcón',
+        '28931': 'Móstoles', '28932': 'Móstoles', '28933': 'Móstoles', '28934': 'Móstoles',
+        '28941': 'Fuenlabrada', '28942': 'Fuenlabrada', '28943': 'Fuenlabrada',
+        '28801': 'Alcalá de Henares', '28802': 'Alcalá de Henares', '28803': 'Alcalá de Henares',
+        '28100': 'Alcobendas', '28108': 'Alcobendas', '28109': 'Alcobendas',
+        '28701': 'San Sebastián de los Reyes', '28220': 'Majadahonda', '28223': 'Pozuelo de Alarcón',
+        '28230': 'Las Rozas', '28820': 'Coslada', '28850': 'Torrejón de Ardoz',
+        '28980': 'Parla', '28300': 'Aranjuez', '28320': 'Pinto', '28340': 'Valdemoro',
+        '28400': 'Collado Villalba', '28660': 'Boadilla del Monte', '28760': 'Tres Cantos',
+
+        // Barcelona
+        '08001': 'Barcelona', '08002': 'Barcelona', '08003': 'Barcelona', '08004': 'Barcelona',
+        '08005': 'Barcelona', '08006': 'Barcelona', '08007': 'Barcelona', '08008': 'Barcelona',
+        '08009': 'Barcelona', '08010': 'Barcelona', '08011': 'Barcelona', '08012': 'Barcelona',
+        '08013': 'Barcelona', '08014': 'Barcelona', '08015': 'Barcelona', '08016': 'Barcelona',
+        '08017': 'Barcelona', '08018': 'Barcelona', '08019': 'Barcelona', '08020': 'Barcelona',
+        '08021': 'Barcelona', '08022': 'Barcelona', '08023': 'Barcelona', '08024': 'Barcelona',
+        '08025': 'Barcelona', '08026': 'Barcelona', '08027': 'Barcelona', '08028': 'Barcelona',
+        '08029': 'Barcelona', '08030': 'Barcelona', '08031': 'Barcelona', '08032': 'Barcelona',
+        '08033': 'Barcelona', '08034': 'Barcelona', '08035': 'Barcelona', '08036': 'Barcelona',
+        '08037': 'Barcelona', '08038': 'Barcelona', '08039': 'Barcelona', '08040': 'Barcelona',
+        '08041': 'Barcelona', '08042': 'Barcelona',
+        '08901': 'L\'Hospitalet de Llobregat', '08902': 'L\'Hospitalet de Llobregat',
+        '08911': 'Badalona', '08912': 'Badalona',
+        '08201': 'Sabadell', '08202': 'Sabadell', '08221': 'Terrassa', '08222': 'Terrassa',
+        '08921': 'Santa Coloma de Gramenet', '08940': 'Cornellà de Llobregat',
+        '08820': 'El Prat de Llobregat', '08830': 'Sant Boi de Llobregat', '08860': 'Castelldefels',
+        '08172': 'Sant Cugat del Vallès', '08301': 'Mataró',
+
+        // Valencia
+        '46001': 'Valencia', '46002': 'Valencia', '46003': 'Valencia', '46004': 'Valencia',
+        '46005': 'Valencia', '46006': 'Valencia', '46007': 'Valencia', '46008': 'Valencia',
+        '46009': 'Valencia', '46010': 'Valencia', '46011': 'Valencia', '46012': 'Valencia',
+        '46013': 'Valencia', '46014': 'Valencia', '46015': 'Valencia', '46016': 'Valencia',
+        '46017': 'Valencia', '46018': 'Valencia', '46019': 'Valencia', '46020': 'Valencia',
+        '46021': 'Valencia', '46022': 'Valencia', '46023': 'Valencia', '46024': 'Valencia',
+        '46025': 'Valencia', '46026': 'Valencia',
+        '46900': 'Torrent', '46700': 'Gandía', '46600': 'Alzira', '46470': 'Catarroja',
+        '46920': 'Mislata', '46100': 'Burjassot', '46980': 'Paterna', '46500': 'Sagunto',
+        '46800': 'Xàtiva', '46870': 'Ontinyent',
+
+        // Sevilla, Málaga, Zaragoza, Murcia, Bilbao, Baleares, Canarias, etc.
+        '41001': 'Sevilla', '41002': 'Sevilla', '41003': 'Sevilla', '41004': 'Sevilla', '41700': 'Dos Hermanas',
+        '29001': 'Málaga', '29002': 'Málaga', '29003': 'Málaga', '29600': 'Marbella', '29620': 'Torremolinos',
+        '50001': 'Zaragoza', '50002': 'Zaragoza', '50003': 'Zaragoza',
+        '30001': 'Murcia', '30002': 'Murcia', '30201': 'Cartagena', '30800': 'Lorca',
+        '48001': 'Bilbao', '48002': 'Bilbao', '48901': 'Barakaldo', '48990': 'Getxo',
+        '07001': 'Palma de Mallorca', '07002': 'Palma de Mallorca', '07800': 'Ibiza', '07701': 'Mahón',
+        '35001': 'Las Palmas de Gran Canaria', '35002': 'Las Palmas de Gran Canaria',
+        '38001': 'Santa Cruz de Tenerife', '38002': 'Santa Cruz de Tenerife',
+        '33001': 'Oviedo', '33201': 'Gijón', '33401': 'Avilés',
+        '15001': 'A Coruña', '15701': 'Santiago de Compostela', '36201': 'Vigo', '36001': 'Pontevedra',
+        '01001': 'Vitoria-Gasteiz', '02001': 'Albacete', '04001': 'Almería', '05001': 'Ávila',
+        '06001': 'Badajoz', '09001': 'Burgos', '10001': 'Cáceres', '11001': 'Cádiz',
+        '12001': 'Castellón de la Plana', '13001': 'Ciudad Real', '14001': 'Córdoba',
+        '16001': 'Cuenca', '17001': 'Girona', '18001': 'Granada', '19001': 'Guadalajara',
+        '20001': 'San Sebastián', '21001': 'Huelva', '22001': 'Huesca', '23001': 'Jaén',
+        '24001': 'León', '25001': 'Lleida', '26001': 'Logroño', '27001': 'Lugo',
+        '31001': 'Pamplona', '32001': 'Ourense', '34001': 'Palencia', '37001': 'Salamanca',
+        '39001': 'Santander', '40001': 'Segovia', '42001': 'Soria', '43001': 'Tarragona',
+        '44001': 'Teruel', '45001': 'Toledo', '47001': 'Valladolid', '49001': 'Zamora',
+        '51001': 'Ceuta', '52001': 'Melilla'
+    };
+
+    const CP_CACHE = {};
+
+    function detectPostalCodeLocality(rawCP) {
+        if (!rawCP || typeof rawCP !== 'string') {
+            return { valid: false, empty: true, partial: false, message: '' };
+        }
+        
+        const cp = rawCP.trim().replace(/\D/g, '').slice(0, 5);
+        if (cp.length === 0) {
+            return { valid: false, empty: true, partial: false, message: '' };
+        }
+        
+        if (cp.length < 5) {
+            const prefix = cp.slice(0, 2);
+            if (cp.length >= 2 && ES_PROVINCES[prefix]) {
+                const prov = ES_PROVINCES[prefix];
+                return {
+                    valid: false,
+                    empty: false,
+                    partial: true,
+                    cp,
+                    message: `📍 ${prov.name} (completa los 5 dígitos)...`
+                };
+            }
+            return {
+                valid: false,
+                empty: false,
+                partial: true,
+                cp,
+                message: 'Introduce 5 dígitos...'
+            };
+        }
+        
+        const prefix = cp.slice(0, 2);
+        const provInfo = ES_PROVINCES[prefix];
+        
+        if (!provInfo) {
+            return {
+                valid: false,
+                empty: false,
+                partial: false,
+                cp,
+                message: 'Código postal no reconocido en España'
+            };
+        }
+        
+        const province = provInfo.name;
+        const region = provInfo.region;
+
+        // Check if verified in runtime cache
+        if (CP_CACHE[cp]) {
+            if (CP_CACHE[cp].notFound) {
+                return {
+                    valid: false,
+                    empty: false,
+                    partial: false,
+                    cp,
+                    message: `Código postal no reconocido en ${province}`
+                };
+            } else if (CP_CACHE[cp].valid) {
+                const cached = CP_CACHE[cp];
+                const displayText = (cached.locality && cached.locality !== cached.region)
+                    ? `${cached.locality}, ${cached.region}`
+                    : (cached.locality || province);
+                return {
+                    valid: true,
+                    empty: false,
+                    cp,
+                    locality: cached.locality,
+                    province,
+                    region: cached.region,
+                    displayText,
+                    badgeText: `📍 ${displayText} ✓`,
+                    summaryText: (cached.locality && cached.locality !== province) ? `${cached.locality} (${province})` : `${province}, ${region}`
+                };
+            }
+        }
+        
+        let locality = ES_KNOWN_LOCALITIES[cp];
+        if (!locality) {
+            locality = province;
+        }
+        
+        let displayText = '';
+        if (locality === province) {
+            if (province === 'Madrid') {
+                displayText = 'Madrid';
+            } else {
+                displayText = `${province}, ${region}`;
+            }
+        } else {
+            if (province === 'Madrid') {
+                displayText = `${locality}, Madrid`;
+            } else {
+                displayText = `${locality}, ${region}`;
+            }
+        }
+
+        const summaryText = (locality && locality !== province) ? `${locality} (${province})` : (province === 'Madrid' ? 'Madrid' : `${province}, ${region}`);
+        
+        return {
+            valid: true,
+            empty: false,
+            cp,
+            locality,
+            province,
+            region,
+            displayText,
+            badgeText: `📍 ${displayText} ✓`,
+            summaryText
+        };
+    }
+
+    // ─── SMART PHONE VALIDATION & FORMATTING ───
+    function formatPhoneNumber(rawPhone) {
+        if (!rawPhone) return '';
+        let val = String(rawPhone).trim();
+        if (val.startsWith('00')) {
+            val = '+' + val.slice(2);
+        }
+        const hasPlus = val.startsWith('+');
+        const digitsOnly = val.replace(/\D/g, '');
+        
+        if (hasPlus) {
+            if (digitsOnly.startsWith('34')) {
+                const nationalDigits = digitsOnly.slice(2, 11);
+                if (nationalDigits.length === 0) return '+34 ';
+                if (nationalDigits.length <= 3) return `+34 ${nationalDigits}`;
+                if (nationalDigits.length <= 6) return `+34 ${nationalDigits.slice(0, 3)} ${nationalDigits.slice(3)}`;
+                return `+34 ${nationalDigits.slice(0, 3)} ${nationalDigits.slice(3, 6)} ${nationalDigits.slice(6, 9)}`;
+            }
+            if (digitsOnly.length <= 3) return `+${digitsOnly}`;
+            if (digitsOnly.length <= 6) return `+${digitsOnly.slice(0, 2)} ${digitsOnly.slice(2)}`;
+            if (digitsOnly.length <= 9) return `+${digitsOnly.slice(0, 2)} ${digitsOnly.slice(2, 5)} ${digitsOnly.slice(5)}`;
+            if (digitsOnly.length <= 12) return `+${digitsOnly.slice(0, 2)} ${digitsOnly.slice(2, 5)} ${digitsOnly.slice(5, 8)} ${digitsOnly.slice(8)}`;
+            return `+${digitsOnly.slice(0, 2)} ${digitsOnly.slice(2, 5)} ${digitsOnly.slice(5, 8)} ${digitsOnly.slice(8, 11)} ${digitsOnly.slice(11, 14)}`;
+        }
+        
+        const digits = digitsOnly.slice(0, 9);
+        if (digits.length <= 3) return digits;
+        if (digits.length <= 6) return `${digits.slice(0, 3)} ${digits.slice(3)}`;
+        return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 9)}`;
+    }
+
+    function validatePhoneNumber(rawPhone) {
+        if (!rawPhone || !rawPhone.trim()) return { valid: false, empty: true, message: '' };
+        let val = rawPhone.trim();
+        if (val.startsWith('00')) {
+            val = '+' + val.slice(2);
+        }
+        const hasPlus = val.startsWith('+');
+        const digitsOnly = val.replace(/\D/g, '');
+        
+        if (hasPlus) {
+            if (digitsOnly.startsWith('34')) {
+                const nationalDigits = digitsOnly.slice(2);
+                if (nationalDigits.length === 9 && /^[6789]/.test(nationalDigits)) {
+                    return { valid: true, formatted: formatPhoneNumber(val), isSpanish: true, message: '✓ Teléfono nacional válido (+34)' };
+                }
+                return { valid: false, message: 'Teléfono incompleto (+34 y 9 dígitos empezando por 6, 7, 8 o 9)' };
+            }
+            if (digitsOnly.length >= 8 && digitsOnly.length <= 15) {
+                return { valid: true, formatted: formatPhoneNumber(val), isSpanish: false, message: '✓ Teléfono internacional válido' };
+            }
+            return { valid: false, message: 'Teléfono internacional no válido' };
+        }
+        
+        if (digitsOnly.length === 9) {
+            if (/^[6789]/.test(digitsOnly)) {
+                return { valid: true, formatted: formatPhoneNumber(val), isSpanish: true, message: '✓ Teléfono válido' };
+            }
+            return { valid: false, message: 'Debe empezar por 6, 7, 8 o 9' };
+        }
+        
+        return { valid: false, message: 'Introduce 9 dígitos (ej: 612 345 678)' };
+    }
+
+    // ─── EMAIL VALIDATION & TYPO SUGGESTIONS ───
+    const EMAIL_DOMAIN_TYPOS = {
+        'gmil.com': 'gmail.com', 'gmaill.com': 'gmail.com', 'gmai.com': 'gmail.com',
+        'gamil.com': 'gmail.com', 'gmail.es': 'gmail.com', 'gma.com': 'gmail.com',
+        'gmial.com': 'gmail.com', 'gmeil.com': 'gmail.com', 'gmai.es': 'gmail.com',
+        'hotmial.com': 'hotmail.com', 'hotmale.com': 'hotmail.com', 'hotmai.com': 'hotmail.com',
+        'hotmaill.com': 'hotmail.com', 'hotm.com': 'hotmail.com', 'hormail.com': 'hotmail.com',
+        'hotmal.com': 'hotmail.com', 'hotmial.es': 'hotmail.es', 'hotmai.es': 'hotmail.es',
+        'outlok.com': 'outlook.com', 'outloo.com': 'outlook.com', 'outlock.com': 'outlook.com',
+        'outllok.com': 'outlook.com', 'outlok.es': 'outlook.es',
+        'yaho.com': 'yahoo.es', 'yahooo.com': 'yahoo.es', 'yaho.es': 'yahoo.es', 'yahooo.es': 'yahoo.es',
+        'iclud.com': 'icloud.com', 'iclou.com': 'icloud.com', 'iclaud.com': 'icloud.com',
+        'protonmai.com': 'protonmail.com', 'protonmaill.com': 'protonmail.com'
+    };
+
+    function checkEmailValidation(emailRaw) {
+        if (!emailRaw || !emailRaw.trim()) return { valid: false, empty: true, hasTypo: false, message: '' };
+        const email = emailRaw.trim().toLowerCase();
+        
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const isValidFormat = emailRegex.test(email);
+        
+        const parts = email.split('@');
+        if (parts.length === 2 && parts[0].length > 0) {
+            const user = parts[0];
+            const domain = parts[1];
+            if (EMAIL_DOMAIN_TYPOS[domain]) {
+                const correctedDomain = EMAIL_DOMAIN_TYPOS[domain];
+                const suggested = `${user}@${correctedDomain}`;
+                return {
+                    valid: isValidFormat,
+                    hasTypo: true,
+                    suggested,
+                    original: email,
+                    message: `¿Quisiste decir ${suggested}?`
+                };
+            }
+        }
+        
+        return {
+            valid: isValidFormat,
+            hasTypo: false,
+            email,
+            message: isValidFormat ? '✓ Correo válido' : 'Formato de correo no válido (ej: tu_nombre@gmail.com)'
+        };
+    }
+
+    function renderEmailSuggestion(inputId, suggestionBoxId, validationResult, isBlur = false) {
+        const box = document.getElementById(suggestionBoxId);
+        if (!box) return;
+        
+        if (!validationResult || validationResult.empty) {
+            box.style.display = 'none';
+            box.className = 'email-suggestion-box';
+            box.innerHTML = '';
+            return;
+        }
+        
+        if (validationResult.hasTypo && validationResult.suggested) {
+            const escSuggested = String(validationResult.suggested).replace(/"/g, '&quot;');
+            box.className = 'email-suggestion-box';
+            box.innerHTML = `
+                <div class="typo-suggestion-content">
+                    <span class="typo-suggestion-text">💡 ¿Quisiste decir <strong>${escSuggested}</strong>?</span>
+                    <button type="button" class="btn-apply-suggestion" data-target="${inputId}" data-suggestion="${escSuggested}">Corregir</button>
+                </div>
+            `;
+            box.style.display = 'flex';
+            
+            const btn = box.querySelector('.btn-apply-suggestion');
+            if (btn) {
+                btn.onclick = () => {
+                    const targetEl = document.getElementById(inputId);
+                    if (targetEl) {
+                        targetEl.value = validationResult.suggested;
+                        box.style.display = 'none';
+                        targetEl.dispatchEvent(new Event('input', { bubbles: true }));
+                        if (typeof Toast !== 'undefined' && Toast.success) {
+                            Toast.success('Correo corregido automáticamente a ' + validationResult.suggested);
+                        }
+                    }
+                };
+            }
+        } else if (validationResult.valid) {
+            box.className = 'field-feedback-badge valid';
+            box.textContent = '✓ Correo válido';
+            box.style.display = 'inline-flex';
+        } else {
+            const inputEl = document.getElementById(inputId);
+            const val = inputEl ? inputEl.value.trim() : '';
+            if (isBlur || val.length >= 3) {
+                box.className = 'field-feedback-badge invalid';
+                box.textContent = '⚠️ Formato de correo no válido (ej: tu@email.com)';
+                box.style.display = 'inline-flex';
+            } else {
+                box.style.display = 'none';
+                box.className = 'email-suggestion-box';
+                box.innerHTML = '';
+            }
+        }
+    }
+
+    // Expose helpers globally for testing & runtime modularity
+    if (typeof window !== 'undefined') {
+        window.ES_PROVINCES = ES_PROVINCES;
+        window.ES_KNOWN_LOCALITIES = ES_KNOWN_LOCALITIES;
+        window.detectPostalCodeLocality = detectPostalCodeLocality;
+        window.formatPhoneNumber = formatPhoneNumber;
+        window.validatePhoneNumber = validatePhoneNumber;
+        window.EMAIL_DOMAIN_TYPOS = EMAIL_DOMAIN_TYPOS;
+        window.checkEmailValidation = checkEmailValidation;
+    }
+
+    // Postal Code (CP) event handling
+    const shipCPEl = document.getElementById('shipCP');
+    const shipCPBadgeEl = document.getElementById('shipCPBadge');
+    let currentCpAbortCtrl = null;
+
+    async function updateShipCPLookup() {
+        if (!shipCPEl) return;
+        const raw = shipCPEl.value;
+        const cleaned = raw.replace(/\D/g, '').slice(0, 5);
+        if (raw !== cleaned) {
+            shipCPEl.value = cleaned;
+        }
+        
+        const result = detectPostalCodeLocality(cleaned);
+        if (shipCPBadgeEl) {
+            if (result.empty) {
+                shipCPBadgeEl.style.display = 'none';
+                shipCPBadgeEl.className = 'cp-locality-badge';
+                shipCPBadgeEl.textContent = '';
+            } else if (result.valid) {
+                shipCPBadgeEl.style.display = 'inline-flex';
+                shipCPBadgeEl.className = 'cp-locality-badge valid';
+                shipCPBadgeEl.textContent = result.badgeText;
+            } else if (result.partial) {
+                shipCPBadgeEl.style.display = 'inline-flex';
+                shipCPBadgeEl.className = 'cp-locality-badge hint';
+                shipCPBadgeEl.textContent = result.message;
+            } else {
+                shipCPBadgeEl.style.display = 'inline-flex';
+                shipCPBadgeEl.className = 'cp-locality-badge invalid';
+                shipCPBadgeEl.textContent = `⚠️ ${result.message}`;
+            }
+        }
+
+        // Live verification for 5-digit codes against open postal dataset
+        if (cleaned.length === 5 && !CP_CACHE[cleaned] && !ES_KNOWN_LOCALITIES[cleaned]) {
+            const prefix = cleaned.slice(0, 2);
+            if (ES_PROVINCES[prefix]) {
+                if (currentCpAbortCtrl) {
+                    currentCpAbortCtrl.abort();
+                }
+                currentCpAbortCtrl = new AbortController();
+                const signal = currentCpAbortCtrl.signal;
+
+                try {
+                    const fetchPromise = fetch(`https://api.zippopotam.us/es/${cleaned}`, { signal });
+                    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 2500));
+                    const resp = await Promise.race([fetchPromise, timeoutPromise]);
+                    
+                    if (resp.status === 200) {
+                        const data = await resp.json();
+                        if (data && data.places && data.places.length > 0) {
+                            const place = data.places[0];
+                            const placeName = place['place name'] || ES_PROVINCES[prefix].name;
+                            const state = place['state'] || ES_PROVINCES[prefix].region;
+                            CP_CACHE[cleaned] = {
+                                valid: true,
+                                locality: placeName,
+                                region: state
+                            };
+                        }
+                    } else if (resp.status === 404) {
+                        CP_CACHE[cleaned] = {
+                            valid: false,
+                            notFound: true,
+                            message: `Código postal no reconocido en ${ES_PROVINCES[prefix].name}`
+                        };
+                    }
+                } catch (e) {
+                    // Fallback to province gracefully
+                }
+
+                if (shipCPEl && shipCPEl.value === cleaned) {
+                    const verifiedResult = detectPostalCodeLocality(cleaned);
+                    if (shipCPBadgeEl) {
+                        if (verifiedResult.valid) {
+                            shipCPBadgeEl.style.display = 'inline-flex';
+                            shipCPBadgeEl.className = 'cp-locality-badge valid';
+                            shipCPBadgeEl.textContent = verifiedResult.badgeText;
+                        } else {
+                            shipCPBadgeEl.style.display = 'inline-flex';
+                            shipCPBadgeEl.className = 'cp-locality-badge invalid';
+                            shipCPBadgeEl.textContent = `⚠️ ${verifiedResult.message}`;
+                        }
+                    }
+                    updateOrderSummaryCard();
+                }
+            }
+        }
+    }
+
+    if (shipCPEl) {
+        shipCPEl.addEventListener('input', () => {
+            updateShipCPLookup();
+            updateOrderSummaryCard();
+        });
+    }
+
+    // Phone formatting & validation event handling
+    const shipPhoneEl = document.getElementById('shipPhone');
+    const shipPhoneBadgeEl = document.getElementById('shipPhoneBadge');
+
+    function updateShipPhoneLookup() {
+        if (!shipPhoneEl) return;
+        const raw = shipPhoneEl.value;
+        const filtered = raw.replace(/[^\d\s\+\-]/g, '');
+        const formatted = formatPhoneNumber(filtered);
+        if (formatted !== raw && raw !== filtered) {
+            shipPhoneEl.value = formatted;
+        } else if (formatted !== raw && !raw.endsWith(' ')) {
+            shipPhoneEl.value = formatted;
+        }
+        
+        const validation = validatePhoneNumber(shipPhoneEl.value);
+        if (shipPhoneBadgeEl) {
+            if (validation.empty) {
+                shipPhoneBadgeEl.style.display = 'none';
+                shipPhoneBadgeEl.className = 'field-feedback-badge';
+                shipPhoneBadgeEl.textContent = '';
+            } else if (validation.valid) {
+                shipPhoneBadgeEl.style.display = 'inline-flex';
+                shipPhoneBadgeEl.className = 'field-feedback-badge valid';
+                shipPhoneBadgeEl.textContent = validation.message;
+            } else {
+                const digitsCount = shipPhoneEl.value.replace(/\D/g, '').length;
+                if (digitsCount >= 3) {
+                    shipPhoneBadgeEl.style.display = 'inline-flex';
+                    shipPhoneBadgeEl.className = 'field-feedback-badge hint';
+                    shipPhoneBadgeEl.textContent = validation.message;
+                } else {
+                    shipPhoneBadgeEl.style.display = 'none';
+                }
+            }
+        }
+    }
+
+    if (shipPhoneEl) {
+        shipPhoneEl.addEventListener('input', () => {
+            updateShipPhoneLookup();
+            updateOrderSummaryCard();
+        });
+        shipPhoneEl.addEventListener('blur', () => {
+            const validation = validatePhoneNumber(shipPhoneEl.value);
+            if (shipPhoneBadgeEl && !validation.empty && !validation.valid) {
+                shipPhoneBadgeEl.style.display = 'inline-flex';
+                shipPhoneBadgeEl.className = 'field-feedback-badge invalid';
+                shipPhoneBadgeEl.textContent = `⚠️ ${validation.message}`;
+            }
+        });
+    }
+
+    // Email typo & validation handling for shipEmail & contactEmail
+    const shipEmailEl = document.getElementById('shipEmail');
+    if (shipEmailEl) {
+        shipEmailEl.addEventListener('input', () => {
+            const res = checkEmailValidation(shipEmailEl.value);
+            renderEmailSuggestion('shipEmail', 'shipEmailSuggestion', res, false);
+            updateOrderSummaryCard();
+        });
+        shipEmailEl.addEventListener('blur', () => {
+            const res = checkEmailValidation(shipEmailEl.value);
+            renderEmailSuggestion('shipEmail', 'shipEmailSuggestion', res, true);
+        });
+    }
+
+    const contactEmailEl = document.getElementById('contactEmail');
+    if (contactEmailEl) {
+        contactEmailEl.addEventListener('input', () => {
+            const res = checkEmailValidation(contactEmailEl.value);
+            renderEmailSuggestion('contactEmail', 'contactEmailSuggestion', res, false);
+        });
+        contactEmailEl.addEventListener('blur', () => {
+            const res = checkEmailValidation(contactEmailEl.value);
+            renderEmailSuggestion('contactEmail', 'contactEmailSuggestion', res, true);
+        });
+    }
+
+    ['shipName', 'shipAddress'].forEach(id => {
+        const inputEl = document.getElementById(id);
+        if (inputEl) {
+            inputEl.addEventListener('input', updateOrderSummaryCard);
+        }
+    });
 
     // ─── ORDER SUMMARY & INSTAGRAM DM BRIDGE ───
     function generateOrderSpecs() {
@@ -483,6 +1116,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const finalPriceFormatted = isEnvio ? `${finalPriceNum.toFixed(2).replace('.', ',')}€` : `${finalPriceNum}€`;
         const deliveryText = isEnvio ? 'Envío a domicilio 24/48h (+4,99€)' : 'Recogida Gratis en Alicante (Luceros)';
 
+        const shipName = (document.getElementById('shipName')?.value || '').trim();
+        const shipAddress = (document.getElementById('shipAddress')?.value || '').trim();
+        const shipCP = (document.getElementById('shipCP')?.value || '').trim();
+        const shipPhone = (document.getElementById('shipPhone')?.value || '').trim();
+        const shipEmail = (document.getElementById('shipEmail')?.value || '').trim();
+
+        const cpDetection = detectPostalCodeLocality(shipCP);
+        const localityInfo = cpDetection.valid ? cpDetection.summaryText : '';
+
         let namesFormatted = (type === 'individual') ? (name1 || 'Sin nombre') : `${name1 || 'Nombre 1'} + ${name2 || 'Nombre 2'}`;
         
         return {
@@ -492,6 +1134,15 @@ document.addEventListener('DOMContentLoaded', () => {
             totalPrice: finalPriceFormatted,
             deliveryChoice,
             deliveryMethod: deliveryText,
+            isEnvio,
+            shipName,
+            shipAddress,
+            shipCP,
+            shipPhone,
+            shipEmail,
+            localityInfo,
+            cpDetection,
+            hasShippingData: !!(shipName || shipAddress || shipCP || shipPhone || shipEmail),
             names: namesFormatted,
             fecha: fecha || 'No grabada',
             hasCard: !!addCard,
@@ -533,6 +1184,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="summary-item-label">Tarjeta 3D Regalo</span>
                 <span class="summary-item-val">💌 "${esc(specs.cardTitle)}": ${esc(specs.cardMessage)}</span>
             </div>` : ''}
+            ${specs.isEnvio && specs.hasShippingData ? `
+            <div class="summary-item" style="grid-column: 1 / -1; background: var(--bg-subtle); padding: 0.65rem 0.8rem; border-radius: var(--radius-sm); border: 1px dashed var(--border-medium);">
+                <span class="summary-item-label">Datos de Envío a Domicilio</span>
+                <span class="summary-item-val" style="font-size: 0.82rem; font-weight: 500; line-height: 1.45;">
+                    📦 <strong>${esc(specs.shipName || 'Nombre por confirmar')}</strong><br>
+                    🏠 ${esc(specs.shipAddress || 'Dirección por confirmar')}<br>
+                    📍 CP ${esc(specs.shipCP || '-----')}${specs.localityInfo ? ` <span class="summary-locality-tag">📍 ${esc(specs.localityInfo)}</span>` : ''}<br>
+                    📞 Tel: ${esc(specs.shipPhone || 'Por confirmar')} · ✉️ ${esc(specs.shipEmail || 'Por confirmar')}
+                </span>
+            </div>` : ''}
         `;
     }
 
@@ -556,23 +1217,53 @@ document.addEventListener('DOMContentLoaded', () => {
             textToCopy += `🚚 Entrega: ${specs.deliveryMethod}\n` +
                 `💳 Total Pedido: ${specs.totalPrice}\n` +
                 `🎁 Incluye: Chapita de Regalo Gratis\n` +
-                `🎨 Acabado: Base Negro Sombra / Letras Blanco Nieve (PLA+)\n\n` +
-                `¿Podríais confirmarme disponibilidad y plazo de entrega? ¡Muchas gracias!`;
+                `🎨 Acabado: Base Negro Sombra / Letras Blanco Nieve (PLA+)\n\n`;
 
-            try {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
+            if (specs.isEnvio) {
+                const cpLine = specs.shipCP 
+                    ? (specs.localityInfo ? `${specs.shipCP} (${specs.localityInfo})` : specs.shipCP) 
+                    : '(a confirmar por chat)';
+                textToCopy += `📦 Datos para el Envío a Domicilio:\n` +
+                    `• Nombre: ${specs.shipName || '(a confirmar por chat)'}\n` +
+                    `• Dirección: ${specs.shipAddress || '(a confirmar por chat)'}\n` +
+                    `• Código Postal: ${cpLine}\n` +
+                    `• Teléfono: ${specs.shipPhone || '(a confirmar por chat)'}\n` +
+                    `• Email: ${specs.shipEmail || '(a confirmar por chat)'}\n\n`;
+            } else {
+                textToCopy += `📍 Punto de Entrega: Recogida en mano en Alicante (Plaza de los Luceros)\n\n`;
+            }
+            
+            textToCopy += `¿Podríais confirmarme disponibilidad y plazo de entrega? ¡Muchas gracias!`;
+
+            let copied = false;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
                     await navigator.clipboard.writeText(textToCopy);
-                } else {
+                    copied = true;
+                } catch (clipErr) {
+                    console.warn('navigator.clipboard writeText failed, attempting execCommand fallback:', clipErr);
+                }
+            }
+
+            if (!copied) {
+                try {
                     const tempTa = document.createElement('textarea');
                     tempTa.value = textToCopy;
+                    tempTa.setAttribute('readonly', '');
                     tempTa.style.position = 'fixed';
                     tempTa.style.left = '-9999px';
+                    tempTa.style.top = '0';
                     document.body.appendChild(tempTa);
                     tempTa.select();
-                    document.execCommand('copy');
+                    tempTa.setSelectionRange(0, 99999);
+                    copied = document.execCommand('copy');
                     tempTa.remove();
+                } catch (execErr) {
+                    console.warn('execCommand copy fallback failed:', execErr);
                 }
+            }
 
+            if (copied) {
                 // Feedback visual en el botón
                 const originalContent = btnCopySummary.innerHTML;
                 btnCopySummary.innerHTML = `
@@ -587,8 +1278,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     btnCopySummary.innerHTML = originalContent;
                     btnCopySummary.classList.remove('copied');
                 }, 2500);
-
-            } catch (err) {
+            } else {
                 Toast.info('Resumen preparado para copiar.', 'Aviso');
             }
         });
@@ -1263,6 +1953,69 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            const deliverySelectEl = document.getElementById('deliverySelect');
+            const isEnvio = deliverySelectEl ? (deliverySelectEl.value === 'envio') : false;
+            if (isEnvio) {
+                const shipNameEl = document.getElementById('shipName');
+                const shipAddressEl = document.getElementById('shipAddress');
+                const shipCPEl = document.getElementById('shipCP');
+                const shipPhoneEl = document.getElementById('shipPhone');
+                const shipEmailEl = document.getElementById('shipEmail');
+
+                const shipName = shipNameEl ? shipNameEl.value.trim() : '';
+                const shipAddress = shipAddressEl ? shipAddressEl.value.trim() : '';
+                const shipCP = shipCPEl ? shipCPEl.value.trim() : '';
+                const shipPhone = shipPhoneEl ? shipPhoneEl.value.trim() : '';
+                const shipEmail = shipEmailEl ? shipEmailEl.value.trim() : '';
+
+                if (!shipName) {
+                    Toast.warning('Por favor, indica tu nombre completo para el envío a domicilio.', 'Nombre requerido');
+                    if (shipNameEl) shipNameEl.focus();
+                    return;
+                }
+
+                if (!shipAddress) {
+                    Toast.warning('Por favor, indica tu dirección completa (calle, número, piso...) para el envío.', 'Dirección requerida');
+                    if (shipAddressEl) shipAddressEl.focus();
+                    return;
+                }
+
+                const cpResult = detectPostalCodeLocality(shipCP);
+                if (!cpResult.valid) {
+                    Toast.warning('Por favor, introduce un código postal válido de España (5 dígitos).', 'Código postal inválido');
+                    if (shipCPEl) shipCPEl.focus();
+                    return;
+                }
+
+                const phoneValidation = validatePhoneNumber(shipPhone);
+                if (!phoneValidation.valid) {
+                    Toast.warning('Por favor, introduce un teléfono de contacto válido (9 dígitos o prefijo internacional).', 'Teléfono inválido');
+                    if (shipPhoneEl) shipPhoneEl.focus();
+                    return;
+                }
+
+                if (!shipEmail) {
+                    Toast.warning('Por favor, introduce tu correo electrónico de contacto.', 'Email requerido');
+                    if (shipEmailEl) shipEmailEl.focus();
+                    return;
+                }
+
+                const emailValidation = checkEmailValidation(shipEmail);
+                if (emailValidation.hasTypo) {
+                    Toast.warning(`Parece que hay un error en tu correo (${shipEmail}). Haz clic en "Corregir" o revísalo.`, 'Email con errata');
+                    if (shipEmailEl) shipEmailEl.focus();
+                    return;
+                }
+
+                if (!emailValidation.valid) {
+                    Toast.warning('Por favor, introduce un correo electrónico con formato válido (ej: tu_nombre@gmail.com).', 'Email no válido');
+                    if (shipEmailEl) shipEmailEl.focus();
+                    return;
+                }
+            }
+
+            const configPlaceholder = document.getElementById('configPlaceholderContainer');
+
             if (viewerInitial) viewerInitial.classList.remove('active');
             if (viewerResults) viewerResults.classList.remove('active');
             if (viewerLoading) viewerLoading.classList.add('active');
@@ -1417,6 +2170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (viewerLoading) viewerLoading.classList.remove('active');
                 if (viewerResults) viewerResults.classList.add('active');
+                if (configPlaceholder) configPlaceholder.style.display = 'none';
 
                 Toast.success(`¡Muestra 3D de ${productInfo.shortName} generada con éxito!`);
 
@@ -1424,6 +2178,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Toast.error(error.message || 'Error al conectar con el servidor 3D. Por favor, inténtalo de nuevo.', 'Error de generación');
                 if (viewerLoading) viewerLoading.classList.remove('active');
                 if (viewerInitial) viewerInitial.classList.add('active');
+                if (configPlaceholder) configPlaceholder.style.display = 'flex';
             } finally {
                 clearInterval(timeTrackerInterval);
                 generateBtn.disabled = false;
@@ -1524,12 +2279,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!emailRegex.test(emailVal)) {
-                const errText = '❌ Por favor, introduce un correo electrónico válido (ej: tu_nombre@gmail.com).';
-                formResult.textContent = errText;
-                formResult.className = 'form-result error';
-                Toast.warning('El correo introducido no tiene un formato válido.');
+            const emailCheck = checkEmailValidation(emailVal);
+            if (!emailCheck.valid || emailCheck.hasTypo) {
+                if (emailCheck.hasTypo && emailCheck.suggested) {
+                    const errText = '⚠️ El correo parece contener una errata tipográfica. ¿Quisiste decir <strong>' + emailCheck.suggested + '</strong>?';
+                    formResult.innerHTML = errText;
+                    formResult.className = 'form-result error';
+                    renderEmailSuggestion('contactEmail', 'contactEmailSuggestion', emailCheck);
+                    Toast.warning('¿Quisiste decir ' + emailCheck.suggested + '?');
+                } else {
+                    const errText = '❌ Por favor, introduce un correo electrónico válido (ej: tu_nombre@gmail.com).';
+                    formResult.textContent = errText;
+                    formResult.className = 'form-result error';
+                    Toast.warning('El correo introducido no tiene un formato válido.');
+                }
                 if (emailInput) emailInput.focus();
                 return;
             }

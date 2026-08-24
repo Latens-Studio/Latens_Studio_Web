@@ -1,7 +1,7 @@
 {
   "name": "Latens Studio",
-  "short_name": "Latens Studio",
-  "description": "Estudio de dise?o, modelado e impresi?n 3D personalizada en Alicante.",
+  "short_name": "Latens",
+  "description": "Estudio de diseño, modelado e impresión 3D personalizada en Alicante.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
