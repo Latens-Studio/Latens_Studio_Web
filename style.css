@@ -4182,6 +4182,10 @@ textarea.form-input {
         margin-top: 0.5rem;
     }
 
+    .config-customization-layout.no-card {
+        grid-template-columns: 1fr !important;
+    }
+
     .config-names-date-col {
         display: flex;
         flex-direction: column;

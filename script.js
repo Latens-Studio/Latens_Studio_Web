@@ -289,20 +289,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const addCardCb = document.getElementById('addCard');
+        const cardCol = document.querySelector('.config-card-col');
         const cardInputsGroup = document.getElementById('cardInputsGroup');
-        const addCardContainer = addCardCb ? addCardCb.closest('.form-field') : null;
+        const customizationLayout = document.querySelector('.config-customization-layout');
         
-        if (addCardCb && addCardContainer && cardInputsGroup) {
-            if (val === 'corazon' || val === 'iniciales') {
-                addCardContainer.style.display = 'block';
-                addCardCb.checked = true;
-                addCardCb.disabled = true;
-                cardInputsGroup.style.display = 'block';
-            } else {
-                addCardContainer.style.display = 'none';
-                addCardCb.checked = false;
-                cardInputsGroup.style.display = 'none';
-            }
+        const isPairProduct = (val === 'corazon' || val === 'iniciales');
+        
+        if (cardCol) {
+            cardCol.style.display = isPairProduct ? 'block' : 'none';
+        }
+        if (customizationLayout && customizationLayout.classList) {
+            customizationLayout.classList.toggle('no-card', !isPairProduct);
+        }
+        if (addCardCb) {
+            addCardCb.checked = isPairProduct;
+            addCardCb.disabled = true;
+        }
+        if (cardInputsGroup) {
+            cardInputsGroup.style.display = isPairProduct ? 'block' : 'none';
         }
 
         if (val === 'individual') {
@@ -1145,9 +1149,9 @@ document.addEventListener('DOMContentLoaded', () => {
             hasShippingData: !!(shipName || shipAddress || shipCP || shipPhone || shipEmail),
             names: namesFormatted,
             fecha: fecha || 'No grabada',
-            hasCard: !!addCard,
-            cardTitle: addCard ? (cardTitleVal || 'Sin título') : null,
-            cardMessage: addCard ? (cardMessageVal || 'Sin mensaje') : null
+            hasCard: (type !== 'individual') && !!addCard,
+            cardTitle: (type !== 'individual' && addCard) ? (cardTitleVal || 'Sin título') : null,
+            cardMessage: (type !== 'individual' && addCard) ? (cardMessageVal || 'Sin mensaje') : null
         };
     }
 
@@ -1925,9 +1929,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const fecha = fechaEl ? fechaEl.value.trim() : '';
             const cruz = cruzEl ? cruzEl.checked : false;
             
-            const tarjeta = addCardEl ? addCardEl.checked : false;
-            const tarjeta_titulo = cardTitleEl ? cardTitleEl.value.trim() : '';
-            const tarjeta_mensaje = cardMessageEl ? cardMessageEl.value.trim() : '';
+            const tarjeta = (type !== 'individual') && (addCardEl ? addCardEl.checked : false);
+            const tarjeta_titulo = tarjeta ? (cardTitleEl ? cardTitleEl.value.trim() : '') : '';
+            const tarjeta_mensaje = tarjeta ? (cardMessageEl ? cardMessageEl.value.trim() : '') : '';
 
             if ((type === 'corazon' || type === 'iniciales') && (!name1 || !name2)) {
                 Toast.warning('Por favor, introduce los dos nombres o iniciales para formar el corazón.', 'Datos incompletos');
