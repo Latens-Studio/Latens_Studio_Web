@@ -1645,7 +1645,7 @@ p, h1, h2, h3, h4, h5, h6, span, a, button, li, .brand-title, .brand-subtitle, d
     z-index: 10051;
     width: 100%;
     max-width: 920px;
-    max-height: 88vh;
+    max-height: 90vh;
     background: var(--bg-card);
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
@@ -1691,8 +1691,9 @@ p, h1, h2, h3, h4, h5, h6, span, a, button, li, .brand-title, .brand-subtitle, d
     gap: 1.75rem;
     padding: 1.75rem;
     overflow-y: auto;
-    max-height: calc(88% - 10px);
+    max-height: 90vh;
     overscroll-behavior: contain;
+    align-items: start;
 }
 
 /* Columna Izquierda: Galería */
@@ -1811,22 +1812,14 @@ p, h1, h2, h3, h4, h5, h6, span, a, button, li, .brand-title, .brand-subtitle, d
     line-height: 1.25;
 }
 
-/* Precio Estilo Amazon */
-.modal-price-card {
-    background: var(--bg-subtle);
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-md);
-    padding: 0.75rem 1rem;
-    margin-bottom: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-}
+
 
 .modal-price-row {
     display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.35rem;
 }
 
 .modal-price-currency {
@@ -1843,17 +1836,95 @@ p, h1, h2, h3, h4, h5, h6, span, a, button, li, .brand-title, .brand-subtitle, d
     color: var(--text-muted);
 }
 
-.modal-gift-pill {
+
+
+
+.modal-shipping-row strong {
+    color: var(--text-heading);
+    font-weight: 600;
+}
+
+
+
+/* Precio Estilo Amazon */
+.modal-price-card {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 0.95rem;
+    margin-bottom: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.modal-price-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.modal-price-main {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+}
+
+.modal-price-currency {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    line-height: 1;
+}
+
+.modal-price-qualifier {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.modal-gift-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     font-weight: 700;
     color: var(--primary);
     background: var(--primary-light);
-    padding: 0.18rem 0.55rem;
+    border: 1px solid rgba(147, 51, 234, 0.2);
+    padding: 0.2rem 0.55rem;
     border-radius: 12px;
-    width: fit-content;
+    white-space: nowrap;
+}
+
+.modal-gift-badge svg {
+    flex-shrink: 0;
+    color: var(--primary);
+}
+
+.modal-shipping-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    line-height: 1.35;
+    border-top: 1px dashed var(--border-light);
+    padding-top: 0.4rem;
+    margin-top: 0.15rem;
+}
+
+.modal-ship-item {
+    display: block;
+    line-height: 1.35;
+}
+
+.modal-ship-item strong {
+    color: var(--text-heading);
+    font-weight: 600;
 }
 
 .modal-product-description {
@@ -1936,7 +2007,7 @@ p, h1, h2, h3, h4, h5, h6, span, a, button, li, .brand-title, .brand-subtitle, d
     display: flex;
     flex-direction: column;
     gap: 0.65rem;
-    margin-top: auto;
+    margin-top: 0.85rem;
     margin-bottom: 0.65rem;
 }
 
@@ -3432,7 +3503,7 @@ textarea.form-input {
         justify-content: flex-start !important;
         gap: 0.45rem !important;
         padding: 0.15rem 0.2rem !important;
-        margin-bottom: 0.45rem !important;
+        margin-bottom: 0.75rem;
         background: transparent !important;
         border: none !important;
     }
@@ -3674,5 +3745,376 @@ textarea.form-input {
         aspect-ratio: 1 / 1 !important;
         height: auto !important;
         min-height: auto !important;
+    }
+}
+
+
+.shipping-badge span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.shipping-badge strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* Toggle Group for Delivery */
+.delivery-toggle-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+.delivery-option-pill {
+    cursor: pointer;
+    position: relative;
+}
+.delivery-option-pill input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+.delivery-option-pill .pill-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 1rem 0.5rem;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+.delivery-option-pill .icon {
+    font-size: 1.5rem;
+}
+.delivery-option-pill .text {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+}
+.delivery-option-pill .price-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+.delivery-option-pill input[type="radio"]:checked + .pill-content {
+    border-color: var(--accent);
+    background: rgba(147, 51, 234, 0.05);
+}
+.delivery-option-pill input[type="radio"]:checked + .pill-content .price-tag {
+    color: var(--accent);
+}
+.delivery-option-pill:hover .pill-content {
+    border-color: var(--text-muted);
+}
+
+
+.product-delivery-pill strong {
+    color: var(--text-heading);
+    font-weight: 600;
+}
+.product-delivery-pill .sep {
+    opacity: 0.4;
+}
+
+
+/* --- PRECIOS CON ENVÍO Y CHAPITA DESTACADA --- */
+.product-pricing-row {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    padding: 0.25rem 0;
+    margin-bottom: 0.75rem;
+}
+
+.price-shipping-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.12rem;
+    text-align: left;
+}
+
+.price-shipping-stack .shipping-line {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+.price-shipping-stack .shipping-line strong {
+    color: var(--text-heading);
+    font-weight: 600;
+}
+
+
+
+.product-gift-tag svg {
+    flex-shrink: 0;
+    color: var(--primary);
+}
+
+@media (max-width: 768px) and (orientation: portrait), (max-width: 500px) {
+    .product-pricing-row {
+        gap: 0.45rem !important;
+        padding: 0.15rem 0 !important;
+        margin-bottom: 0.75rem;
+        justify-content: flex-start !important;
+    }
+    .price-shipping-stack {
+        align-items: flex-start !important;
+        text-align: left !important;
+    }
+    .price-shipping-stack .shipping-line {
+        font-size: 0.65rem !important;
+    }
+    
+}
+
+
+
+.modal-features-title {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.55rem;
+}
+
+.modal-features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+}
+
+.modal-feature-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 0.45rem 0.6rem;
+    transition: var(--transition);
+}
+
+.modal-feature-card:hover {
+    border-color: var(--border-medium);
+    background: var(--bg-hover);
+}
+
+.modal-feature-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+}
+
+.modal-feature-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.08rem;
+}
+
+.modal-feature-name {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    line-height: 1.2;
+}
+
+.modal-feature-desc {
+    font-size: 0.69rem;
+    color: var(--text-muted);
+    line-height: 1.25;
+}
+
+@media (max-width: 500px) {
+    .modal-features-grid {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+    }
+}
+
+/* --- ESPECIFICACIONES DESPLEGABLES BAJO GALERÍA --- */
+.modal-specs-accordion {
+    margin-top: 0.2rem;
+    margin-bottom: 0.75rem;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.modal-specs-accordion:hover {
+    border-color: var(--border-medium);
+}
+
+.modal-specs-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    transition: var(--transition);
+}
+
+.modal-specs-toggle:hover {
+    background: var(--bg-hover);
+    color: var(--primary);
+}
+
+.modal-specs-toggle .accordion-arrow {
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+    color: var(--text-muted);
+}
+
+.modal-specs-accordion.open .accordion-arrow {
+    transform: rotate(180deg);
+    color: var(--primary);
+}
+
+.modal-specs-collapse {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+    padding: 0 0.75rem;
+}
+
+.modal-specs-accordion.open .modal-specs-collapse {
+    max-height: 600px;
+    padding: 0 0.75rem 0.75rem 0.75rem;
+}
+
+.modal-specs-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    border-top: 1px dashed var(--border-light);
+    padding-top: 0.55rem;
+}
+
+.modal-specs-list li {
+    font-size: 0.76rem;
+    color: var(--text-body);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    line-height: 1.35;
+}
+
+.modal-specs-list li::before {
+    content: "✓";
+    color: var(--accent-emerald);
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.modal-specs-list li.spec-care-note {
+    margin-top: 0.4rem;
+    padding: 0.45rem 0.65rem;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: var(--radius-sm);
+    color: var(--text-body);
+    font-size: 0.74rem;
+    line-height: 1.35;
+}
+
+.modal-specs-list li.spec-care-note::before {
+    content: "⚠️";
+    font-size: 0.8rem;
+    font-weight: normal;
+}
+
+/* Selector de Entrega en Configurador 3D */
+.delivery-pills-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 0.35rem;
+}
+
+.delivery-pill-label {
+    cursor: pointer;
+    display: block;
+    position: relative;
+}
+
+.delivery-radio-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.delivery-pill-box {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.6rem 0.75rem;
+    background: var(--bg-subtle);
+    border: 1.5px solid var(--border-medium);
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    user-select: none;
+}
+
+.delivery-pill-label:hover .delivery-pill-box {
+    border-color: var(--primary);
+    background: var(--bg-hover);
+}
+
+.delivery-radio-input:checked + .delivery-pill-box {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    box-shadow: 0 0 0 1px var(--primary);
+}
+
+.delivery-pill-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.delivery-pill-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05rem;
+}
+
+.delivery-pill-title {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    line-height: 1.2;
+}
+
+.delivery-pill-price {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--primary);
+    line-height: 1.2;
+}
+
+@media (max-width: 480px) {
+    .delivery-pills-row {
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
     }
 }

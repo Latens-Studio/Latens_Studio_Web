@@ -229,7 +229,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=89.0">
+    <link rel="stylesheet" href="style.css?v=107.0">
 </head>
 <body>
 
@@ -489,7 +489,10 @@
                                 <div class="price-stack">
                                     <span class="price-amount">15€</span>
                                 </div>
-                                <span class="price-gift-tag">+ Chapita gratis</span>
+                                <div class="price-shipping-stack">
+                                    <span class="shipping-line">📍 Alicante: <strong>Recogida Gratis</strong></span>
+                                    <span class="shipping-line">📦 Envío: <strong>+4,99€</strong></span>
+                                </div>
                             </div>
                             <div class="product-card-actions">
                                 <button type="button" class="btn-secondary-block btn-view-details" data-gc-event="Ver_Detalles" data-product="corazon" data-product-id="corazon">
@@ -532,7 +535,10 @@
                                 <div class="price-stack">
                                     <span class="price-amount">12€</span>
                                 </div>
-                                <span class="price-gift-tag">+ Chapita gratis</span>
+                                <div class="price-shipping-stack">
+                                    <span class="shipping-line">📍 Alicante: <strong>Recogida Gratis</strong></span>
+                                    <span class="shipping-line">📦 Envío: <strong>+4,99€</strong></span>
+                                </div>
                             </div>
                             <div class="product-card-actions">
                                 <button type="button" class="btn-secondary-block btn-view-details" data-gc-event="Ver_Detalles" data-product="iniciales" data-product-id="iniciales">
@@ -562,7 +568,10 @@
                                 <div class="price-stack">
                                     <span class="price-amount">3€</span>
                                 </div>
-                                <span class="price-gift-tag">+ Chapita gratis</span>
+                                <div class="price-shipping-stack">
+                                    <span class="shipping-line">📍 Alicante: <strong>Recogida Gratis</strong></span>
+                                    <span class="shipping-line">📦 Envío: <strong>+4,99€</strong></span>
+                                </div>
                             </div>
                             <div class="product-card-actions">
                                 <button type="button" class="btn-secondary-block btn-view-details" data-gc-event="Ver_Detalles" data-product="individual" data-product-id="individual">
@@ -641,18 +650,27 @@
                                 <div id="cardInputsGroup" class="form-inputs-group hidden fade-in" style="background: var(--bg-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-top: 0.5rem; display: none;">
                                     <div class="form-field" style="margin-bottom: 1rem;">
                                         <label for="cardTitle" style="font-size: 0.85rem;">Título de la Tarjeta</label>
-                                        <input type="text" id="cardTitle" class="form-input" maxlength="10" placeholder="Ej: Para vosotros" style="font-size: 0.9rem; padding: 0.6rem;">
-                                        <small style="color:#94a3b8; font-size:11px; float: right;" id="titleCounter">0/10</small>
+                                        <input type="text" id="cardTitle" class="form-input" maxlength="20" placeholder="Ej: Te quiero mucho" style="font-size: 0.9rem; padding: 0.6rem;">
+                                        <small style="color:#94a3b8; font-size:11px; float: right;" id="titleCounter">0/20</small>
                                     </div>
                                     <div class="form-field" style="margin-bottom: 0;">
                                         <label for="cardMessage" style="font-size: 0.85rem;">Mensaje</label>
-                                        <textarea id="cardMessage" class="form-input" maxlength="81" rows="3" placeholder="Que este detalle os recuerde lo especiales que sois juntos..." style="resize: none; font-size: 0.9rem; padding: 0.6rem;"></textarea>
-                                        <small style="color:#94a3b8; font-size:11px; float: right;" id="messageCounter">0/81</small>
+                                        <textarea id="cardMessage" class="form-input" maxlength="60" rows="3" placeholder="Que este detalle te recuerde lo especial que eres para mí..." style="resize: none; font-size: 0.9rem; padding: 0.6rem;"></textarea>
+                                        <small style="color:#94a3b8; font-size:11px; float: right;" id="messageCounter">0/60</small>
                                     </div>
                                 </div>
                             </div>
 
 
+
+                            <!-- Selector de Entrega / Envío (Compacto) -->
+                            <div class="form-field" style="margin-top: 0.85rem; border-top: 1px solid var(--border-light); padding-top: 0.85rem;">
+                                <label for="deliverySelect">Método de Entrega / Envío</label>
+                                <select id="deliverySelect" class="form-select" data-gc-event="Select_Delivery_Method">
+                                    <option value="recogida" selected>📍 Alicante (Luceros) — Recogida Gratis</option>
+                                    <option value="envio">📦 Toda España (Península) — Envío 24/48h (+4,99€)</option>
+                                </select>
+                            </div>
 
                             <button id="generateBtn" class="btn-generate" type="button" data-gc-event="Generar_3D">
                                 <span class="btn-text">Generar Previsualización 3D</span>
@@ -988,13 +1006,19 @@
 
                     <!-- Bloque de Precio Estilo Amazon -->
                     <div class="modal-price-card">
-                        <div class="modal-price-row">
-                            <span class="modal-price-currency" id="modalProductPrice">15€</span>
-                            <span class="modal-price-qualifier" id="modalProductQualifier">Pareja completa</span>
+                        <div class="modal-price-header">
+                            <div class="modal-price-main">
+                                <span class="modal-price-currency" id="modalProductPrice">15€</span>
+                                <span class="modal-price-qualifier" id="modalProductQualifier">Pareja completa</span>
+                            </div>
+                            <div class="modal-gift-badge">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+                                <span>+ Chapita Gratis</span>
+                            </div>
                         </div>
-                        <div class="modal-gift-pill">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
-                            <span>+ Chapita Gratis incluida con tu pedido</span>
+                        <div class="modal-shipping-row">
+                            <span class="modal-ship-item">📍 Alicante: <strong>Recogida Gratis (Luceros)</strong></span>
+                            <span class="modal-ship-item">📦 Toda España: <strong>Envío 24/48h (+4,99€)</strong></span>
                         </div>
                     </div>
 
@@ -1003,12 +1027,17 @@
                         Descripción completa del llavero...
                     </p>
 
-                    <!-- Especificaciones Técnicas (Estilo Amazon) -->
-                    <div class="modal-specs-section">
-                        <h3 class="modal-specs-title">Detalles y Especificaciones</h3>
-                        <ul class="modal-specs-list" id="modalSpecsList">
-                            <!-- Generado dinámicamente -->
-                        </ul>
+                    <!-- Especificaciones Desplegables -->
+                    <div class="modal-specs-accordion" id="modalSpecsAccordion">
+                        <button type="button" class="modal-specs-toggle" id="modalSpecsToggle" aria-expanded="false" aria-controls="modalSpecsCollapse">
+                            <span>📋 Especificaciones y detalles técnicos</span>
+                            <svg class="accordion-arrow" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="modal-specs-collapse" id="modalSpecsCollapse">
+                            <ul class="modal-specs-list" id="modalSpecsList">
+                                <!-- Generado dinámicamente -->
+                            </ul>
+                        </div>
                     </div>
 
                     <!-- Acciones / CTA Directo Instagram -->
@@ -1026,7 +1055,7 @@
                     </div>
 
                     <div class="modal-trust-footer">
-                        <span>⚡ Entrega en Alicante · Pago 100% por Bizum · Chapita de regalo incluida</span>
+                        <span>⚡ Envíos 24/48h a toda España o Recogida en Alicante · Pago por Bizum · Chapita incluida</span>
                     </div>
                 </div>
             </div>
@@ -1061,7 +1090,7 @@
     <!-- Contenedor Flotante de Notificaciones Toast (Accesible) -->
     <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <script src="script.js?v=68.0" defer></script>
+    <script src="script.js?v=82.0" defer></script>
     <script data-goatcounter="https://lts.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

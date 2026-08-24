@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Incluye tarjeta con título y dedicatoria personalizables + soporte expositor.',
                 'Fabricado en PLA+ ecológico de máxima resistencia y ligereza.',
                 'Incluye 2 anillas de acero reforzadas + Chapita de regalo gratis.',
-                'Entrega física rápida en Alicante el mismo día o 24h.'
+                'Entrega en mano en Alicante (Luceros) GRATIS o Envío a domicilio 24/48h (+4,99€).'
             ],
             careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones.',
             instagramCta: 'Pídelo ya por MD'
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Incluye tarjeta con título y dedicatoria personalizables + soporte expositor.',
                 'Fabricado en PLA+ ecológico de máxima resistencia y ligereza.',
                 'Incluye 2 anillas de acero reforzadas + Chapita de regalo gratis.',
-                'Entrega física rápida en Alicante el mismo día o 24h.'
+                'Entrega en mano en Alicante (Luceros) GRATIS o Envío a domicilio 24/48h (+4,99€).'
             ],
             careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones.',
             instagramCta: 'Pídelo ya por MD'
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Colores a elegir: Negro (PLA+), Blanco (PLA+), Rojo (PLA+), Azul, Rosa, Rosa Melocotón, Violeta Interestelar o Verde Primavera.',
                 'Fabricado en PLA o PLA+ ecológico de máxima resistencia y ligereza.',
                 'Incluye anilla de acero reforzada + Chapita de regalo gratis.',
-                'Entrega física rápida en Alicante el mismo día o 24h.'
+                'Entrega en mano en Alicante (Luceros) GRATIS o Envío a domicilio 24/48h (+4,99€).'
             ],
             careNote: 'Evitar exposición solar prolongada o calor intenso (>55°C) para prevenir deformaciones.',
             instagramCta: 'Pídelo ya por MD'
@@ -475,12 +475,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const cardTitleVal = (document.getElementById('cardTitle')?.value || '').trim();
         const cardMessageVal = (document.getElementById('cardMessage')?.value || '').trim();
 
+        const deliverySelectEl = document.getElementById('deliverySelect');
+        const deliveryChoice = deliverySelectEl ? deliverySelectEl.value : 'recogida';
+        const isEnvio = deliveryChoice === 'envio';
+        const basePrice = productInfo.priceNum || 15;
+        const finalPriceNum = isEnvio ? (basePrice + 4.99) : basePrice;
+        const finalPriceFormatted = isEnvio ? `${finalPriceNum.toFixed(2).replace('.', ',')}€` : `${finalPriceNum}€`;
+        const deliveryText = isEnvio ? 'Envío a domicilio 24/48h (+4,99€)' : 'Recogida Gratis en Alicante (Luceros)';
+
         let namesFormatted = (type === 'individual') ? (name1 || 'Sin nombre') : `${name1 || 'Nombre 1'} + ${name2 || 'Nombre 2'}`;
         
         return {
             type,
             productName: productInfo.name,
-            price: productInfo.price,
+            basePrice: productInfo.price,
+            totalPrice: finalPriceFormatted,
+            deliveryChoice,
+            deliveryMethod: deliveryText,
             names: namesFormatted,
             fecha: fecha || 'No grabada',
             hasCard: !!addCard,
@@ -497,8 +508,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.innerHTML = `
             <div class="summary-item">
-                <span class="summary-item-label">Modelo & Precio</span>
-                <span class="summary-item-val">🏷️ ${esc(specs.productName)} <strong>(${esc(specs.price)})</strong></span>
+                <span class="summary-item-label">Modelo</span>
+                <span class="summary-item-val">🏷️ ${esc(specs.productName)}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-item-label">Entrega</span>
+                <span class="summary-item-val">🚚 ${esc(specs.deliveryMethod)}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-item-label">Total Final</span>
+                <span class="summary-item-val">💳 <strong>${esc(specs.totalPrice)}</strong></span>
             </div>
             <div class="summary-item">
                 <span class="summary-item-label">Nombres / Iniciales</span>
@@ -524,7 +543,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const specs = generateOrderSpecs();
             
             let textToCopy = `✨ ¡Hola Latens Studio! 👋 Quiero encargar este llavero personalizado:\n\n` +
-                `📋 Modelo: ${specs.productName} (${specs.price})\n` +
+                `📋 Modelo: ${specs.productName} (${specs.basePrice})\n` +
                 `✍️ Nombres/Iniciales: ${specs.names}\n`;
             
             if (specs.fecha !== 'No grabada') {
@@ -534,7 +553,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 textToCopy += `💌 Tarjeta 3D Regalo: "${specs.cardTitle}" - ${specs.cardMessage}\n`;
             }
             
-            textToCopy += `🎁 Incluye: Chapita de Regalo Gratis\n` +
+            textToCopy += `🚚 Entrega: ${specs.deliveryMethod}\n` +
+                `💳 Total Pedido: ${specs.totalPrice}\n` +
+                `🎁 Incluye: Chapita de Regalo Gratis\n` +
                 `🎨 Acabado: Base Negro Sombra / Letras Blanco Nieve (PLA+)\n\n` +
                 `¿Podríais confirmarme disponibilidad y plazo de entrega? ¡Muchas gracias!`;
 
@@ -808,14 +829,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (cardTitle && titleCounter) {
         cardTitle.addEventListener('input', () => {
-            titleCounter.textContent = `${cardTitle.value.length}/10`;
+            titleCounter.textContent = `${cardTitle.value.length}/20`;
             updateOrderSummaryCard();
         });
     }
 
     if (cardMessage && messageCounter) {
         cardMessage.addEventListener('input', () => {
-            messageCounter.textContent = `${cardMessage.value.length}/81`;
+            messageCounter.textContent = `${cardMessage.value.length}/60`;
             updateOrderSummaryCard();
         });
     }
@@ -1665,6 +1686,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalSpecsList = document.getElementById('modalSpecsList');
     const modalInstagramCta = document.getElementById('modalInstagramCta');
     const modalPreviewActionBtn = document.getElementById('modalPreviewActionBtn');
+    // Listener para desplegable de especificaciones en el modal
+    const modalSpecsToggleBtn = document.getElementById('modalSpecsToggle');
+    const modalSpecsAccordionEl = document.getElementById('modalSpecsAccordion');
+    if (modalSpecsToggleBtn && modalSpecsAccordionEl) {
+        modalSpecsToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = modalSpecsAccordionEl.classList.toggle('open');
+            modalSpecsToggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+    }
 
     let lastFocusedElementBeforeModal = null;
     let activeModalImageIdx = 0;
@@ -1683,12 +1714,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modalProductQualifier) modalProductQualifier.textContent = product.priceQualifier || '';
         if (modalProductDesc) modalProductDesc.textContent = product.desc;
 
-        // 2. Inyectar Especificaciones Estilo Amazon (con aviso de cuidado al final sin tick)
+        // 2. Inyectar Especificaciones en Acordeón Desplegable (bajo la galería)
+        const modalSpecsList = document.getElementById('modalSpecsList');
+        const modalSpecsAccordion = document.getElementById('modalSpecsAccordion');
+        const modalSpecsToggle = document.getElementById('modalSpecsToggle');
+
         if (modalSpecsList) {
             const specsHtml = (product.specs || []).map(spec => `<li><span>${spec}</span></li>`).join('');
             const careHtml = product.careNote ? `<li class="spec-care-note"><span><strong>Recomendación de cuidado:</strong> ${product.careNote}</span></li>` : '';
             modalSpecsList.innerHTML = specsHtml + careHtml;
         }
+
+        // Resetear acordeón cerrado al abrir
+        if (modalSpecsAccordion) modalSpecsAccordion.classList.remove('open');
+        if (modalSpecsToggle) modalSpecsToggle.setAttribute('aria-expanded', 'false');
 
         // 3. Configurar Galería y Miniaturas Interactivas
         if (modalProductImg && product.images && product.images.length > 0) {
