@@ -3067,77 +3067,35 @@ textarea.form-input {
     overflow-wrap: break-word;
 }
 
-/* Adaptación fluida y limpia para móviles y tablets */
+/* Adaptación fluida para móviles y tablets: Marca arriba, Entrega y Enlaces lado a lado */
 @media (max-width: 768px) {
     .main-footer {
-        padding: 1.5rem 1.25rem 1.25rem;
+        padding: 1.35rem 1.25rem 1.15rem;
         margin-top: 1.25rem;
     }
 
     .footer-content {
-        grid-template-columns: 1fr;
-        gap: 1.35rem;
-        padding-bottom: 1.25rem;
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 1.25rem 1.15rem;
+        padding-bottom: 1.15rem;
     }
 
-    .footer-logo {
-        width: 52px;
-        height: 52px;
-        min-width: 52px;
+    .footer-col.brand-col {
+        grid-column: 1 / -1;
     }
 
-    .footer-brand-name {
-        font-size: 1.22rem;
+    .footer-col.local-col {
+        grid-column: 1;
     }
 
-    .footer-local-content {
-        background: transparent !important;
-        padding: 0 !important;
-        border: none !important;
+    .footer-col.quick-col {
+        grid-column: 2;
     }
 
-    .footer-map-link {
-        padding: 0 !important;
-        margin: 0 !important;
-        min-height: auto !important;
-    }
-
-    .footer-links {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 0.5rem !important;
-    }
-
-    .footer-links a {
-        background: transparent !important;
-        border: none !important;
-        padding: 0.2rem 0 !important;
-        margin: 0 !important;
-        min-height: auto !important;
-        color: var(--text-muted) !important;
-        font-size: 0.88rem !important;
-        border-radius: 0 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-    }
-
-    .footer-links a:hover,
-    .footer-links a:active {
-        background: transparent !important;
-        color: var(--primary) !important;
-        transform: translateX(4px);
-    }
-}
-
-@media (max-width: 500px) {
-    .main-footer {
-        padding: 1.25rem 1rem 1rem;
-        margin-top: 1rem;
-    }
-
-    .footer-content {
-        gap: 1.15rem;
-        padding-bottom: 1rem;
+    .footer-brand {
+        gap: 0.9rem;
+        margin-bottom: 0.5rem;
     }
 
     .footer-logo {
@@ -3147,20 +3105,130 @@ textarea.form-input {
     }
 
     .footer-brand-name {
-        font-size: 1.18rem;
+        font-size: 1.22rem;
     }
 
     .footer-desc {
         font-size: 0.84rem;
+        line-height: 1.5;
+    }
+
+    .footer-heading {
+        font-size: 0.88rem;
+        margin-bottom: 0.45rem;
+    }
+
+    .footer-local-content {
+        background: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+        gap: 0.3rem;
+    }
+
+    .footer-map-link {
+        font-size: 0.86rem;
+        padding: 0 !important;
+        margin: 0 !important;
+        min-height: auto !important;
+    }
+
+    .footer-local-address {
+        font-size: 0.80rem;
+    }
+
+    .footer-local-info {
+        gap: 0.25rem;
+        margin-top: 0.35rem;
+    }
+
+    .footer-info-line {
+        font-size: 0.77rem;
+        line-height: 1.35;
+    }
+
+    .footer-links {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.35rem !important;
     }
 
     .footer-links a {
-        font-size: 0.86rem !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0.15rem 0 !important;
+        margin: 0 !important;
+        min-height: auto !important;
+        color: var(--text-muted) !important;
+        font-size: 0.84rem !important;
+        border-radius: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+    }
+
+    .footer-links a:hover,
+    .footer-links a:active {
+        background: transparent !important;
+        color: var(--primary) !important;
+        transform: translateX(3px);
     }
 
     .footer-bottom {
+        padding-top: 1rem;
         font-size: 0.76rem;
-        padding-top: 0.85rem;
+        line-height: 1.45;
+    }
+}
+
+@media (max-width: 500px) {
+    .main-footer {
+        padding: 1.15rem 1rem 0.95rem;
+        margin-top: 1rem;
+    }
+
+    .footer-content {
+        grid-template-columns: 1.12fr 0.88fr;
+        gap: 1.1rem 0.85rem;
+        padding-bottom: 0.95rem;
+    }
+
+    .footer-logo {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+    }
+
+    .footer-brand-name {
+        font-size: 1.18rem;
+    }
+
+    .footer-desc {
+        font-size: 0.82rem;
+    }
+
+    .footer-heading {
+        font-size: 0.84rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .footer-map-link {
+        font-size: 0.82rem;
+    }
+
+    .footer-local-address {
+        font-size: 0.76rem;
+    }
+
+    .footer-info-line {
+        font-size: 0.74rem;
+    }
+
+    .footer-links a {
+        font-size: 0.80rem !important;
+    }
+
+    .footer-bottom {
+        font-size: 0.73rem;
+        padding-top: 0.8rem;
     }
 }
 
