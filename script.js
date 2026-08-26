@@ -1336,6 +1336,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     openProductDetailsModal(modalProductId);
                 }
             }, 120);
+
+            // Limpiar la URL de forma silenciosa para que si el usuario recarga la página (F5),
+            // no se quede atrapado en el modal de detalles y cargue la web con total normalidad.
+            if (window.history && window.history.replaceState) {
+                urlParams.delete('detalle');
+                urlParams.delete('detalles');
+                urlParams.delete('modal');
+                urlParams.delete('ver');
+                const remainingQuery = urlParams.toString();
+                const cleanUrl = window.location.pathname + (remainingQuery ? '?' + remainingQuery : '') + '#tab-gallery';
+                window.history.replaceState(null, '', cleanUrl);
+            }
             return;
         }
         
@@ -1401,6 +1413,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         openProductDetailsModal(modalProductId);
                     }
                 }, 100);
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(null, '', window.location.pathname + window.location.search + '#tab-gallery');
+                }
                 return;
             }
             const target = resolveTabId(window.location.hash);
@@ -2679,6 +2694,21 @@ document.addEventListener('DOMContentLoaded', () => {
         productModal.classList.remove('active');
         productModal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+
+        // Limpiar cualquier parámetro o hash residual de la URL
+        if (window.history && window.history.replaceState) {
+            const currentParams = new URLSearchParams(window.location.search);
+            if (currentParams.has('detalle') || currentParams.has('detalles') || currentParams.has('modal') || currentParams.has('ver') || (window.location.hash && window.location.hash.toLowerCase().startsWith('#detalle-'))) {
+                currentParams.delete('detalle');
+                currentParams.delete('detalles');
+                currentParams.delete('modal');
+                currentParams.delete('ver');
+                const cleanQuery = currentParams.toString();
+                const activeTab = sessionStorage.getItem('latens_active_tab') || 'tab-gallery';
+                const cleanUrl = window.location.pathname + (cleanQuery ? '?' + cleanQuery : '') + '#' + activeTab;
+                window.history.replaceState(null, '', cleanUrl);
+            }
+        }
 
         if (lastFocusedElementBeforeModal && typeof lastFocusedElementBeforeModal.focus === 'function') {
             lastFocusedElementBeforeModal.focus();
