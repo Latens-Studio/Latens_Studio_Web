@@ -1568,6 +1568,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightboxPrev = document.getElementById('lightboxPrev');
     const lightboxNext = document.getElementById('lightboxNext');
     const lightboxCounter = document.getElementById('lightboxCounter');
+    const lightboxBottomControls = document.getElementById('lightboxBottomControls');
 
     let zoomLevel = 1;
     let panX = 0;
@@ -1645,6 +1646,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 lightboxImg.alt = `Vista 3D: ${pLabel}`;
             }
             const hasMultiple = imgList.length > 1;
+            if (lightboxBottomControls) lightboxBottomControls.style.display = hasMultiple ? 'flex' : 'none';
             if (lightboxPrev) lightboxPrev.style.display = hasMultiple ? 'grid' : 'none';
             if (lightboxNext) lightboxNext.style.display = hasMultiple ? 'grid' : 'none';
             if (lightboxCounter) {
@@ -1662,6 +1664,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 lightboxImg.alt = `Foto de producto ${catalogSlideIndex + 1}`;
             }
             const hasMultiple = catalogLightboxImages.length > 1;
+            if (lightboxBottomControls) lightboxBottomControls.style.display = hasMultiple ? 'flex' : 'none';
             if (lightboxPrev) lightboxPrev.style.display = hasMultiple ? 'grid' : 'none';
             if (lightboxNext) lightboxNext.style.display = hasMultiple ? 'grid' : 'none';
             if (lightboxCounter) {

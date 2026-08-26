@@ -229,7 +229,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=131.0">
+    <link rel="stylesheet" href="style.css?v=132.0">
 </head>
 <body>
 
@@ -1166,20 +1166,23 @@
                 <img id="lightboxImg" alt="Vista ampliada del producto" draggable="false">
             </div>
 
-            <button class="lightbox-nav-btn prev" id="lightboxPrev" aria-label="Foto anterior">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            </button>
-            <button class="lightbox-nav-btn next" id="lightboxNext" aria-label="Siguiente foto">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-            <div class="lightbox-counter" id="lightboxCounter"></div>
+            <!-- Controles Inferiores Centrados: Flecha Izq · (1 / 6) · Flecha Der -->
+            <div class="lightbox-bottom-controls" id="lightboxBottomControls">
+                <button class="lightbox-nav-btn prev" id="lightboxPrev" aria-label="Foto anterior">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <div class="lightbox-counter" id="lightboxCounter">1 / 6</div>
+                <button class="lightbox-nav-btn next" id="lightboxNext" aria-label="Siguiente foto">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Contenedor Flotante de Notificaciones Toast (Accesible) -->
     <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <script src="script.js?v=106.0" defer></script>
+    <script src="script.js?v=107.0" defer></script>
     <script data-goatcounter="https://lts.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
