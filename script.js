@@ -89,10 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
             priceQualifier: 'Pareja completa (2 llaveros)',
             desc: 'Dos llaveros independientes con nombres totalmente personalizados que encajan magnéticamente de forma perfecta gracias a sus imanes de neodimio integrados. Incluye tarjeta de presentación en caja (con título y dedicatoria personalizables) y soporte expositor.',
             images: [
-                'llaverocompleto3.webp',
-                'llaverocompleto1.webp',
-                'llaverocompleto2.webp',
-                'imagen llaveros pareja ambos(tarjeta en caja).webp'
+                'pareja_nombre_portada.webp',
+                'pareja_nombre_imanes.webp',
+                'pareja_nombre_fecha.webp',
+                'pareja_nombre_llaves.webp',
+                'tarjeta_3d_comun.webp',
+                'pareja_nombre_conjunto.webp'
             ],
             specs: [
                 'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
@@ -115,10 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
             priceQualifier: 'Pareja completa (2 llaveros)',
             desc: 'Dos llaveros magnéticos con la inicial de cada persona sobre un corazón central y cruz opcional. Incluye tarjeta de presentación en caja (con título y dedicatoria personalizables) y soporte expositor.',
             images: [
-                'llavero3iniciales.webp',
-                'llavero1iniciales.webp',
-                'llavero2iniciales.webp',
-                'imagen llaveros pareja ambos(tarjeta en caja).webp'
+                'pareja_iniciales_portada.webp',
+                'pareja_iniciales_imanes.webp',
+                'pareja_iniciales_fecha.webp',
+                'pareja_iniciales_cruz.webp',
+                'pareja_iniciales_llaves.webp',
+                'tarjeta_3d_comun.webp',
+                'pareja_iniciales_conjunto.webp'
             ],
             specs: [
                 'Imanes de neodimio N52 de máxima atracción perfectamente integrados.',
@@ -142,9 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
             priceQualifier: 'Por unidad (1 llavero)',
             desc: 'Tu nombre personalizado en relieve blanco sobre una base orgánica oscura y resistente. Compacto, duradero e ideal para llaves de coche, mochilas o regalo.',
             images: [
-                'llaverocompleto1.webp',
-                'chapita.png',
-                'logo_latens.png'
+                'individual_portada.webp',
+                'individual_llaves_1.webp',
+                'individual_llaves_2.webp'
             ],
             specs: [
                 '1 Nombre personalizado en relieve 3D de alto contraste.',
@@ -1645,7 +1650,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (lightboxCounter) {
                 if (hasMultiple) {
                     const pLabel = currentPerspectives[currentSlide] || `Vista ${currentSlide + 1}`;
-                    lightboxCounter.textContent = `${pLabel} ? ${currentSlide + 1} / ${imgList.length}`;
+                    lightboxCounter.textContent = `${pLabel} · ${currentSlide + 1} / ${imgList.length}`;
                     lightboxCounter.style.display = 'block';
                 } else {
                     lightboxCounter.style.display = 'none';
@@ -2596,7 +2601,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }); // ─── FIN de DOMContentLoaded ───
 
     // ==========================================
-    // GOATCOUNTER EVENTOS PERSONALIZADOS (CON BUFFER ANTIP?RDIDAS)
+    // GOATCOUNTER EVENTOS PERSONALIZADOS (CON BUFFER ANTIPÉRDIDAS)
     // ==========================================
     const gcQueue = [];
     function flushGcQueue() {
@@ -2608,7 +2613,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Intervalo de reintento autom?tico por si count.js tarda en cargar
+    // Intervalo de reintento automático por si count.js tarda en cargar
     const gcCheckInterval = setInterval(() => {
         if (window.goatcounter && typeof window.goatcounter.count === 'function') {
             flushGcQueue();
@@ -2652,7 +2657,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.goatcounter && typeof window.goatcounter.count === 'function') {
                 window.goatcounter.count(eventPayload);
             } else {
-                // Si el script de GoatCounter a?n no ha terminado de descargarse, encolar el evento
+                // Si el script de GoatCounter aún no ha terminado de descargarse, encolar el evento
                 gcQueue.push(eventPayload);
             }
         }
