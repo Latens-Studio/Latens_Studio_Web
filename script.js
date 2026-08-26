@@ -1305,6 +1305,39 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleUrlRouting() {
         const urlParams = new URLSearchParams(window.location.search);
         const hash = window.location.hash;
+
+        // Soporte para abrir modal de detalles directamente (ej: ?detalle=corazon o #detalle-iniciales)
+        const paramDetalle = urlParams.get('detalle') || urlParams.get('detalles') || urlParams.get('modal') || urlParams.get('ver');
+        let modalProductId = null;
+        if (paramDetalle) {
+            const dVal = paramDetalle.toLowerCase();
+            if (dVal.includes('inicial')) {
+                modalProductId = 'iniciales';
+            } else if (dVal.includes('individual') || dVal.includes('solo') || dVal.includes('unico')) {
+                modalProductId = 'individual';
+            } else {
+                modalProductId = 'corazon';
+            }
+        } else if (hash && hash.toLowerCase().startsWith('#detalle-')) {
+            const hVal = hash.toLowerCase().replace('#detalle-', '').trim();
+            if (hVal.includes('inicial')) {
+                modalProductId = 'iniciales';
+            } else if (hVal.includes('individual')) {
+                modalProductId = 'individual';
+            } else {
+                modalProductId = 'corazon';
+            }
+        }
+
+        if (modalProductId) {
+            switchTab('tab-gallery', false);
+            setTimeout(() => {
+                if (typeof openProductDetailsModal === 'function') {
+                    openProductDetailsModal(modalProductId);
+                }
+            }, 120);
+            return;
+        }
         
         const paramTab = urlParams.get('tab') || urlParams.get('seccion');
         let targetTab = resolveTabId(paramTab);
@@ -1356,6 +1389,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('hashchange', () => {
         if (window.location.hash) {
+            const hash = window.location.hash;
+            if (hash.toLowerCase().startsWith('#detalle-')) {
+                const hVal = hash.toLowerCase().replace('#detalle-', '').trim();
+                let modalProductId = 'corazon';
+                if (hVal.includes('inicial')) modalProductId = 'iniciales';
+                else if (hVal.includes('individual')) modalProductId = 'individual';
+                switchTab('tab-gallery', false);
+                setTimeout(() => {
+                    if (typeof openProductDetailsModal === 'function') {
+                        openProductDetailsModal(modalProductId);
+                    }
+                }, 100);
+                return;
+            }
             const target = resolveTabId(window.location.hash);
             if (target) switchTab(target, false);
         }
