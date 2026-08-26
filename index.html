@@ -229,7 +229,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=132.0">
+    <link rel="stylesheet" href="style.css?v=133.0">
 </head>
 <body>
 
@@ -256,6 +256,32 @@
                 </a>
             </div>
         </header>
+        
+        <!-- ═══════════════════════════════════════════════════════════════
+             AVISO TEMPORAL DE TALLER: MANTENIMIENTO & RESERVAS
+             (Para quitarlo en el futuro, simplemente elimina o comenta este bloque entero)
+             ═══════════════════════════════════════════════════════════════ -->
+        <div class="maintenance-alert-banner" role="alert" aria-live="polite">
+            <div class="maintenance-banner-content">
+                <div class="maintenance-banner-icon" aria-hidden="true">🛠️</div>
+                <div class="maintenance-banner-text">
+                    <div class="maintenance-banner-title">
+                        <span>Aviso de Taller: Impresora en Mantenimiento</span>
+                        <span class="maintenance-banner-tag">Reservas Abiertas</span>
+                    </div>
+                    <p class="maintenance-banner-desc">
+                        Nuestra impresora 3D se encuentra temporalmente en reparación. 
+                        <strong>No realizamos envíos ni entregas inmediatas</strong>, pero puedes seguir diseñando en el previsualizador 3D y <strong>reservar tu pedido por Instagram DM</strong> para fabricarlo con prioridad en cuanto se reanude el servicio.
+                    </p>
+                </div>
+            </div>
+            <div class="maintenance-banner-action">
+                <a href="https://www.instagram.com/latens.studio?igsh=ZmIwaXVvYmJta2lt" target="_blank" rel="noopener noreferrer" class="btn-banner-reserve" title="Reservar tu encargo por mensaje directo en Instagram">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    <span>Reservar por Instagram</span>
+                </a>
+            </div>
+        </div>
 
         <!-- BARRA DE NAVEGACIÓN ESTRUCTURADA POR SECCIONES (TABS CON WAI-ARIA) -->
         <nav class="nav-tabs" role="tablist" aria-label="Secciones del sitio">
