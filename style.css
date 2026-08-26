@@ -731,6 +731,12 @@ p, h1, h2, h3, h4, h5, h6, span, a, button, li, .brand-title, .brand-subtitle, d
     transform: scale(1.1);
 }
 
+@media (hover: none) {
+    .card-gallery-nav {
+        display: none !important;
+    }
+}
+
 .card-gallery-dots {
     position: absolute;
     bottom: 8px;
@@ -3526,11 +3532,8 @@ textarea.form-input {
         max-height: none !important;
     }
 
-    .card-gallery-nav button {
-        opacity: 0.85 !important;
-        width: 24px !important;
-        height: 24px !important;
-        font-size: 13px !important;
+    .card-gallery-nav {
+        display: none !important;
     }
 
     .product-tag {
