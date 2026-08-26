@@ -2507,8 +2507,62 @@ document.addEventListener('DOMContentLoaded', () => {
             modalProductImg.alt = product.name;
         }
 
+        function setModalImage(idx) {
+            if (!product.images || !product.images[idx]) return;
+            activeModalImageIdx = idx;
+            if (modalProductImg) {
+                modalProductImg.src = product.images[idx];
+            }
+            if (modalThumbnailsTrack) {
+                const thumbBtns = modalThumbnailsTrack.querySelectorAll('.modal-thumb-btn');
+                thumbBtns.forEach(b => {
+                    const bIdx = parseInt(b.getAttribute('data-index'), 10);
+                    const isActive = (bIdx === idx);
+                    b.classList.toggle('active', isActive);
+                    if (isActive) {
+                        b.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    }
+                });
+            }
+        }
+
         if (modalMainImageWrap) {
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchMoved = false;
+
+            modalMainImageWrap.ontouchstart = (e) => {
+                if (e.touches && e.touches.length === 1) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                    touchMoved = false;
+                }
+            };
+
+            modalMainImageWrap.ontouchend = (e) => {
+                if (e.changedTouches && e.changedTouches.length === 1) {
+                    const diffX = e.changedTouches[0].clientX - touchStartX;
+                    const diffY = e.changedTouches[0].clientY - touchStartY;
+                    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+                        touchMoved = true;
+                        if (diffX < 0) {
+                            // Swipe izquierda -> siguiente
+                            const nextIdx = (activeModalImageIdx + 1) % product.images.length;
+                            setModalImage(nextIdx);
+                        } else {
+                            // Swipe derecha -> anterior
+                            const prevIdx = (activeModalImageIdx - 1 + product.images.length) % product.images.length;
+                            setModalImage(prevIdx);
+                        }
+                    }
+                }
+            };
+
             modalMainImageWrap.onclick = () => {
+                if (touchMoved) {
+                    touchMoved = false;
+                    return;
+                }
                 if (product.images && product.images.length > 0) {
                     openCatalogLightbox(product.images, activeModalImageIdx);
                 }
@@ -2529,12 +2583,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
                         const idx = parseInt(btn.getAttribute('data-index'), 10);
-                        activeModalImageIdx = idx;
-                        if (modalProductImg && product.images[idx]) {
-                            modalProductImg.src = product.images[idx];
-                        }
-                        thumbBtns.forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
+                        setModalImage(idx);
                     });
                 });
             } else {
