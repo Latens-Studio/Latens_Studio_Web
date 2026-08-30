@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -258,6 +258,38 @@
         </header>
 
         <!-- BARRA DE NAVEGACIÓN ESTRUCTURADA POR SECCIONES (TABS CON WAI-ARIA) -->
+        
+    <!-- ============================================== -->
+        <!-- ALERTA DE MANTENIMIENTO TEMPORAL (QUITAR AL ARREGLAR IMPRESORA) -->
+    <!-- ============================================== -->
+    <div class="maintenance-alert-banner">
+        <div class="maintenance-banner-content">
+            <div class="maintenance-banner-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            <div class="maintenance-banner-text">
+                <h4 class="maintenance-banner-title">
+                    Taller en Mantenimiento 
+                    <span class="maintenance-banner-tag">Aviso</span>
+                </h4>
+                <p class="maintenance-banner-desc">
+                    Nuestra impresora 3D se encuentra temporalmente en reparación. <strong>Pre-reserva ahora</strong> por mensaje y entra el primero en la lista.
+                </p>
+            </div>
+        </div>
+        <div class="maintenance-banner-action">
+            <a href="https://ig.me/m/latens.studio" class="btn-banner-reserve" target="_blank" rel="noopener noreferrer">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                Pre-reservar
+            </a>
+        </div>
+    </div>
+    <!-- ============================================== -->
+
         <nav class="nav-tabs" role="tablist" aria-label="Secciones del sitio">
             <button class="nav-tab-btn active" data-target="tab-profile" id="tab-btn-profile" data-gc-event="Tab_Perfil" role="tab" aria-selected="true" aria-controls="tab-profile" tabindex="0">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -1186,3 +1218,5 @@
     <script data-goatcounter="https://lts.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
+
+

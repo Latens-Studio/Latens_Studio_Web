@@ -1,4 +1,5 @@
-User-agent: *
+﻿User-agent: *
 Allow: /
 
 Sitemap: https://latens-studio.github.io/latens_studio_web/sitemap.xml
+
