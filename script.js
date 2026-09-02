@@ -142,9 +142,16 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'Llavero con Nombre',
             shortName: 'Llavero con Nombre',
             badge: 'Individual',
-            price: '3€',
-            priceNum: 3,
-            priceQualifier: 'Por unidad (1 llavero)',
+            price: '5,50€',
+            priceNum: 5.50,
+            priceQualifier: '',
+            pricingTiers: [
+                { min: 1, max: 1, pricePerUnit: 5.50 },
+                { min: 2, max: 2, pricePerUnit: 5.00 },
+                { min: 3, max: 3, pricePerUnit: 4.50 },
+                { min: 4, max: 99, pricePerUnit: 4.00 }
+            ],
+            maxQuantityWeb: 5,
             desc: 'Tu nombre personalizado en relieve blanco sobre una base orgánica oscura y resistente. Compacto, duradero e ideal para llaves de coche, mochilas o regalo.',
             images: [
                 'individual_portada.webp',
@@ -237,6 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // Exponer globalmente para enlaces generados dinámicamente
+    window.switchTab = switchTab;
+
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             switchTab(btn.getAttribute('data-target'));
@@ -271,6 +281,106 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ─── DYNAMIC INPUTS FOR PREVIEWER (CON PRESERVACIÓN DE ESTADO) ───
     const dynamicInputsContainer = document.getElementById('dynamicInputs');
+
+    // ─── MULTI-LLAVERO INDIVIDUAL: Precio por volumen y estado ───
+    let individualNameCount = 1;
+
+    function getIndividualPrice(quantity) {
+        const tiers = PRODUCT_CATALOG.individual.pricingTiers;
+        for (let i = 0; i < tiers.length; i++) {
+            if (quantity >= tiers[i].min && quantity <= tiers[i].max) {
+                return tiers[i].pricePerUnit;
+            }
+        }
+        return tiers[tiers.length - 1].pricePerUnit;
+    }
+
+    function getIndividualNames() {
+        const names = [];
+        for (let i = 1; i <= individualNameCount; i++) {
+            const input = document.getElementById('name_ind_' + i);
+            if (input) names.push(input.value.trim());
+        }
+        return names;
+    }
+
+    function addIndividualName() {
+        const max = PRODUCT_CATALOG.individual.maxQuantityWeb;
+        if (individualNameCount >= max) return;
+        individualNameCount++;
+        renderIndividualInputs();
+        updateOrderSummaryCard();
+    }
+
+    function removeIndividualName(index) {
+        if (individualNameCount <= 1) return;
+        // Save current values
+        const currentValues = getIndividualNames();
+        currentValues.splice(index - 1, 1);
+        individualNameCount--;
+        renderIndividualInputs(currentValues);
+        updateOrderSummaryCard();
+    }
+
+    function renderIndividualInputs(preservedValues) {
+        if (!dynamicInputsContainer) return;
+        const max = PRODUCT_CATALOG.individual.maxQuantityWeb;
+        const pricePerUnit = getIndividualPrice(individualNameCount);
+        const total = (pricePerUnit * individualNameCount);
+        const totalFormatted = total % 1 === 0 ? total + '€' : total.toFixed(2).replace('.', ',') + '€';
+        const priceFormatted = pricePerUnit % 1 === 0 ? pricePerUnit + '€' : pricePerUnit.toFixed(2).replace('.', ',') + '€';
+
+        let html = '<div class="multi-name-container">';
+
+        for (let i = 1; i <= individualNameCount; i++) {
+            const savedVal = preservedValues ? (preservedValues[i - 1] || '') : '';
+            const placeholder = i === 1 ? 'Ej: Carlos' : 'Ej: María';
+            html += `
+                <div class="multi-name-row">
+                    <div class="form-field" style="margin-bottom: 0; flex: 1;">
+                        <label for="name_ind_${i}">Llavero ${i}</label>
+                        <input type="text" id="name_ind_${i}" placeholder="${placeholder}" maxlength="12" ${i === 1 ? 'required' : ''} autocomplete="off" value="${savedVal}">
+                    </div>
+                    ${i > 1 ? `<button type="button" class="btn-remove-name" onclick="window._removeIndividualName(${i})" title="Quitar llavero ${i}" aria-label="Quitar llavero ${i}">✕</button>` : ''}
+                </div>`;
+        }
+
+        // Pricing indicator
+        if (individualNameCount > 1) {
+            html += `
+                <div class="multi-name-pricing">
+                    <span>${individualNameCount} × ${priceFormatted}/ud = <strong>${totalFormatted}</strong></span>
+                </div>`;
+        }
+
+        // Add button or limit message
+        if (individualNameCount < max) {
+            html += `
+                <button type="button" class="btn-add-name" onclick="window._addIndividualName()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <span>Añadir otro llavero</span>
+                </button>`;
+        } else {
+            html += `
+                <div class="multi-name-limit-msg">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    <span>¿Necesitas más de 5? Escríbenos por el formulario de la sección <strong>Sobre Mí y redes</strong> para pedidos grandes, o por <a href="https://www.instagram.com/latens.studio?igsh=ZmIwaXVvYmJta2lt" target="_blank" rel="noopener noreferrer">Instagram DM</a> para cantidades normales.</span>
+                </div>`;
+        }
+
+        html += '</div>';
+        dynamicInputsContainer.innerHTML = html;
+
+        // Attach input listeners for live summary updates
+        for (let i = 1; i <= individualNameCount; i++) {
+            const inp = document.getElementById('name_ind_' + i);
+            if (inp) inp.addEventListener('input', updateOrderSummaryCard);
+        }
+    }
+
+    // Expose to global scope for onclick handlers
+    window._addIndividualName = addIndividualName;
+    window._removeIndividualName = removeIndividualName;
     
     function renderDynamicInputs() {
         if (!productSelect || !dynamicInputsContainer) return;
@@ -315,12 +425,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (val === 'individual') {
-            html = `
-                <div class="form-field">
-                    <label for="name1">Nombre para el Llavero</label>
-                    <input type="text" id="name1" placeholder="Ej: Carlos" maxlength="12" required autocomplete="off">
-                </div>
-            `;
+            individualNameCount = 1;
+            renderIndividualInputs();
+            return; // renderIndividualInputs handles everything for individual
         } else {
             const labelA = val === 'iniciales' ? 'Inicial Izquierda (A)' : 'Nombre Izquierda (Llavero A)';
             const labelB = val === 'iniciales' ? 'Inicial Derecha (B)' : 'Nombre Derecha (Llavero B)';
@@ -1120,9 +1227,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const deliverySelectEl = document.getElementById('deliverySelect');
         const deliveryChoice = deliverySelectEl ? deliverySelectEl.value : 'recogida';
         const isEnvio = deliveryChoice === 'envio';
-        const basePrice = productInfo.priceNum || 15;
-        const finalPriceNum = isEnvio ? (basePrice + 4.99) : basePrice;
-        const finalPriceFormatted = isEnvio ? `${finalPriceNum.toFixed(2).replace('.', ',')}€` : `${finalPriceNum}€`;
         const deliveryText = isEnvio ? 'Envío a domicilio 24/48h (+4,99€)' : 'Recogida Gratis en Alicante (Luceros)';
 
         const shipName = (document.getElementById('shipName')?.value || '').trim();
@@ -1134,13 +1238,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const cpDetection = detectPostalCodeLocality(shipCP);
         const localityInfo = cpDetection.valid ? cpDetection.summaryText : '';
 
-        let namesFormatted = (type === 'individual') ? (name1 || 'Sin nombre') : `${name1 || 'Nombre 1'} + ${name2 || 'Nombre 2'}`;
-        
+        // ─── Cálculo de precio con soporte multi-llavero individual ───
+        let basePrice, finalPriceNum, namesFormatted, quantity, pricePerUnit, allNames;
+
+        if (type === 'individual') {
+            allNames = getIndividualNames();
+            quantity = Math.max(1, allNames.length);
+            pricePerUnit = getIndividualPrice(quantity);
+            basePrice = pricePerUnit * quantity;
+            namesFormatted = allNames.filter(n => n).join(', ') || 'Sin nombre';
+        } else {
+            quantity = 1;
+            pricePerUnit = productInfo.priceNum || 15;
+            basePrice = pricePerUnit;
+            allNames = [];
+            namesFormatted = `${name1 || 'Nombre 1'} + ${name2 || 'Nombre 2'}`;
+        }
+
+        finalPriceNum = isEnvio ? (basePrice + 4.99) : basePrice;
+        const finalPriceFormatted = finalPriceNum % 1 === 0 ? `${finalPriceNum}€` : `${finalPriceNum.toFixed(2).replace('.', ',')}€`;
+        const basePriceFormatted = basePrice % 1 === 0 ? `${basePrice}€` : `${basePrice.toFixed(2).replace('.', ',')}€`;
+
         return {
             type,
             productName: productInfo.name,
-            basePrice: productInfo.price,
+            basePrice: basePriceFormatted,
             totalPrice: finalPriceFormatted,
+            quantity,
+            pricePerUnit,
+            allNames,
             deliveryChoice,
             deliveryMethod: deliveryText,
             isEnvio,
@@ -1169,8 +1295,13 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = `
             <div class="summary-item">
                 <span class="summary-item-label">Modelo</span>
-                <span class="summary-item-val">🏷️ ${esc(specs.productName)}</span>
+                <span class="summary-item-val">🏷️ ${esc(specs.productName)}${specs.quantity > 1 ? ' (×' + specs.quantity + ')' : ''}</span>
             </div>
+            ${specs.type === 'individual' && specs.quantity > 1 ? `
+            <div class="summary-item">
+                <span class="summary-item-label">Precio/ud</span>
+                <span class="summary-item-val">🏷️ ${specs.pricePerUnit.toFixed(2).replace('.', ',')}€/ud × ${specs.quantity} = <strong>${esc(specs.basePrice)}</strong></span>
+            </div>` : ''}
             <div class="summary-item">
                 <span class="summary-item-label">Entrega</span>
                 <span class="summary-item-val">🚚 ${esc(specs.deliveryMethod)}</span>
@@ -1180,7 +1311,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="summary-item-val">💳 <strong>${esc(specs.totalPrice)}</strong></span>
             </div>
             <div class="summary-item">
-                <span class="summary-item-label">Nombres / Iniciales</span>
+                <span class="summary-item-label">${specs.type === 'individual' && specs.quantity > 1 ? 'Nombres' : 'Nombres / Iniciales'}</span>
                 <span class="summary-item-val">✍️ ${esc(specs.names)}</span>
             </div>
             ${specs.fecha !== 'No grabada' ? `
@@ -1213,8 +1344,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const specs = generateOrderSpecs();
             
             let textToCopy = `✨ ¡Hola Latens Studio! 👋 Quiero encargar este llavero personalizado:\n\n` +
-                `📋 Modelo: ${specs.productName} (${specs.basePrice})\n` +
-                `✍️ Nombres/Iniciales: ${specs.names}\n`;
+                `📋 Modelo: ${specs.productName}${specs.quantity > 1 ? ' (×' + specs.quantity + ')' : ''}\n`;
+
+            if (specs.type === 'individual' && specs.quantity > 1) {
+                const ppuFormatted = specs.pricePerUnit % 1 === 0 ? specs.pricePerUnit + '€' : specs.pricePerUnit.toFixed(2).replace('.', ',') + '€';
+                textToCopy += `💰 Precio: ${ppuFormatted}/ud × ${specs.quantity} = ${specs.basePrice}\n`;
+                textToCopy += `✍️ Nombres: ${specs.names}\n`;
+            } else {
+                textToCopy += `💰 Precio: ${specs.basePrice}\n` +
+                    `✍️ Nombres/Iniciales: ${specs.names}\n`;
+            }
             
             if (specs.fecha !== 'No grabada') {
                 textToCopy += `📅 Fecha Reverso: ${specs.fecha}\n`;
@@ -1984,8 +2123,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (generateBtn) {
         generateBtn.addEventListener('click', async () => {
             const type = productSelect ? productSelect.value : 'corazon';
-            const name1El = document.getElementById('name1');
-            const name2El = document.getElementById('name2');
+            let name1El, name2El, name1, name2;
+
+            if (type === 'individual') {
+                const namesList = [];
+                for (let i = 1; i <= 5; i++) {
+                    const el = document.getElementById(`name_ind_${i}`);
+                    if (el && el.value.trim()) namesList.push(el.value.trim());
+                }
+                name1El = document.getElementById('name_ind_1');
+                name1 = namesList.join(',');
+                name2 = ''; // No aplica
+            } else {
+                name1El = document.getElementById('name1');
+                name2El = document.getElementById('name2');
+                name1 = name1El ? name1El.value.trim() : '';
+                name2 = name2El ? name2El.value.trim() : '';
+            }
+
             const fechaEl = document.getElementById('fecha');
             const cruzEl = document.getElementById('checkCruz');
             
@@ -1994,8 +2149,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const cardTitleEl = document.getElementById('cardTitle');
             const cardMessageEl = document.getElementById('cardMessage');
 
-            const name1 = name1El ? name1El.value.trim() : '';
-            const name2 = name2El ? name2El.value.trim() : '';
             const fecha = fechaEl ? fechaEl.value.trim() : '';
             const cruz = cruzEl ? cruzEl.checked : false;
             
@@ -2009,7 +2162,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 else if (!name2 && name2El) name2El.focus();
                 return;
             } else if (type === 'individual' && !name1) {
-                Toast.warning('Por favor, introduce el nombre para el llavero.', 'Nombre requerido');
+                Toast.warning('Por favor, introduce el nombre del primer llavero.', 'Nombre requerido');
                 if (name1El) name1El.focus();
                 return;
             }
@@ -2549,6 +2702,67 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modalProductBadge) modalProductBadge.textContent = product.badge || 'Catálogo Oficial';
         if (modalProductPrice) modalProductPrice.textContent = product.price;
         if (modalProductQualifier) modalProductQualifier.textContent = product.priceQualifier || '';
+        // 1.5. Inyectar selector de cantidad si el producto tiene tiers de precio
+        if (product.pricingTiers && modalProductQualifier) {
+            const max = product.maxQuantityWeb || 5;
+            let options = '';
+            for (let i = 1; i <= max; i++) {
+                let ppu = product.pricingTiers[product.pricingTiers.length - 1].pricePerUnit;
+                for (let t of product.pricingTiers) {
+                    if (i >= t.min && i <= t.max) {
+                        ppu = t.pricePerUnit; break;
+                    }
+                }
+                const ppuStr = ppu % 1 === 0 ? ppu + '€' : ppu.toFixed(2).replace('.', ',') + '€';
+                const label = i === 1 ? `1 unidad` : `${i} unidades (${ppuStr}/ud)`;
+                options += `<option value="${i}" data-ppu="${ppu}">${label}</option>`;
+            }
+
+            modalProductQualifier.innerHTML = `<select class="modal-qty-select">${options}</select>`;
+
+            // Limpiar mensaje anterior si lo hubiera al re-abrir el modal
+            const priceCard = modalProductPrice?.closest('.modal-price-card');
+            const oldMsg = priceCard?.querySelector('.modal-limit-msg');
+            if (oldMsg) oldMsg.remove();
+
+            const selectEl = modalProductQualifier.querySelector('.modal-qty-select');
+            selectEl.addEventListener('change', (e) => {
+                const qty = parseInt(e.target.value, 10);
+                const ppu = parseFloat(e.target.options[e.target.selectedIndex].dataset.ppu);
+                const total = qty * ppu;
+                const totalStr = total % 1 === 0 ? total + '€' : total.toFixed(2).replace('.', ',') + '€';
+                if (modalProductPrice) {
+                    modalProductPrice.textContent = totalStr;
+                }
+                
+                // Mostrar/ocultar mensaje de límite
+                if (priceCard) {
+                    let msgEl = priceCard.querySelector('.modal-limit-msg');
+                    if (qty === max) {
+                        if (!msgEl) {
+                            msgEl = document.createElement('div');
+                            msgEl.className = 'modal-limit-msg multi-name-limit-msg';
+                            msgEl.style.marginTop = '0.85rem';
+                            msgEl.innerHTML = `
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                <span>¿Necesitas más de ${max}? Escríbenos por el formulario de la sección <strong>Sobre Mí y redes</strong> para pedidos grandes, o por <a href="https://www.instagram.com/latens.studio?igsh=ZmIwaXVvYmJta2lt" target="_blank" rel="noopener noreferrer">Instagram DM</a> para cantidades normales.</span>
+                            `;
+                            priceCard.appendChild(msgEl);
+                        }
+                    } else if (msgEl) {
+                        msgEl.remove();
+                    }
+                }
+            });
+            
+            // Inicializar el precio con cantidad 1
+            selectEl.dispatchEvent(new Event('change'));
+        } else {
+            const priceCard = modalProductPrice?.closest('.modal-price-card');
+            const existingTiers = priceCard?.querySelector('.modal-pricing-tiers');
+            if (existingTiers) existingTiers.remove();
+        }
+
         if (modalProductDesc) modalProductDesc.textContent = product.desc;
 
         // 2. Inyectar Especificaciones en Acordeón Desplegable (bajo la galería)
